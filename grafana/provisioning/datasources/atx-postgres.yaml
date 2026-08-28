@@ -1,0 +1,23 @@
+apiVersion: 1
+
+deleteDatasources:
+  - name: ATX Maintenance PostgreSQL
+    orgId: 1
+
+datasources:
+  - name: ATX Maintenance PostgreSQL
+    uid: atx-postgres
+    type: postgres
+    access: proxy
+    url: ${POSTGRES_HOST}:${POSTGRES_PORT}
+    user: ${POSTGRES_USER}
+    database: atx_demo_dashboard
+    isDefault: true
+    editable: false
+    jsonData:
+      database: atx_demo_dashboard
+      sslmode: disable
+      postgresVersion: 1700
+      timescaledb: false
+    secureJsonData:
+      password: ${POSTGRES_PASSWORD}

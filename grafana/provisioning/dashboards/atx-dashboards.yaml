@@ -1,0 +1,14 @@
+apiVersion: 1
+
+providers:
+  - name: ATX Maintenance Interview Demo
+    orgId: 1
+    folder: ATX Maintenance Demo
+    folderUid: atx-maintenance
+    type: file
+    disableDeletion: false
+    updateIntervalSeconds: 10
+    allowUiUpdates: false
+    options:
+      path: ${ATX_GRAFANA_DASHBOARDS_PATH}
+      foldersFromFilesStructure: false

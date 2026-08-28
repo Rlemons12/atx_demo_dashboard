@@ -1,0 +1,976 @@
+{
+  "annotations": {
+    "list": [
+      {
+        "builtIn": 1,
+        "datasource": "-- Grafana --",
+        "enable": true,
+        "hide": true,
+        "name": "Annotations & Alerts",
+        "type": "dashboard"
+      },
+      {
+        "datasource": {
+          "type": "grafana-postgresql-datasource",
+          "uid": "atx-postgres"
+        },
+        "enable": true,
+        "hide": false,
+        "iconColor": "rgba(255, 96, 96, 1)",
+        "name": "Filler-201 RCA",
+        "rawQuery": "SELECT completed_at AS time, 'RCA-2026-008 Completed: Filler-201 bracket fatigue identified' AS text, 'RCA' AS tags FROM rca_events WHERE rca_number='RCA-2026-008'",
+        "showIn": 0,
+        "type": "tags"
+      },
+      {
+        "datasource": {
+          "type": "grafana-postgresql-datasource",
+          "uid": "atx-postgres"
+        },
+        "enable": true,
+        "hide": false,
+        "iconColor": "rgba(50, 200, 50, 1)",
+        "name": "Filler-201 PM Revision",
+        "rawQuery": "SELECT effective_from::timestamptz AS time, 'PM Rev 2 Active: Bracket security & locking verified' AS text, 'PM' AS tags FROM pm_plan_revisions r JOIN pm_plans p USING(pm_plan_id) JOIN assets a USING(asset_id) WHERE a.asset_code='FILLER-201' AND r.revision_number=2 AND p.pm_code LIKE '%WEEKLY'",
+        "showIn": 0,
+        "type": "tags"
+      },
+      {
+        "datasource": {
+          "type": "grafana-postgresql-datasource",
+          "uid": "atx-postgres"
+        },
+        "enable": true,
+        "hide": false,
+        "iconColor": "rgba(0, 180, 255, 1)",
+        "name": "Air-Comp Predictive Intervention",
+        "rawQuery": "SELECT work_completed_at AS time, 'Air-Comp-001 planned predictive overhaul during sanitation' AS text, 'CBM' AS tags FROM work_orders WHERE work_order_number='WO-2026-0185'",
+        "showIn": 0,
+        "type": "tags"
+      }
+    ]
+  },
+  "editable": false,
+  "fiscalYearStartMonth": 0,
+  "graphTooltip": 1,
+  "id": null,
+  "links": [
+    {
+      "asDropdown": false,
+      "icon": "dashboard",
+      "includeVars": true,
+      "keepTime": true,
+      "tags": [],
+      "targetBlank": false,
+      "title": "Maintenance Reliability",
+      "type": "link",
+      "url": "/d/atx-maintenance-reliability/maintenance-reliability"
+    },
+    {
+      "asDropdown": false,
+      "icon": "dashboard",
+      "includeVars": true,
+      "keepTime": true,
+      "tags": [],
+      "targetBlank": false,
+      "title": "Staffing, Sanitation & Operational Risk",
+      "type": "link",
+      "url": "/d/atx-operational-risk/staffing-sanitation-and-operational-risk"
+    },
+    {
+      "asDropdown": false,
+      "icon": "dashboard",
+      "includeVars": true,
+      "keepTime": true,
+      "tags": [],
+      "targetBlank": false,
+      "title": "Production & OEE Performance",
+      "type": "link",
+      "url": "/d/atx-production-oee/production-and-oee-performance"
+    }
+  ],
+  "panels": [
+    {
+      "collapsed": false,
+      "gridPos": { "h": 1, "w": 24, "x": 0, "y": 0 },
+      "id": 100,
+      "title": "Executive KPI Scorecard",
+      "type": "row"
+    },
+    {
+      "datasource": { "type": "grafana-postgresql-datasource", "uid": "atx-postgres" },
+      "fieldConfig": {
+        "defaults": {
+          "color": { "mode": "thresholds" },
+          "decimals": 2,
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              { "color": "red", "value": null },
+              { "color": "yellow", "value": 92 },
+              { "color": "green", "value": 95 }
+            ]
+          },
+          "unit": "percent"
+        },
+        "overrides": []
+      },
+      "gridPos": { "h": 4, "w": 3, "x": 0, "y": 1 },
+      "id": 1,
+      "options": {
+        "colorMode": "background",
+        "graphMode": "area",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": { "calcs": ["lastNotNull"], "fields": "", "values": false },
+        "textMode": "auto",
+        "wideLayout": true
+      },
+      "targets": [
+        {
+          "datasource": { "type": "grafana-postgresql-datasource", "uid": "atx-postgres" },
+          "format": "table",
+          "rawQuery": true,
+          "rawSql": "SELECT uptime_percent FROM v_plant_uptime_monthly ORDER BY period DESC LIMIT 1",
+          "refId": "A"
+        }
+      ],
+      "title": "Plant Uptime — Target ≥95%",
+      "type": "stat"
+    },
+    {
+      "datasource": { "type": "grafana-postgresql-datasource", "uid": "atx-postgres" },
+      "fieldConfig": {
+        "defaults": {
+          "color": { "mode": "thresholds" },
+          "decimals": 2,
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              { "color": "red", "value": null },
+              { "color": "yellow", "value": 90 },
+              { "color": "green", "value": 98 }
+            ]
+          },
+          "unit": "percent"
+        },
+        "overrides": []
+      },
+      "gridPos": { "h": 4, "w": 3, "x": 3, "y": 1 },
+      "id": 2,
+      "options": {
+        "colorMode": "background",
+        "graphMode": "area",
+        "reduceOptions": { "calcs": ["lastNotNull"], "fields": "", "values": false },
+        "textMode": "auto"
+      },
+      "targets": [
+        {
+          "datasource": { "type": "grafana-postgresql-datasource", "uid": "atx-postgres" },
+          "format": "table",
+          "rawQuery": true,
+          "rawSql": "SELECT compliance_percent FROM v_pm_compliance_monthly ORDER BY period DESC LIMIT 1",
+          "refId": "A"
+        }
+      ],
+      "title": "PM Compliance — Target ≥98%",
+      "type": "stat"
+    },
+    {
+      "datasource": { "type": "grafana-postgresql-datasource", "uid": "atx-postgres" },
+      "fieldConfig": {
+        "defaults": {
+          "color": { "mode": "thresholds" },
+          "decimals": 2,
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              { "color": "green", "value": null },
+              { "color": "yellow", "value": 30 },
+              { "color": "red", "value": 40 }
+            ]
+          },
+          "unit": "percent"
+        },
+        "overrides": []
+      },
+      "gridPos": { "h": 4, "w": 3, "x": 6, "y": 1 },
+      "id": 3,
+      "options": {
+        "colorMode": "background",
+        "graphMode": "area",
+        "reduceOptions": { "calcs": ["lastNotNull"], "fields": "", "values": false }
+      },
+      "targets": [
+        {
+          "datasource": { "type": "grafana-postgresql-datasource", "uid": "atx-postgres" },
+          "format": "table",
+          "rawQuery": true,
+          "rawSql": "SELECT emergency_percent FROM v_emergency_work_monthly ORDER BY period DESC LIMIT 1",
+          "refId": "A"
+        }
+      ],
+      "title": "Emergency Work — Target <30%",
+      "type": "stat"
+    },
+    {
+      "datasource": { "type": "grafana-postgresql-datasource", "uid": "atx-postgres" },
+      "fieldConfig": {
+        "defaults": {
+          "color": { "mode": "thresholds" },
+          "decimals": 1,
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              { "color": "green", "value": null },
+              { "color": "yellow", "value": 72 },
+              { "color": "red", "value": 80 }
+            ]
+          },
+          "unit": "m"
+        },
+        "overrides": []
+      },
+      "gridPos": { "h": 4, "w": 3, "x": 9, "y": 1 },
+      "id": 4,
+      "options": {
+        "colorMode": "background",
+        "graphMode": "area",
+        "reduceOptions": { "calcs": ["lastNotNull"], "fields": "", "values": false }
+      },
+      "targets": [
+        {
+          "datasource": { "type": "grafana-postgresql-datasource", "uid": "atx-postgres" },
+          "format": "table",
+          "rawQuery": true,
+          "rawSql": "SELECT mttr_minutes FROM v_mttr_monthly ORDER BY period DESC LIMIT 1",
+          "refId": "A"
+        }
+      ],
+      "title": "MTTR — Target ≥15% Improvement",
+      "type": "stat"
+    },
+    {
+      "datasource": { "type": "grafana-postgresql-datasource", "uid": "atx-postgres" },
+      "fieldConfig": {
+        "defaults": {
+          "color": { "mode": "thresholds" },
+          "decimals": 1,
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              { "color": "red", "value": null },
+              { "color": "yellow", "value": 45 },
+              { "color": "green", "value": 70 }
+            ]
+          },
+          "unit": "h"
+        },
+        "overrides": []
+      },
+      "gridPos": { "h": 4, "w": 3, "x": 12, "y": 1 },
+      "id": 5,
+      "options": {
+        "colorMode": "background",
+        "graphMode": "area",
+        "reduceOptions": { "calcs": ["lastNotNull"], "fields": "", "values": false }
+      },
+      "targets": [
+        {
+          "datasource": { "type": "grafana-postgresql-datasource", "uid": "atx-postgres" },
+          "format": "table",
+          "rawQuery": true,
+          "rawSql": "SELECT mtbf_hours FROM v_mtbf_monthly ORDER BY period DESC LIMIT 1",
+          "refId": "A"
+        }
+      ],
+      "title": "MTBF — Target ≥20% Improvement",
+      "type": "stat"
+    },
+    {
+      "datasource": { "type": "grafana-postgresql-datasource", "uid": "atx-postgres" },
+      "fieldConfig": {
+        "defaults": {
+          "color": { "mode": "thresholds" },
+          "decimals": 2,
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              { "color": "red", "value": null },
+              { "color": "yellow", "value": 90 },
+              { "color": "green", "value": 95 }
+            ]
+          },
+          "unit": "percent"
+        },
+        "overrides": []
+      },
+      "gridPos": { "h": 4, "w": 3, "x": 15, "y": 1 },
+      "id": 6,
+      "options": {
+        "colorMode": "background",
+        "graphMode": "area",
+        "reduceOptions": { "calcs": ["lastNotNull"], "fields": "", "values": false }
+      },
+      "targets": [
+        {
+          "datasource": { "type": "grafana-postgresql-datasource", "uid": "atx-postgres" },
+          "format": "table",
+          "rawQuery": true,
+          "rawSql": "SELECT closure_percent FROM v_work_order_closure_monthly ORDER BY period DESC LIMIT 1",
+          "refId": "A"
+        }
+      ],
+      "title": "WO Closure — Target ≥95%",
+      "type": "stat"
+    },
+    {
+      "datasource": { "type": "grafana-postgresql-datasource", "uid": "atx-postgres" },
+      "fieldConfig": {
+        "defaults": {
+          "color": { "mode": "thresholds" },
+          "decimals": 2,
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              { "color": "red", "value": null },
+              { "color": "yellow", "value": 90 },
+              { "color": "green", "value": 98 }
+            ]
+          },
+          "unit": "percent"
+        },
+        "overrides": []
+      },
+      "gridPos": { "h": 4, "w": 3, "x": 18, "y": 1 },
+      "id": 7,
+      "options": {
+        "colorMode": "background",
+        "graphMode": "area",
+        "reduceOptions": { "calcs": ["lastNotNull"], "fields": "", "values": false }
+      },
+      "targets": [
+        {
+          "datasource": { "type": "grafana-postgresql-datasource", "uid": "atx-postgres" },
+          "format": "table",
+          "rawQuery": true,
+          "rawSql": "SELECT availability_percent FROM v_critical_spares_monthly ORDER BY period DESC LIMIT 1",
+          "refId": "A"
+        }
+      ],
+      "title": "Critical Spares — Target ≥98%",
+      "type": "stat"
+    },
+    {
+      "datasource": { "type": "grafana-postgresql-datasource", "uid": "atx-postgres" },
+      "fieldConfig": {
+        "defaults": {
+          "color": { "mode": "thresholds" },
+          "decimals": 0,
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              { "color": "green", "value": null },
+              { "color": "yellow", "value": 6 },
+              { "color": "red", "value": 9 }
+            ]
+          },
+          "unit": "short"
+        },
+        "overrides": []
+      },
+      "gridPos": { "h": 4, "w": 3, "x": 21, "y": 1 },
+      "id": 8,
+      "options": {
+        "colorMode": "background",
+        "graphMode": "area",
+        "reduceOptions": { "calcs": ["lastNotNull"], "fields": "", "values": false }
+      },
+      "targets": [
+        {
+          "datasource": { "type": "grafana-postgresql-datasource", "uid": "atx-postgres" },
+          "format": "table",
+          "rawQuery": true,
+          "rawSql": "SELECT repeat_failure_count FROM v_repeat_failures_monthly ORDER BY period DESC LIMIT 1",
+          "refId": "A"
+        }
+      ],
+      "title": "Repeat Failures — Target ≥30% Reduction",
+      "type": "stat"
+    },
+    {
+      "collapsed": false,
+      "gridPos": { "h": 1, "w": 24, "x": 0, "y": 5 },
+      "id": 106,
+      "title": "Production & OEE Summary",
+      "type": "row"
+    },
+    {
+      "datasource": { "type": "grafana-postgresql-datasource", "uid": "atx-postgres" },
+      "fieldConfig": {
+        "defaults": {
+          "color": { "mode": "thresholds" },
+          "decimals": 2,
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              { "color": "red", "value": null },
+              { "color": "yellow", "value": 75 },
+              { "color": "green", "value": 85 }
+            ]
+          },
+          "unit": "percent"
+        },
+        "overrides": []
+      },
+      "gridPos": { "h": 4, "w": 4, "x": 0, "y": 6 },
+      "id": 19,
+      "options": {
+        "colorMode": "background",
+        "graphMode": "area",
+        "reduceOptions": { "calcs": ["lastNotNull"], "fields": "", "values": false }
+      },
+      "targets": [
+        {
+          "datasource": { "type": "grafana-postgresql-datasource", "uid": "atx-postgres" },
+          "format": "table",
+          "rawQuery": true,
+          "rawSql": "SELECT oee_percent FROM v_line_oee_monthly WHERE line_code = 'LINE-1' ORDER BY period DESC LIMIT 1",
+          "refId": "A"
+        }
+      ],
+      "title": "Line 1 OEE — Target ≥85%",
+      "type": "stat"
+    },
+    {
+      "datasource": { "type": "grafana-postgresql-datasource", "uid": "atx-postgres" },
+      "fieldConfig": {
+        "defaults": {
+          "color": { "mode": "thresholds" },
+          "decimals": 2,
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              { "color": "red", "value": null },
+              { "color": "yellow", "value": 75 },
+              { "color": "green", "value": 85 }
+            ]
+          },
+          "unit": "percent"
+        },
+        "overrides": []
+      },
+      "gridPos": { "h": 4, "w": 4, "x": 4, "y": 6 },
+      "id": 20,
+      "options": {
+        "colorMode": "background",
+        "graphMode": "area",
+        "reduceOptions": { "calcs": ["lastNotNull"], "fields": "", "values": false }
+      },
+      "targets": [
+        {
+          "datasource": { "type": "grafana-postgresql-datasource", "uid": "atx-postgres" },
+          "format": "table",
+          "rawQuery": true,
+          "rawSql": "SELECT oee_percent FROM v_line_oee_monthly WHERE line_code = 'LINE-2' ORDER BY period DESC LIMIT 1",
+          "refId": "A"
+        }
+      ],
+      "title": "Line 2 OEE — Target ≥85%",
+      "type": "stat"
+    },
+    {
+      "datasource": { "type": "grafana-postgresql-datasource", "uid": "atx-postgres" },
+      "fieldConfig": {
+        "defaults": {
+          "color": { "mode": "thresholds" },
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              { "color": "blue", "value": null }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": { "h": 4, "w": 4, "x": 8, "y": 6 },
+      "id": 21,
+      "options": {
+        "colorMode": "background",
+        "graphMode": "none",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": { "calcs": ["lastNotNull"], "fields": "", "values": false },
+        "textMode": "value_and_name"
+      },
+      "targets": [
+        {
+          "datasource": { "type": "grafana-postgresql-datasource", "uid": "atx-postgres" },
+          "format": "table",
+          "rawQuery": true,
+          "rawSql": "SELECT lot_number || ' (' || product_name || ')' AS \"Active Lot\", progress_percent || '%' AS \"Progress\", yield_percent || '%' AS \"Yield\" FROM v_current_production_lots WHERE line_code = 'LINE-1' LIMIT 1",
+          "refId": "A"
+        }
+      ],
+      "title": "Line 1 — Current Running Lot",
+      "type": "stat"
+    },
+    {
+      "datasource": { "type": "grafana-postgresql-datasource", "uid": "atx-postgres" },
+      "fieldConfig": {
+        "defaults": {
+          "color": { "mode": "thresholds" },
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              { "color": "purple", "value": null }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": { "h": 4, "w": 4, "x": 12, "y": 6 },
+      "id": 22,
+      "options": {
+        "colorMode": "background",
+        "graphMode": "none",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": { "calcs": ["lastNotNull"], "fields": "", "values": false },
+        "textMode": "value_and_name"
+      },
+      "targets": [
+        {
+          "datasource": { "type": "grafana-postgresql-datasource", "uid": "atx-postgres" },
+          "format": "table",
+          "rawQuery": true,
+          "rawSql": "SELECT lot_number || ' (' || product_name || ')' AS \"Active Lot\", progress_percent || '%' AS \"Progress\", yield_percent || '%' AS \"Yield\" FROM v_current_production_lots WHERE line_code = 'LINE-2' LIMIT 1",
+          "refId": "A"
+        }
+      ],
+      "title": "Line 2 — Current Running Lot",
+      "type": "stat"
+    },
+    {
+      "datasource": { "type": "grafana-postgresql-datasource", "uid": "atx-postgres" },
+      "fieldConfig": {
+        "defaults": {
+          "color": { "mode": "thresholds" },
+          "decimals": 1,
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              { "color": "red", "value": null },
+              { "color": "yellow", "value": 90 },
+              { "color": "green", "value": 95 }
+            ]
+          },
+          "unit": "percent"
+        },
+        "overrides": []
+      },
+      "gridPos": { "h": 4, "w": 4, "x": 16, "y": 6 },
+      "id": 23,
+      "options": {
+        "colorMode": "background",
+        "graphMode": "area",
+        "reduceOptions": { "calcs": ["lastNotNull"], "fields": "", "values": false }
+      },
+      "targets": [
+        {
+          "datasource": { "type": "grafana-postgresql-datasource", "uid": "atx-postgres" },
+          "format": "table",
+          "rawQuery": true,
+          "rawSql": "SELECT round(avg(on_time_start_percent), 1) AS \"On-Time Start %\" FROM v_production_schedule_adherence WHERE period = (SELECT max(period) FROM v_production_schedule_adherence)",
+          "refId": "A"
+        }
+      ],
+      "title": "Schedule Adherence (On-Time)",
+      "type": "stat"
+    },
+    {
+      "datasource": { "type": "grafana-postgresql-datasource", "uid": "atx-postgres" },
+      "fieldConfig": {
+        "defaults": {
+          "color": { "mode": "thresholds" },
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              { "color": "green", "value": null }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": { "h": 4, "w": 4, "x": 20, "y": 6 },
+      "id": 24,
+      "options": {
+        "colorMode": "background",
+        "graphMode": "none",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": { "calcs": ["lastNotNull"], "fields": "", "values": false },
+        "textMode": "auto"
+      },
+      "targets": [
+        {
+          "datasource": { "type": "grafana-postgresql-datasource", "uid": "atx-postgres" },
+          "format": "table",
+          "rawQuery": true,
+          "rawSql": "SELECT count(DISTINCT employee_id) || ' On Duty (1 Maint Tech)' AS \"PROD-B Staffing\" FROM employee_schedules WHERE schedule_date = DATE '2026-08-27' AND shift_id = 2",
+          "refId": "A"
+        }
+      ],
+      "title": "Shift Staffing (1/1/0 Model)",
+      "type": "stat"
+    },
+    {
+      "collapsed": false,
+      "gridPos": { "h": 1, "w": 24, "x": 0, "y": 10 },
+      "id": 101,
+      "title": "Production Performance",
+      "type": "row"
+    },
+    {
+      "datasource": { "type": "grafana-postgresql-datasource", "uid": "atx-postgres" },
+      "fieldConfig": {
+        "defaults": {
+          "custom": { "drawStyle": "line", "fillOpacity": 15, "lineWidth": 2 },
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              { "color": "red", "value": null },
+              { "color": "green", "value": 95 }
+            ]
+          },
+          "unit": "percent"
+        },
+        "overrides": [
+          {
+            "matcher": { "id": "byName", "options": "Target (95%)" },
+            "properties": [
+              { "id": "custom.lineStyle", "value": { "dash": [10, 10], "fill": "dash" } },
+              { "id": "color", "value": { "fixedColor": "dark-green", "mode": "fixed" } },
+              { "id": "custom.fillOpacity", "value": 0 }
+            ]
+          }
+        ]
+      },
+      "gridPos": { "h": 8, "w": 12, "x": 0, "y": 11 },
+      "id": 9,
+      "options": {
+        "legend": { "displayMode": "table", "placement": "bottom", "showLegend": true },
+        "tooltip": { "mode": "multi" }
+      },
+      "targets": [
+        {
+          "datasource": { "type": "grafana-postgresql-datasource", "uid": "atx-postgres" },
+          "format": "time_series",
+          "rawQuery": true,
+          "rawSql": "SELECT period AS time, uptime_percent AS \"Plant Uptime (%)\", 95.0 AS \"Target (95%)\" FROM v_plant_uptime_monthly ORDER BY period",
+          "refId": "A"
+        }
+      ],
+      "title": "Plant Uptime Trend (Monthly)",
+      "type": "timeseries"
+    },
+    {
+      "datasource": { "type": "grafana-postgresql-datasource", "uid": "atx-postgres" },
+      "fieldConfig": {
+        "defaults": {
+          "custom": { "drawStyle": "line", "fillOpacity": 10, "lineWidth": 2 },
+          "unit": "percent"
+        },
+        "overrides": [
+          {
+            "matcher": { "id": "byName", "options": "Line 1" },
+            "properties": [{ "id": "color", "value": { "fixedColor": "green", "mode": "fixed" } }]
+          },
+          {
+            "matcher": { "id": "byName", "options": "Line 2" },
+            "properties": [{ "id": "color", "value": { "fixedColor": "semi-dark-red", "mode": "fixed" } }]
+          }
+        ]
+      },
+      "gridPos": { "h": 8, "w": 12, "x": 12, "y": 11 },
+      "id": 10,
+      "options": {
+        "legend": { "displayMode": "table", "placement": "bottom", "showLegend": true },
+        "tooltip": { "mode": "multi" }
+      },
+      "targets": [
+        {
+          "datasource": { "type": "grafana-postgresql-datasource", "uid": "atx-postgres" },
+          "format": "time_series",
+          "rawQuery": true,
+          "rawSql": "SELECT period AS time, line_name AS metric, uptime_percent AS value FROM v_line_uptime_monthly ORDER BY period, line_name",
+          "refId": "A"
+        }
+      ],
+      "title": "Line 1 vs Line 2 Uptime Trend (Line 2 Reliability Opportunity)",
+      "type": "timeseries"
+    },
+    {
+      "collapsed": false,
+      "gridPos": { "h": 1, "w": 24, "x": 0, "y": 19 },
+      "id": 102,
+      "title": "Where Are We Losing Production?",
+      "type": "row"
+    },
+    {
+      "datasource": { "type": "grafana-postgresql-datasource", "uid": "atx-postgres" },
+      "fieldConfig": {
+        "defaults": {
+          "color": { "mode": "palette-classic" },
+          "unit": "m"
+        },
+        "overrides": []
+      },
+      "gridPos": { "h": 8, "w": 8, "x": 0, "y": 20 },
+      "id": 11,
+      "options": {
+        "barWidth": 0.8,
+        "groupWidth": 0.7,
+        "legend": { "displayMode": "list", "placement": "bottom", "showLegend": false },
+        "orientation": "horizontal",
+        "showValue": "always",
+        "stacking": "none",
+        "tooltip": { "mode": "single" },
+        "xTickLabelRotation": 0
+      },
+      "targets": [
+        {
+          "datasource": { "type": "grafana-postgresql-datasource", "uid": "atx-postgres" },
+          "format": "table",
+          "rawQuery": true,
+          "rawSql": "SELECT asset_code AS \"Asset\", downtime_minutes AS \"Downtime (Minutes)\" FROM v_downtime_by_asset ORDER BY downtime_minutes DESC LIMIT 7",
+          "refId": "A"
+        }
+      ],
+      "title": "Top Downtime Assets (Pareto)",
+      "type": "barchart"
+    },
+    {
+      "datasource": { "type": "grafana-postgresql-datasource", "uid": "atx-postgres" },
+      "fieldConfig": {
+        "defaults": {
+          "color": { "mode": "palette-classic" },
+          "unit": "m"
+        },
+        "overrides": []
+      },
+      "gridPos": { "h": 8, "w": 8, "x": 8, "y": 20 },
+      "id": 12,
+      "options": {
+        "barWidth": 0.8,
+        "groupWidth": 0.7,
+        "legend": { "displayMode": "list", "placement": "bottom", "showLegend": false },
+        "orientation": "horizontal",
+        "showValue": "always",
+        "stacking": "none",
+        "tooltip": { "mode": "single" },
+        "xTickLabelRotation": 0
+      },
+      "targets": [
+        {
+          "datasource": { "type": "grafana-postgresql-datasource", "uid": "atx-postgres" },
+          "format": "table",
+          "rawQuery": true,
+          "rawSql": "SELECT failure_mode AS \"Failure Mode\", downtime_minutes AS \"Downtime (Minutes)\" FROM v_downtime_by_failure_mode ORDER BY downtime_minutes DESC LIMIT 7",
+          "refId": "A"
+        }
+      ],
+      "title": "Top Failure Modes by Downtime",
+      "type": "barchart"
+    },
+    {
+      "datasource": { "type": "grafana-postgresql-datasource", "uid": "atx-postgres" },
+      "fieldConfig": {
+        "defaults": {
+          "custom": { "drawStyle": "bars", "fillOpacity": 65 },
+          "unit": "m"
+        },
+        "overrides": []
+      },
+      "gridPos": { "h": 8, "w": 8, "x": 16, "y": 20 },
+      "id": 13,
+      "options": {
+        "legend": { "displayMode": "table", "placement": "bottom", "showLegend": true },
+        "tooltip": { "mode": "single" }
+      },
+      "targets": [
+        {
+          "datasource": { "type": "grafana-postgresql-datasource", "uid": "atx-postgres" },
+          "format": "time_series",
+          "rawQuery": true,
+          "rawSql": "SELECT period AS time, unplanned_downtime_minutes AS \"Unplanned Downtime (Minutes)\" FROM v_plant_uptime_monthly ORDER BY period",
+          "refId": "A"
+        }
+      ],
+      "title": "Unplanned Downtime Reduction Trend",
+      "type": "timeseries"
+    },
+    {
+      "collapsed": false,
+      "gridPos": { "h": 1, "w": 24, "x": 0, "y": 28 },
+      "id": 103,
+      "title": "Reactive vs Controlled Maintenance",
+      "type": "row"
+    },
+    {
+      "datasource": { "type": "grafana-postgresql-datasource", "uid": "atx-postgres" },
+      "fieldConfig": {
+        "defaults": {
+          "custom": {
+            "drawStyle": "bars",
+            "fillOpacity": 70,
+            "stacking": { "group": "A", "mode": "normal" }
+          },
+          "unit": "short"
+        },
+        "overrides": [
+          {
+            "matcher": { "id": "byName", "options": "PLANNED" },
+            "properties": [{ "id": "color", "value": { "fixedColor": "green", "mode": "fixed" } }]
+          },
+          {
+            "matcher": { "id": "byName", "options": "REACTIVE" },
+            "properties": [{ "id": "color", "value": { "fixedColor": "semi-dark-red", "mode": "fixed" } }]
+          }
+        ]
+      },
+      "gridPos": { "h": 8, "w": 12, "x": 0, "y": 29 },
+      "id": 14,
+      "options": {
+        "legend": { "displayMode": "table", "placement": "bottom", "showLegend": true },
+        "tooltip": { "mode": "multi" }
+      },
+      "targets": [
+        {
+          "datasource": { "type": "grafana-postgresql-datasource", "uid": "atx-postgres" },
+          "format": "time_series",
+          "rawQuery": true,
+          "rawSql": "SELECT period AS time, work_classification AS metric, work_order_count AS value FROM v_planned_vs_reactive_work ORDER BY period, work_classification",
+          "refId": "A"
+        }
+      ],
+      "title": "Planned vs Reactive Work (Monthly Work Orders)",
+      "type": "timeseries"
+    },
+    {
+      "datasource": { "type": "grafana-postgresql-datasource", "uid": "atx-postgres" },
+      "fieldConfig": {
+        "defaults": {
+          "custom": { "drawStyle": "line", "fillOpacity": 15, "lineWidth": 2 },
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              { "color": "green", "value": null },
+              { "color": "red", "value": 30 }
+            ]
+          },
+          "unit": "percent"
+        },
+        "overrides": [
+          {
+            "matcher": { "id": "byName", "options": "Target (<30%)" },
+            "properties": [
+              { "id": "custom.lineStyle", "value": { "dash": [10, 10], "fill": "dash" } },
+              { "id": "color", "value": { "fixedColor": "dark-green", "mode": "fixed" } },
+              { "id": "custom.fillOpacity", "value": 0 }
+            ]
+          }
+        ]
+      },
+      "gridPos": { "h": 8, "w": 12, "x": 12, "y": 29 },
+      "id": 15,
+      "options": {
+        "legend": { "displayMode": "table", "placement": "bottom", "showLegend": true },
+        "tooltip": { "mode": "multi" }
+      },
+      "targets": [
+        {
+          "datasource": { "type": "grafana-postgresql-datasource", "uid": "atx-postgres" },
+          "format": "time_series",
+          "rawQuery": true,
+          "rawSql": "SELECT period AS time, emergency_percent AS \"Emergency Work (%)\", 30.0 AS \"Target (<30%)\" FROM v_emergency_work_monthly ORDER BY period",
+          "refId": "A"
+        }
+      ],
+      "title": "Emergency Work Order % Trend",
+      "type": "timeseries"
+    },
+    {
+      "collapsed": false,
+      "gridPos": { "h": 1, "w": 24, "x": 0, "y": 37 },
+      "id": 104,
+      "title": "Current Operations Risks & Actions",
+      "type": "row"
+    },
+    {
+      "datasource": { "type": "grafana-postgresql-datasource", "uid": "atx-postgres" },
+      "fieldConfig": { "defaults": {}, "overrides": [] },
+      "gridPos": { "h": 7, "w": 12, "x": 0, "y": 38 },
+      "id": 16,
+      "options": { "footer": { "show": false }, "showHeader": true },
+      "targets": [
+        {
+          "datasource": { "type": "grafana-postgresql-datasource", "uid": "atx-postgres" },
+          "format": "table",
+          "rawQuery": true,
+          "rawSql": "SELECT risk_type AS \"Risk Area\", asset_code AS \"Asset\", severity AS \"Severity\", description AS \"Operational Condition & Risk\", status AS \"Current Mitigation / Response\" FROM v_operational_risks ORDER BY identified_at DESC",
+          "refId": "A"
+        }
+      ],
+      "title": "Current Operational & Maintenance Risks",
+      "type": "table"
+    },
+    {
+      "datasource": { "type": "grafana-postgresql-datasource", "uid": "atx-postgres" },
+      "fieldConfig": { "defaults": {}, "overrides": [] },
+      "gridPos": { "h": 7, "w": 12, "x": 12, "y": 38 },
+      "id": 17,
+      "options": { "footer": { "show": false }, "showHeader": true },
+      "targets": [
+        {
+          "datasource": { "type": "grafana-postgresql-datasource", "uid": "atx-postgres" },
+          "format": "table",
+          "rawQuery": true,
+          "rawSql": "SELECT a.asset_code AS \"Asset\", r.problem_statement AS \"Problem Statement\", c.action_description AS \"Corrective Action\", c.due_date AS \"Due Date\", CASE WHEN c.completed_date IS NOT NULL THEN 'Completed' WHEN c.due_date < CURRENT_DATE THEN 'Overdue' ELSE 'Open' END AS \"Status\" FROM corrective_actions c JOIN rca_events r USING(rca_event_id) JOIN work_orders w USING(work_order_id) JOIN assets a USING(asset_id) ORDER BY c.due_date DESC LIMIT 5",
+          "refId": "A"
+        }
+      ],
+      "title": "RCA Corrective Actions Status",
+      "type": "table"
+    },
+    {
+      "collapsed": false,
+      "gridPos": { "h": 1, "w": 24, "x": 0, "y": 45 },
+      "id": 105,
+      "title": "Executive AI Maintenance Assistant",
+      "type": "row"
+    },
+    {
+      "gridPos": { "h": 6, "w": 24, "x": 0, "y": 46 },
+      "id": 18,
+      "options": {
+        "content": "### AI Maintenance Summary & Decision Support\n\nAI Maintenance Summary is powered by the **Grafana LLM Plugin** (`grafana-llm-app`) connected to curated PostgreSQL views (`v_plant_uptime`, `v_line_uptime`, `v_downtime_by_asset`, `v_repeat_failures`, `v_open_rca_actions`, `v_shared_asset_risk`, `v_condition_measurements`).\n\n#### Key Operational Questions Supported in Interview:\n- **Plant Uptime Performance**: *\"What is keeping plant uptime below target?\"* → Line 2 downtime (85.95% uptime) driven by Filler-201 and Conveyor-201 repeat issues.\n- **Line Comparison**: *\"Why is Line 2 worse than Line 1?\"* → Line 1 achieved 97.61% in August vs. Line 2 at 92.71% due to packaging and conveying failures.\n- **Reliability Engineering**: *\"What changed after the Filler-201 RCA?\"* → Root cause identified bracket vibration; PM Revision 2 added explicit locking hardware and security checks; repeat failures dropped from 11/mo to 5/mo.\n- **Predictive Intervention**: *\"Why is Air-Comp-001 a predictive maintenance concern?\"* → Simultaneous dependency on Line 1 & Line 2; vibration trended from 1.63 to 3.13 mm/s, prompting planned intervention during sanitation window.\n\n*Run `.\\scripts\\test-ai-summary.ps1` to execute live grounded queries against OpenAI BASE (`gpt-4o-mini`) and LARGE (`gpt-4o`) models.*",
+        "mode": "markdown"
+      },
+      "title": "AI Maintenance Summary",
+      "type": "text"
+    }
+  ],
+  "refresh": "",
+  "schemaVersion": 42,
+  "tags": ["maintenance", "operations", "executive"],
+  "templating": { "list": [] },
+  "time": {
+    "from": "2026-01-01T00:00:00.000Z",
+    "to": "2026-09-01T00:00:00.000Z"
+  },
+  "timezone": "browser",
+  "title": "VP Operations Overview",
+  "uid": "atx-vp-operations",
+  "version": 2
+}
