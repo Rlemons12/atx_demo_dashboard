@@ -65,7 +65,7 @@ The project uses the installed Grafana binary but keeps its runtime database, lo
 
 Milestone 4 instruments only `MIXER-201`, `CONVEYOR-201`, `FILLER-201`, and `LABELER-201` in depth. Deterministic PostgreSQL telemetry resolves into auditable states and primary Stop Reason Tags, then into Equipment OEE and Loss Analysis. Line 2 OEE is independently calculated from line time, product-specific rate, and line counts; it is never the average of machine OEE percentages.
 
-The aligned terms are Asset Utilization / Scheduled Utilization, Equipment OEE, Line OEE, and Loss Analysis—not the legacy draft labels “OEE1” and “OEE2.” Asset Utilization is Scheduled Production Time / Total Calendar Time and is not OEE. OEE is Availability × Performance / Speed × Quality. Loss Analysis separately explains scheduled capacity, stop, unplanned-maintenance, speed, and quality losses; it is not multiplied into OEE.
+The aligned terms are Asset Utilization / Scheduled Utilization, Equipment OEE, Line OEE, and Loss Analysis—not the earlier draft labels “OEE1” and “OEE2.” Asset Utilization is Scheduled Production Time / Total Calendar Time and is not OEE. OEE is Availability × Performance / Speed × Quality. Loss Analysis separately explains scheduled capacity, stop, unplanned-maintenance, speed, and quality losses; it is not multiplied into OEE.
 
 Planned breaks preserve the existing convention and are outside Scheduled Production Time. Planned changeover is inside Scheduled Production Time and visible as planned production loss. Sanitation, outside-schedule planned maintenance, and no-schedule time reduce utilization but not OEE Availability. `AIR-COMP-001` remains a shared utility and is excluded from piece-rate OEE.
 
@@ -79,6 +79,23 @@ Apply or validate Milestone 4 on an existing database:
 ```
 
 The guarded `rebuild-database.ps1 -ConfirmRebuild` command also applies and validates Milestone 4 after Milestone 2.5.
+
+## Current demo operating state
+
+All panels labeled current, active, or latest use one PostgreSQL-owned demonstration clock: `INTERVIEW_DEMO` at **2026-08-28 10:00:00 America/Chicago**. They do not use `NOW()`, browser time, or the workstation clock. This keeps the interview scenario stable and repeatable whenever Grafana is opened.
+
+The scenario is hypothetical and is not actual ATX production data, but every displayed value is read from relational PostgreSQL rows. At the anchor, Line 1 runs `ATX-20260828-L1-001` (Spicy Sauce), Line 2 runs `ATX-20260828-L2-001` (BBQ Blend), Production Shift A has its confirmed lead, two line operators, and maintenance technician, and the four dedicated Line 2 assets have current state and sensor observations. Historical January–August 2026 trends remain event-time based and are not rewritten around the anchor.
+
+Apply or validate the current scenario on an existing Milestone 4 database:
+
+```powershell
+.\scripts\seed-current-demo-state.ps1
+.\scripts\validate-current-demo-state.ps1
+```
+
+The semantic views `v_demo_context_active`, `v_current_production_status`, `v_current_line1_production_status`, `v_current_line2_production_status`, `v_current_shift_staffing`, `v_current_equipment_state`, `v_current_sensor_state`, and `v_current_month_schedule_adherence` derive current-state meaning from `demo_context.anchor_timestamp`.
+
+> This dashboard is reading real rows from the PostgreSQL demo database. For the interview I use a fixed demo timestamp so the operating state is repeatable and does not depend on when I open the dashboard. The scenario is hypothetical, but the database relationships, calculations, drill-downs, and operating workflow are real.
 
 Open Equipment OEE Detail (Filler-201 default): <http://127.0.0.1:3001/d/atx-equipment-oee-detail/equipment-oee-detail?var-asset=FILLER-201>
 
@@ -116,5 +133,7 @@ Database validation and AI summaries can be rerun independently:
 .\scripts\validate-database.ps1
 .\scripts\validate-milestone2.ps1
 .\scripts\validate-milestone2_5.ps1
+.\scripts\validate-milestone4.ps1
+.\scripts\validate-current-demo-state.ps1
 .\scripts\test-ai-summary.ps1
 ```

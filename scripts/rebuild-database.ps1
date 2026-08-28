@@ -23,3 +23,5 @@ finally {
 & "$PSScriptRoot\validate-milestone2_5.ps1"
 & "$PSScriptRoot\seed-line2-equipment-inputs.ps1"
 & "$PSScriptRoot\validate-milestone4.ps1"
+& "$PSScriptRoot\seed-current-demo-state.ps1"
+& "$PSScriptRoot\validate-current-demo-state.ps1"

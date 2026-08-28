@@ -682,13 +682,13 @@
                                                           },
                                            "format":  "time_series",
                                            "rawQuery":  true,
-                                           "rawSql":  "SELECT time,COALESCE(numeric_value,CASE discrete_value WHEN \u0027RUNNING\u0027 THEN 1 WHEN \u0027ACTIVE\u0027 THEN 1 WHEN \u0027FAULTED\u0027 THEN 1 WHEN \u0027INTERMITTENT\u0027 THEN 1 WHEN \u0027PRESENT\u0027 THEN 1 WHEN \u0027PRODUCT_DETECTED\u0027 THEN 1 ELSE 0 END) AS value,functional_class AS metric FROM v_line2_sensor_history WHERE asset_code=\u0027$asset\u0027 AND $__timeFilter(time) ORDER BY time",
+                                           "rawSql":  "SELECT h.time,COALESCE(h.numeric_value,CASE h.discrete_value WHEN \u0027RUNNING\u0027 THEN 1 WHEN \u0027ACTIVE\u0027 THEN 1 WHEN \u0027FAULTED\u0027 THEN 1 WHEN \u0027INTERMITTENT\u0027 THEN 1 WHEN \u0027PRESENT\u0027 THEN 1 WHEN \u0027PRODUCT_DETECTED\u0027 THEN 1 ELSE 0 END) AS value,h.functional_class AS metric FROM v_line2_sensor_history h CROSS JOIN v_demo_context_active dc WHERE h.asset_code=\u0027$asset\u0027 AND h.time BETWEEN dc.anchor_timestamp-INTERVAL \u00278 hours\u0027 AND dc.anchor_timestamp ORDER BY h.time",
                                            "refId":  "A"
                                        }
                                    ],
                        "title":  "Run/fault, counts, rate/cycle, and asset-specific condition inputs",
                        "type":  "timeseries",
-                       "description":  "Trends selected-asset synthetic inputs over the dashboard time range. Discrete run/fault/photoeye states are mapped to 0/1 while counts, rate, cycle, and condition signals retain numeric values. Correlate state changes and flat counters with Stop Reason Tags before assigning cause.\n\n**Data source:** PostgreSQL v_line2_sensor_history."
+                       "description":  "Trends selected-asset synthetic inputs during the eight hours ending at the fixed demo anchor. Discrete run/fault/photoeye states are mapped to 0/1 while counts, rate, cycle, and condition signals retain numeric values. The fixed window prevents workstation time from producing an empty panel. Correlate state changes and flat counters with Stop Reason Tags before assigning cause. Data sources: v_line2_sensor_history and v_demo_context_active."
                    },
                    {
                        "collapsed":  false,

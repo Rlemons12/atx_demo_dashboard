@@ -302,7 +302,7 @@
                                    ],
                        "title":  "Overdue PMs",
                        "type":  "stat",
-                       "description":  "Counts PM executions past due whose status is not COMPLETED or CANCELLED, filtered by asset. Zero is desired; overdue work on A or plant-critical assets deserves first escalation. Review the Overdue PM Execution List for plan, age, and criticality. Data source: v_overdue_pm."
+                       "description":  "Counts PM executions past due as of the fixed Aug 28, 2026 demo anchor whose status is not COMPLETED or CANCELLED, filtered by asset. Zero is desired; overdue work on A or plant-critical assets deserves first escalation. Review the Overdue PM Execution List for plan, age, and criticality. Data source: v_overdue_pm."
                    },
                    {
                        "datasource":  {
@@ -929,13 +929,13 @@
                                                           },
                                            "format":  "table",
                                            "rawQuery":  true,
-                                           "rawSql":  "SELECT a.asset_code AS \"Asset\", p.pm_code AS \"PM Plan\", p.frequency AS \"Frequency\", e.scheduled_date AS \"Due Date\", (CURRENT_DATE - e.scheduled_date) AS \"Days Overdue\", ac.criticality_class AS \"Priority\" FROM pm_executions e JOIN pm_plans p USING(pm_plan_id) JOIN assets a USING(asset_id) JOIN asset_criticality ac USING(asset_id) WHERE e.status NOT IN (\u0027COMPLETED\u0027, \u0027CANCELLED\u0027) AND e.scheduled_date \u003c CURRENT_DATE AND (\u0027$asset\u0027 = \u0027%\u0027 OR a.asset_code = \u0027$asset\u0027) ORDER BY (CURRENT_DATE - e.scheduled_date) DESC",
+                                           "rawSql":  "SELECT a.asset_code AS \"Asset\", p.pm_code AS \"PM Plan\", p.frequency AS \"Frequency\", e.scheduled_date AS \"Due Date\", (dc.anchor_timestamp::date - e.scheduled_date) AS \"Days Overdue\", ac.criticality_class AS \"Priority\" FROM pm_executions e JOIN pm_plans p USING(pm_plan_id) JOIN assets a USING(asset_id) JOIN asset_criticality ac USING(asset_id) CROSS JOIN v_demo_context_active dc WHERE e.status NOT IN (\u0027COMPLETED\u0027, \u0027CANCELLED\u0027) AND e.scheduled_date \u003c dc.anchor_timestamp::date AND (\u0027$asset\u0027 = \u0027%\u0027 OR a.asset_code = \u0027$asset\u0027) ORDER BY (dc.anchor_timestamp::date - e.scheduled_date) DESC",
                                            "refId":  "A"
                                        }
                                    ],
                        "title":  "Overdue PM Execution List",
                        "type":  "table",
-                       "description":  "Each row is one PM execution past its scheduled date and not Completed or Cancelled, filtered by asset. Days Overdue drives descending order; criticality and age determine escalation priority.\n\n**Data source:** PostgreSQL asset_criticality, assets, pm_executions, pm_plans."
+                       "description":  "Each row is one PM execution past its scheduled date as of the fixed Aug 28, 2026 demo anchor and not Completed or Cancelled, filtered by asset. Days Overdue drives descending order; criticality and age determine escalation priority. Data sources: asset_criticality, assets, pm_executions, pm_plans, and v_demo_context_active."
                    },
                    {
                        "collapsed":  false,

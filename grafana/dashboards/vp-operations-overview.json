@@ -752,9 +752,9 @@
                                            "refId":  "A"
                                        }
                                    ],
-                       "title":  "Legacy Monthly Line 1 OEE — Target ≥85%",
+                       "title":  "Line 1 Monthly OEE — Target ≥85%",
                        "type":  "stat",
-                       "description":  "Shows the latest monthly Line OEE from the preserved Milestone 2.5 view. That legacy view derives runtime from planned-versus-actual production and uses the historical production-calendar denominator, then calculates OEE as Availability x Performance x Quality. Higher is better. Do not compare it as if it were the newer detailed Line 2 calculation; use the independently calculated Line 2 section and Equipment OEE Detail for sensor-to-loss analysis.\n\n**Data source:** PostgreSQL v_line_oee_monthly."
+                       "description":  "Shows monthly Line 1 OEE for the selected historical period using the dashboard's monthly rollup model. Runtime is derived from planned-versus-actual production and the historical production-calendar denominator; OEE is Availability x Performance x Quality. Use this panel for directional performance trending. For detailed loss attribution, review Detailed Line 2 OEE and Equipment OEE Detail.\n\n**Data source:** PostgreSQL v_line_oee_monthly."
                    },
                    {
                        "datasource":  {
@@ -820,9 +820,9 @@
                                            "refId":  "A"
                                        }
                                    ],
-                       "title":  "Legacy Monthly Line 2 OEE — Target ≥85%",
+                       "title":  "Line 2 Monthly OEE — Target ≥85%",
                        "type":  "stat",
-                       "description":  "Shows the latest monthly Line OEE from the preserved Milestone 2.5 view. That legacy view derives runtime from planned-versus-actual production and uses the historical production-calendar denominator, then calculates OEE as Availability x Performance x Quality. Higher is better. Do not compare it as if it were the newer detailed Line 2 calculation; use the independently calculated Line 2 section and Equipment OEE Detail for sensor-to-loss analysis.\n\n**Data source:** PostgreSQL v_line_oee_monthly."
+                       "description":  "Shows monthly Line 2 OEE for the selected historical period using the dashboard's monthly rollup model. Runtime is derived from planned-versus-actual production and the historical production-calendar denominator; OEE is Availability x Performance x Quality. Use this panel for directional performance trending. For detailed loss attribution, review Detailed Line 2 OEE and Equipment OEE Detail.\n\n**Data source:** PostgreSQL v_line_oee_monthly."
                    },
                    {
                        "datasource":  {
@@ -877,13 +877,13 @@
                                                           },
                                            "format":  "table",
                                            "rawQuery":  true,
-                                           "rawSql":  "SELECT lot_number || \u0027 (\u0027 || product_name || \u0027)\u0027 AS \"Active Lot\", progress_percent || \u0027%\u0027 AS \"Progress\", yield_percent || \u0027%\u0027 AS \"Yield\" FROM v_current_production_lots WHERE line_code = \u0027LINE-1\u0027 LIMIT 1",
+                                           "rawSql":  "SELECT lot_number || \u0027 (\u0027 || product_name || \u0027)\u0027 AS \"Active Lot\", progress_percent || \u0027%\u0027 AS \"Progress\", yield_percent || \u0027%\u0027 AS \"Yield\" FROM v_current_line1_production_status",
                                            "refId":  "A"
                                        }
                                    ],
                        "title":  "Line 1 — Current Running Lot",
                        "type":  "stat",
-                       "description":  "Shows the current running production lot snapshot, product, completion progress, and yield for the named line. It is not a historical aggregation. Delayed progress or weak yield should be followed into schedule adherence, line OEE, and equipment detail.\n\n**Data source:** PostgreSQL v_current_production_lots."
+                       "description":  "Shows the Line 1 lot running at the fixed Aug 28, 2026 10:00 AM demo anchor, including product, progress, and yield. It is a hypothetical live-like PostgreSQL snapshot, not actual production or a wall-clock query. Delayed progress or weak yield should be followed into Production \u0026 OEE. Data source: v_current_line1_production_status."
                    },
                    {
                        "datasource":  {
@@ -938,13 +938,13 @@
                                                           },
                                            "format":  "table",
                                            "rawQuery":  true,
-                                           "rawSql":  "SELECT lot_number || \u0027 (\u0027 || product_name || \u0027)\u0027 AS \"Active Lot\", progress_percent || \u0027%\u0027 AS \"Progress\", yield_percent || \u0027%\u0027 AS \"Yield\" FROM v_current_production_lots WHERE line_code = \u0027LINE-2\u0027 LIMIT 1",
+                                           "rawSql":  "SELECT lot_number || \u0027 (\u0027 || product_name || \u0027)\u0027 AS \"Active Lot\", progress_percent || \u0027%\u0027 AS \"Progress\", yield_percent || \u0027%\u0027 AS \"Yield\" FROM v_current_line2_production_status",
                                            "refId":  "A"
                                        }
                                    ],
                        "title":  "Line 2 — Current Running Lot",
                        "type":  "stat",
-                       "description":  "Shows the current running production lot snapshot, product, completion progress, and yield for the named line. It is not a historical aggregation. Delayed progress or weak yield should be followed into schedule adherence, line OEE, and equipment detail.\n\n**Data source:** PostgreSQL v_current_production_lots."
+                       "description":  "Shows the Line 2 lot running at the fixed Aug 28, 2026 10:00 AM demo anchor, including product, progress, and yield. It is a hypothetical live-like PostgreSQL snapshot, not actual production or a wall-clock query. Follow weak performance into Detailed Line 2 OEE and Equipment OEE Detail. Data source: v_current_line2_production_status."
                    },
                    {
                        "datasource":  {
@@ -1006,13 +1006,13 @@
                                                           },
                                            "format":  "table",
                                            "rawQuery":  true,
-                                           "rawSql":  "SELECT round(avg(on_time_start_percent), 1) AS \"On-Time Start %\" FROM v_production_schedule_adherence WHERE period = (SELECT max(period) FROM v_production_schedule_adherence)",
+                                           "rawSql":  "SELECT round(avg(on_time_start_percent), 1) AS \"On-Time Start %\" FROM v_current_month_schedule_adherence",
                                            "refId":  "A"
                                        }
                                    ],
                        "title":  "Schedule Adherence (On-Time)",
                        "type":  "stat",
-                       "description":  "Shows average on-time-start percentage for the latest available monthly period. Higher means scheduled lots began closer to plan; low values indicate execution, staffing, material, shared-asset, or changeover constraints. Review the upcoming schedule and operating-risk panels.\n\n**Data source:** PostgreSQL v_production_schedule_adherence."
+                       "description":  "Shows August 2026 average on-time-start performance, with the reporting month derived from the fixed demo anchor. Higher is better; low values indicate execution, staffing, material, shared-asset, or changeover constraints. Running lots are excluded until complete. Data source: v_current_month_schedule_adherence."
                    },
                    {
                        "datasource":  {
@@ -1067,13 +1067,13 @@
                                                           },
                                            "format":  "table",
                                            "rawQuery":  true,
-                                           "rawSql":  "SELECT count(DISTINCT employee_id) || \u0027 On Duty (1 Maint Tech)\u0027 AS \"PROD-B Staffing\" FROM employee_schedules WHERE schedule_date = DATE \u00272026-08-27\u0027 AND shift_id = 2",
+                                           "rawSql":  "SELECT count(*) || \u0027 On Duty (1 Maint Tech)\u0027 AS \"PROD-A Staffing\" FROM v_current_shift_staffing",
                                            "refId":  "A"
                                        }
                                    ],
-                       "title":  "Shift B Staffing Snapshot — August 27, 2026",
+                       "title":  "Current Demo Staffing — Shift A",
                        "type":  "stat",
-                       "description":  "Shows the deterministic August 27, 2026 Shift B staffing snapshot and expected one-maintenance-technician production coverage. Treat an unexpected headcount as a coverage exception and drill to the staffing/risk dashboard.\n\n**Data source:** PostgreSQL employee_schedules."
+                       "description":  "Shows confirmed personnel on duty at the fixed Aug 28, 2026 10:00 AM demo anchor. The expected four-person Shift A roster contains a production lead, two line operators, and one plant-wide maintenance technician. An unexpected count is a coverage exception; drill to Staffing, Sanitation \u0026 Operational Risk. Data source: v_current_shift_staffing."
                    },
                    {
                        "collapsed":  false,
@@ -1710,13 +1710,13 @@
                                                           },
                                            "format":  "table",
                                            "rawQuery":  true,
-                                           "rawSql":  "SELECT a.asset_code AS \"Asset\", r.problem_statement AS \"Problem Statement\", c.action_description AS \"Corrective Action\", c.due_date AS \"Due Date\", CASE WHEN c.completed_date IS NOT NULL THEN \u0027Completed\u0027 WHEN c.due_date \u003c CURRENT_DATE THEN \u0027Overdue\u0027 ELSE \u0027Open\u0027 END AS \"Status\" FROM corrective_actions c JOIN rca_events r USING(rca_event_id) JOIN work_orders w USING(work_order_id) JOIN assets a USING(asset_id) ORDER BY c.due_date DESC LIMIT 5",
+                                           "rawSql":  "SELECT a.asset_code AS \"Asset\", r.problem_statement AS \"Problem Statement\", c.action_description AS \"Corrective Action\", c.due_date AS \"Due Date\", CASE WHEN c.completed_date IS NOT NULL THEN \u0027Completed\u0027 WHEN c.due_date \u003c dc.anchor_timestamp::date THEN \u0027Overdue\u0027 ELSE \u0027Open\u0027 END AS \"Status\" FROM corrective_actions c JOIN rca_events r USING(rca_event_id) JOIN work_orders w USING(work_order_id) JOIN assets a USING(asset_id) CROSS JOIN v_demo_context_active dc ORDER BY c.due_date DESC LIMIT 5",
                                            "refId":  "A"
                                        }
                                    ],
                        "title":  "RCA Corrective Actions Status",
                        "type":  "table",
-                       "description":  "Each row is an RCA corrective action joined to its asset and problem statement. Status is Completed when completed_date exists, Overdue when due_date is before today, otherwise Open. The query includes open and completed actions, sorts due dates newest first, and limits to five. Overdue or unverified high-impact actions require owner follow-up in Maintenance Reliability. Data source: corrective_actions, rca_events, work_orders, assets."
+                       "description":  "Each row is an RCA corrective action joined to its asset and problem statement. Status is Completed when completed_date exists, Overdue when due_date is before the fixed Aug 28, 2026 demo anchor date, otherwise Open. The query includes open and completed actions, sorts due dates newest first, and limits to five. Overdue or unverified high-impact actions require owner follow-up in Maintenance Reliability. Data sources: corrective_actions, rca_events, work_orders, assets, and v_demo_context_active."
                    },
                    {
                        "collapsed":  false,

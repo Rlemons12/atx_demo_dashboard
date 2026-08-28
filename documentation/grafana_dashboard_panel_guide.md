@@ -2,6 +2,12 @@
 
 This guide catalogs the actual provisioned dashboard JSON. It documents panel meaning, exact query logic, variables, and navigation so the dashboards can be used without presenter narration.
 
+## Current Demo Operating State
+
+Panels labeled current, active, latest, or overdue use the single active PostgreSQL `demo_context` anchor: **2026-08-28 10:00:00 America/Chicago**. This fixed clock makes the live-like scenario repeatable and prevents workstation or browser time from producing empty or changing panels. The scenario is hypothetical and is not actual ATX production data, but the displayed values are real related rows from the PostgreSQL demo database. Historical trends continue to use their recorded January–August 2026 dates.
+
+Interview message: “This dashboard is reading real rows from the PostgreSQL demo database. For the interview I use a fixed demo timestamp so the operating state is repeatable and does not depend on when I open the dashboard. The scenario is hypothetical, but the database relationships, calculations, drill-downs, and operating workflow are real.”
+
 ## 1. VP Operations Overview
 
 ### Dashboard purpose
@@ -199,11 +205,11 @@ SELECT repeat_failure_count FROM v_repeat_failures_monthly ORDER BY period DESC 
 - **Drill-down:** Drill to Production & OEE for capacity/OEE, Maintenance Reliability for failures/RCA, or Operational Risk for staffing/shared assets.
 - **PostgreSQL source view/table:** Dashboard narrative / no PostgreSQL query
 
-### Panel 12 - Legacy Monthly Line 1 OEE — Target ≥85%
+### Panel 12 - Line 1 Monthly OEE — Target ≥85%
 
-- **Panel title:** Legacy Monthly Line 1 OEE — Target ≥85%
+- **Panel title:** Line 1 Monthly OEE — Target ≥85%
 - **Visualization type:** stat
-- **Purpose:** Shows the latest monthly Line OEE from the preserved Milestone 2.5 view. That legacy view derives runtime from planned-versus-actual production and uses the historical production-calendar denominator, then calculates OEE as Availability x Performance x Quality. Higher is better. Do not compare it as if it were the newer detailed Line 2 calculation; use the independently calculated Line 2 section and Equipment OEE Detail for sensor-to-loss analysis.  **Data source:** PostgreSQL v_line_oee_monthly.
+- **Purpose:** Shows monthly Line 1 OEE for the selected historical period using the dashboard's monthly rollup model. Runtime is derived from planned-versus-actual production and the historical production-calendar denominator; OEE is Availability x Performance x Quality. Use this panel for directional performance trending. For detailed loss attribution, review Detailed Line 2 OEE and Equipment OEE Detail.  **Data source:** PostgreSQL v_line_oee_monthly.
 - **Data represented:** The value, row, bar, or trend series described above, using the exact selected fields and inclusion rules in the panel SQL below.
 - **Formula / aggregation:** Defined by the exact panel SQL below; view-backed formulas are identified in the panel description and source view.
 - **Interpretation:** Apply the stated high/low direction, target, status, trend, or ordering guidance before assigning cause.
@@ -217,11 +223,11 @@ SELECT oee_percent FROM v_line_oee_monthly WHERE line_code = 'LINE-1' ORDER BY p
 - **Drill-down:** Drill to Production & OEE for capacity/OEE, Maintenance Reliability for failures/RCA, or Operational Risk for staffing/shared assets.
 - **PostgreSQL source view/table:** v_line_oee_monthly
 
-### Panel 13 - Legacy Monthly Line 2 OEE — Target ≥85%
+### Panel 13 - Line 2 Monthly OEE — Target ≥85%
 
-- **Panel title:** Legacy Monthly Line 2 OEE — Target ≥85%
+- **Panel title:** Line 2 Monthly OEE — Target ≥85%
 - **Visualization type:** stat
-- **Purpose:** Shows the latest monthly Line OEE from the preserved Milestone 2.5 view. That legacy view derives runtime from planned-versus-actual production and uses the historical production-calendar denominator, then calculates OEE as Availability x Performance x Quality. Higher is better. Do not compare it as if it were the newer detailed Line 2 calculation; use the independently calculated Line 2 section and Equipment OEE Detail for sensor-to-loss analysis.  **Data source:** PostgreSQL v_line_oee_monthly.
+- **Purpose:** Shows monthly Line 2 OEE for the selected historical period using the dashboard's monthly rollup model. Runtime is derived from planned-versus-actual production and the historical production-calendar denominator; OEE is Availability x Performance x Quality. Use this panel for directional performance trending. For detailed loss attribution, review Detailed Line 2 OEE and Equipment OEE Detail.  **Data source:** PostgreSQL v_line_oee_monthly.
 - **Data represented:** The value, row, bar, or trend series described above, using the exact selected fields and inclusion rules in the panel SQL below.
 - **Formula / aggregation:** Defined by the exact panel SQL below; view-backed formulas are identified in the panel description and source view.
 - **Interpretation:** Apply the stated high/low direction, target, status, trend, or ordering guidance before assigning cause.
@@ -239,7 +245,7 @@ SELECT oee_percent FROM v_line_oee_monthly WHERE line_code = 'LINE-2' ORDER BY p
 
 - **Panel title:** Line 1 — Current Running Lot
 - **Visualization type:** stat
-- **Purpose:** Shows the current running production lot snapshot, product, completion progress, and yield for the named line. It is not a historical aggregation. Delayed progress or weak yield should be followed into schedule adherence, line OEE, and equipment detail.  **Data source:** PostgreSQL v_current_production_lots.
+- **Purpose:** Shows the Line 1 lot running at the fixed Aug 28, 2026 10:00 AM demo anchor. It is a hypothetical live-like PostgreSQL snapshot, not actual production or a wall-clock query. Delayed progress or weak yield should be followed into Production & OEE. **Data source:** v_current_line1_production_status.
 - **Data represented:** The value, row, bar, or trend series described above, using the exact selected fields and inclusion rules in the panel SQL below.
 - **Formula / aggregation:** Defined by the exact panel SQL below; view-backed formulas are identified in the panel description and source view.
 - **Interpretation:** Apply the stated high/low direction, target, status, trend, or ordering guidance before assigning cause.
@@ -248,16 +254,16 @@ SELECT oee_percent FROM v_line_oee_monthly WHERE line_code = 'LINE-2' ORDER BY p
 - **Exact panel SQL:**
 
 ```sql
-SELECT lot_number || ' (' || product_name || ')' AS "Active Lot", progress_percent || '%' AS "Progress", yield_percent || '%' AS "Yield" FROM v_current_production_lots WHERE line_code = 'LINE-1' LIMIT 1
+SELECT lot_number || ' (' || product_name || ')' AS "Active Lot", progress_percent || '%' AS "Progress", yield_percent || '%' AS "Yield" FROM v_current_line1_production_status
 ```
 - **Drill-down:** Drill to Production & OEE for capacity/OEE, Maintenance Reliability for failures/RCA, or Operational Risk for staffing/shared assets.
-- **PostgreSQL source view/table:** v_current_production_lots
+- **PostgreSQL source view/table:** v_current_line1_production_status
 
 ### Panel 15 - Line 2 — Current Running Lot
 
 - **Panel title:** Line 2 — Current Running Lot
 - **Visualization type:** stat
-- **Purpose:** Shows the current running production lot snapshot, product, completion progress, and yield for the named line. It is not a historical aggregation. Delayed progress or weak yield should be followed into schedule adherence, line OEE, and equipment detail.  **Data source:** PostgreSQL v_current_production_lots.
+- **Purpose:** Shows the Line 2 lot running at the fixed Aug 28, 2026 10:00 AM demo anchor. It is a hypothetical live-like PostgreSQL snapshot, not actual production or a wall-clock query. Follow weak performance into Detailed Line 2 OEE and Equipment OEE Detail. **Data source:** v_current_line2_production_status.
 - **Data represented:** The value, row, bar, or trend series described above, using the exact selected fields and inclusion rules in the panel SQL below.
 - **Formula / aggregation:** Defined by the exact panel SQL below; view-backed formulas are identified in the panel description and source view.
 - **Interpretation:** Apply the stated high/low direction, target, status, trend, or ordering guidance before assigning cause.
@@ -266,16 +272,16 @@ SELECT lot_number || ' (' || product_name || ')' AS "Active Lot", progress_perce
 - **Exact panel SQL:**
 
 ```sql
-SELECT lot_number || ' (' || product_name || ')' AS "Active Lot", progress_percent || '%' AS "Progress", yield_percent || '%' AS "Yield" FROM v_current_production_lots WHERE line_code = 'LINE-2' LIMIT 1
+SELECT lot_number || ' (' || product_name || ')' AS "Active Lot", progress_percent || '%' AS "Progress", yield_percent || '%' AS "Yield" FROM v_current_line2_production_status
 ```
 - **Drill-down:** Drill to Production & OEE for capacity/OEE, Maintenance Reliability for failures/RCA, or Operational Risk for staffing/shared assets.
-- **PostgreSQL source view/table:** v_current_production_lots
+- **PostgreSQL source view/table:** v_current_line2_production_status
 
 ### Panel 16 - Schedule Adherence (On-Time)
 
 - **Panel title:** Schedule Adherence (On-Time)
 - **Visualization type:** stat
-- **Purpose:** Shows average on-time-start percentage for the latest available monthly period. Higher means scheduled lots began closer to plan; low values indicate execution, staffing, material, shared-asset, or changeover constraints. Review the upcoming schedule and operating-risk panels.  **Data source:** PostgreSQL v_production_schedule_adherence.
+- **Purpose:** Shows August 2026 average on-time-start performance, with the reporting month derived from the fixed demo anchor. Higher is better; running lots are excluded until complete. **Data source:** v_current_month_schedule_adherence.
 - **Data represented:** The value, row, bar, or trend series described above, using the exact selected fields and inclusion rules in the panel SQL below.
 - **Formula / aggregation:** Defined by the exact panel SQL below; view-backed formulas are identified in the panel description and source view.
 - **Interpretation:** Apply the stated high/low direction, target, status, trend, or ordering guidance before assigning cause.
@@ -284,16 +290,16 @@ SELECT lot_number || ' (' || product_name || ')' AS "Active Lot", progress_perce
 - **Exact panel SQL:**
 
 ```sql
-SELECT round(avg(on_time_start_percent), 1) AS "On-Time Start %" FROM v_production_schedule_adherence WHERE period = (SELECT max(period) FROM v_production_schedule_adherence)
+SELECT round(avg(on_time_start_percent), 1) AS "On-Time Start %" FROM v_current_month_schedule_adherence
 ```
 - **Drill-down:** Drill to Production & OEE for capacity/OEE, Maintenance Reliability for failures/RCA, or Operational Risk for staffing/shared assets.
-- **PostgreSQL source view/table:** v_production_schedule_adherence
+- **PostgreSQL source view/table:** v_current_month_schedule_adherence
 
-### Panel 17 - Shift B Staffing Snapshot — August 27, 2026
+### Panel 17 - Current Demo Staffing — Shift A
 
-- **Panel title:** Shift B Staffing Snapshot — August 27, 2026
+- **Panel title:** Current Demo Staffing — Shift A
 - **Visualization type:** stat
-- **Purpose:** Shows the deterministic August 27, 2026 Shift B staffing snapshot and expected one-maintenance-technician production coverage. Treat an unexpected headcount as a coverage exception and drill to the staffing/risk dashboard.  **Data source:** PostgreSQL employee_schedules.
+- **Purpose:** Shows the four confirmed personnel on duty at the fixed Aug 28, 2026 10:00 AM anchor: production lead, two line operators, and plant-wide maintenance technician. An unexpected count is a coverage exception. **Data source:** v_current_shift_staffing.
 - **Data represented:** The value, row, bar, or trend series described above, using the exact selected fields and inclusion rules in the panel SQL below.
 - **Formula / aggregation:** Defined by the exact panel SQL below; view-backed formulas are identified in the panel description and source view.
 - **Interpretation:** Apply the stated high/low direction, target, status, trend, or ordering guidance before assigning cause.
@@ -302,10 +308,10 @@ SELECT round(avg(on_time_start_percent), 1) AS "On-Time Start %" FROM v_producti
 - **Exact panel SQL:**
 
 ```sql
-SELECT count(DISTINCT employee_id) || ' On Duty (1 Maint Tech)' AS "PROD-B Staffing" FROM employee_schedules WHERE schedule_date = DATE '2026-08-27' AND shift_id = 2
+SELECT count(*) || ' On Duty (1 Maint Tech)' AS "PROD-A Staffing" FROM v_current_shift_staffing
 ```
 - **Drill-down:** Drill to Production & OEE for capacity/OEE, Maintenance Reliability for failures/RCA, or Operational Risk for staffing/shared assets.
-- **PostgreSQL source view/table:** employee_schedules
+- **PostgreSQL source view/table:** v_current_shift_staffing
 
 ### Panel 18 - Production Performance
 
@@ -516,7 +522,7 @@ SELECT risk_type AS "Risk Area", asset_code AS "Asset", severity AS "Severity", 
 - **Exact panel SQL:**
 
 ```sql
-SELECT a.asset_code AS "Asset", r.problem_statement AS "Problem Statement", c.action_description AS "Corrective Action", c.due_date AS "Due Date", CASE WHEN c.completed_date IS NOT NULL THEN 'Completed' WHEN c.due_date < CURRENT_DATE THEN 'Overdue' ELSE 'Open' END AS "Status" FROM corrective_actions c JOIN rca_events r USING(rca_event_id) JOIN work_orders w USING(work_order_id) JOIN assets a USING(asset_id) ORDER BY c.due_date DESC LIMIT 5
+SELECT a.asset_code AS "Asset", r.problem_statement AS "Problem Statement", c.action_description AS "Corrective Action", c.due_date AS "Due Date", CASE WHEN c.completed_date IS NOT NULL THEN 'Completed' WHEN c.due_date < dc.anchor_timestamp::date THEN 'Overdue' ELSE 'Open' END AS "Status" FROM corrective_actions c JOIN rca_events r USING(rca_event_id) JOIN work_orders w USING(work_order_id) JOIN assets a USING(asset_id) CROSS JOIN v_demo_context_active dc ORDER BY c.due_date DESC LIMIT 5
 ```
 - **Drill-down:** Drill to Production & OEE for capacity/OEE, Maintenance Reliability for failures/RCA, or Operational Risk for staffing/shared assets.
 - **PostgreSQL source view/table:** assets, corrective_actions, rca_events, work_orders
@@ -584,11 +590,11 @@ Start with line utilization and OEE, identify whether Availability, Performance 
 - **Drill-down:** Drill from Line 2 and its equipment table to Equipment OEE Detail, then use Maintenance Reliability for RCA.
 - **PostgreSQL source view/table:** Dashboard narrative / no PostgreSQL query
 
-### Panel 2 - Current Production Status & Shift Staffing
+### Panel 2 - Current Demo Operating State — Aug 28, 2026
 
-- **Panel title:** Current Production Status & Shift Staffing
+- **Panel title:** Current Demo Operating State — Aug 28, 2026
 - **Visualization type:** row
-- **Purpose:** Section grouping for **Current Production Status & Shift Staffing**. Read the panels below it together before drilling to the next numbered section or linked dashboard.
+- **Purpose:** Displays the hypothetical plant state at the fixed demonstration anchor. Values come from PostgreSQL and form a repeatable live-like interview scenario; they are not actual ATX production data.
 - **Data represented:** The value, row, bar, or trend series described above, using the exact selected fields and inclusion rules in the panel SQL below.
 - **Formula / aggregation:** Defined by the exact panel SQL below; view-backed formulas are identified in the panel description and source view.
 - **Interpretation:** Apply the stated high/low direction, target, status, trend, or ordering guidance before assigning cause.
@@ -601,7 +607,7 @@ Start with line utilization and OEE, identify whether Availability, Performance 
 
 - **Panel title:** Line 1 — Active Lot Status (Running)
 - **Visualization type:** stat
-- **Purpose:** Shows the current Line 1 RUNNING lot from v_current_production_lots: lot, product, progress, and yield. One displayed value set represents the current deterministic snapshot, not a historical period. Low progress versus elapsed schedule or weak yield should be checked against schedule adherence and line OEE; Shift B context is shown in the staffing roster. Data source: v_current_production_lots.
+- **Purpose:** Shows the one Line 1 RUNNING lot at the fixed demo anchor, including lot, product, Shift A, progress, yield, and current rate. It is relational PostgreSQL demo data, not actual ATX production data. Data source: v_current_line1_production_status.
 - **Data represented:** The value, row, bar, or trend series described above, using the exact selected fields and inclusion rules in the panel SQL below.
 - **Formula / aggregation:** Defined by the exact panel SQL below; view-backed formulas are identified in the panel description and source view.
 - **Interpretation:** Apply the stated high/low direction, target, status, trend, or ordering guidance before assigning cause.
@@ -610,16 +616,16 @@ Start with line utilization and OEE, identify whether Availability, Performance 
 - **Exact panel SQL:**
 
 ```sql
-SELECT lot_number AS "Active Lot", product_name AS "Product", progress_percent || '%' AS "Progress", yield_percent || '%' AS "Yield" FROM v_current_production_lots WHERE line_code = 'LINE-1'
+SELECT lot_number AS "Active Lot", product_name AS "Product", shift_code AS "Shift", progress_percent || '%' AS "Progress", yield_percent || '%' AS "Yield", round(current_rate,1) || ' units/min' AS "Current Rate" FROM v_current_line1_production_status
 ```
 - **Drill-down:** Drill from Line 2 and its equipment table to Equipment OEE Detail, then use Maintenance Reliability for RCA.
-- **PostgreSQL source view/table:** v_current_production_lots
+- **PostgreSQL source view/table:** v_current_line1_production_status
 
 ### Panel 4 - Line 2 — Active Lot Status (Running)
 
 - **Panel title:** Line 2 — Active Lot Status (Running)
 - **Visualization type:** stat
-- **Purpose:** Shows the current Line 2 RUNNING lot from v_current_production_lots: lot, product, progress, and yield. One displayed value set represents the current deterministic snapshot, not a historical period. Low progress or yield should be followed into detailed Line 2 OEE, equipment contributors, and Filler-201 detail; Shift B context is in the roster. Data source: v_current_production_lots.
+- **Purpose:** Shows the one Line 2 RUNNING lot at the fixed demo anchor, including lot, product, Shift A, progress, yield, and current rate. The lot is linked to the four detailed Line 2 assets. Data source: v_current_line2_production_status.
 - **Data represented:** The value, row, bar, or trend series described above, using the exact selected fields and inclusion rules in the panel SQL below.
 - **Formula / aggregation:** Defined by the exact panel SQL below; view-backed formulas are identified in the panel description and source view.
 - **Interpretation:** Apply the stated high/low direction, target, status, trend, or ordering guidance before assigning cause.
@@ -628,16 +634,16 @@ SELECT lot_number AS "Active Lot", product_name AS "Product", progress_percent |
 - **Exact panel SQL:**
 
 ```sql
-SELECT lot_number AS "Active Lot", product_name AS "Product", progress_percent || '%' AS "Progress", yield_percent || '%' AS "Yield" FROM v_current_production_lots WHERE line_code = 'LINE-2'
+SELECT lot_number AS "Active Lot", product_name AS "Product", shift_code AS "Shift", progress_percent || '%' AS "Progress", yield_percent || '%' AS "Yield", round(current_rate,1) || ' units/min' AS "Current Rate" FROM v_current_line2_production_status
 ```
 - **Drill-down:** Drill from Line 2 and its equipment table to Equipment OEE Detail, then use Maintenance Reliability for RCA.
-- **PostgreSQL source view/table:** v_current_production_lots
+- **PostgreSQL source view/table:** v_current_line2_production_status
 
-### Panel 5 - Current Staffing Roster (Shift B — 1/1/0 Model)
+### Panel 5 - Current Staffing Roster (Shift A — 1/1/0 Model)
 
-- **Panel title:** Current Staffing Roster (Shift B — 1/1/0 Model)
+- **Panel title:** Current Staffing Roster (Shift A — 1/1/0 Model)
 - **Visualization type:** table
-- **Purpose:** Each row is one employee in the deterministic current Shift B schedule, ordered by role. Columns show assigned role, employee, line/plant assignment, and confirmation status. Expected production coverage is one lead, one operator per line, and one maintenance technician; missing or unconfirmed roles require Operational Risk review. Data source: v_employee_schedule_current.
+- **Purpose:** Each row is one confirmed employee whose scheduled interval contains the demo anchor. Shift A includes one lead, one operator per line, and one plant-wide maintenance technician; sanitation is not active. Data source: v_current_shift_staffing.
 - **Data represented:** The value, row, bar, or trend series described above, using the exact selected fields and inclusion rules in the panel SQL below.
 - **Formula / aggregation:** Defined by the exact panel SQL below; view-backed formulas are identified in the panel description and source view.
 - **Interpretation:** Apply the stated high/low direction, target, status, trend, or ordering guidance before assigning cause.
@@ -646,16 +652,16 @@ SELECT lot_number AS "Active Lot", product_name AS "Product", progress_percent |
 - **Exact panel SQL:**
 
 ```sql
-SELECT assigned_role AS "Role", employee_name AS "Employee", line_assignment AS "Line", status AS "Status" FROM v_employee_schedule_current ORDER BY assigned_role
+SELECT assigned_role AS "Role", employee_name AS "Employee", line_assignment AS "Line", shift_code AS "Shift", status AS "Status" FROM v_current_shift_staffing ORDER BY assigned_role
 ```
 - **Drill-down:** Drill from Line 2 and its equipment table to Equipment OEE Detail, then use Maintenance Reliability for RCA.
-- **PostgreSQL source view/table:** v_employee_schedule_current
+- **PostgreSQL source view/table:** v_current_shift_staffing
 
 ### Panel 6 - Schedule Adherence (Current Month)
 
 - **Panel title:** Schedule Adherence (Current Month)
 - **Visualization type:** stat
-- **Purpose:** Shows average on-time-start percentage for the latest available monthly period. Higher means scheduled lots began closer to plan; low values indicate execution, staffing, material, shared-asset, or changeover constraints. Review the upcoming schedule and operating-risk panels.  **Data source:** PostgreSQL v_production_schedule_adherence.
+- **Purpose:** Shows August 2026 on-time-start performance, with the month derived from the active demo anchor. Current running lots do not inflate the completed-lot denominator. Data source: v_current_month_schedule_adherence.
 - **Data represented:** The value, row, bar, or trend series described above, using the exact selected fields and inclusion rules in the panel SQL below.
 - **Formula / aggregation:** Defined by the exact panel SQL below; view-backed formulas are identified in the panel description and source view.
 - **Interpretation:** Apply the stated high/low direction, target, status, trend, or ordering guidance before assigning cause.
@@ -664,10 +670,10 @@ SELECT assigned_role AS "Role", employee_name AS "Employee", line_assignment AS 
 - **Exact panel SQL:**
 
 ```sql
-SELECT round(avg(on_time_start_percent), 1) AS "On-Time Start %" FROM v_production_schedule_adherence WHERE period = (SELECT max(period) FROM v_production_schedule_adherence)
+SELECT round(avg(on_time_start_percent), 1) AS "On-Time Start %" FROM v_current_month_schedule_adherence
 ```
 - **Drill-down:** Drill from Line 2 and its equipment table to Equipment OEE Detail, then use Maintenance Reliability for RCA.
-- **PostgreSQL source view/table:** v_production_schedule_adherence
+- **PostgreSQL source view/table:** v_current_month_schedule_adherence
 
 ### Panel 7 - Line OEE Scorecard & Components
 
@@ -682,11 +688,11 @@ SELECT round(avg(on_time_start_percent), 1) AS "On-Time Start %" FROM v_producti
 - **Drill-down:** Drill from Line 2 and its equipment table to Equipment OEE Detail, then use Maintenance Reliability for RCA.
 - **PostgreSQL source view/table:** Dashboard narrative / no PostgreSQL query
 
-### Panel 8 - Legacy Monthly Line 1 OEE — Target ≥85%
+### Panel 8 - Line 1 Monthly OEE — Target ≥85%
 
-- **Panel title:** Legacy Monthly Line 1 OEE — Target ≥85%
+- **Panel title:** Line 1 Monthly OEE — Target ≥85%
 - **Visualization type:** stat
-- **Purpose:** Shows the latest monthly Line OEE from the preserved Milestone 2.5 view. That legacy view derives runtime from planned-versus-actual production and uses the historical production-calendar denominator, then calculates OEE as Availability x Performance x Quality. Higher is better. Do not compare it as if it were the newer detailed Line 2 calculation; use the independently calculated Line 2 section and Equipment OEE Detail for sensor-to-loss analysis.  **Data source:** PostgreSQL v_line_oee_monthly.
+- **Purpose:** Shows monthly Line 1 OEE for the selected historical period using the dashboard's monthly rollup model. Runtime is derived from planned-versus-actual production and the historical production-calendar denominator; OEE is Availability x Performance x Quality. Use this panel for directional performance trending. For detailed loss attribution, review Detailed Line 2 OEE and Equipment OEE Detail.  **Data source:** PostgreSQL v_line_oee_monthly.
 - **Data represented:** The value, row, bar, or trend series described above, using the exact selected fields and inclusion rules in the panel SQL below.
 - **Formula / aggregation:** Defined by the exact panel SQL below; view-backed formulas are identified in the panel description and source view.
 - **Interpretation:** Apply the stated high/low direction, target, status, trend, or ordering guidance before assigning cause.
@@ -704,7 +710,7 @@ SELECT oee_percent FROM v_line_oee_monthly WHERE line_code = 'LINE-1' ORDER BY p
 
 - **Panel title:** Line 1 A / P / Q Components
 - **Visualization type:** stat
-- **Purpose:** Shows Availability, Performance, and Quality for the latest month under the preserved Milestone 2.5 line convention. Availability uses the legacy inferred runtime and historical planned-production denominator; Performance compares output with ideal-rate output during that runtime; Quality is good/total output. Use the lowest component diagnostically, then use the detailed Line 2 section for the Milestone 4 time-accounting convention.  **Data source:** PostgreSQL v_line_oee_monthly.
+- **Purpose:** Shows Availability, Performance, and Quality for the latest month under the historical monthly rollup model. Availability uses inferred runtime and the historical planned-production denominator; Performance compares output with ideal-rate output during that runtime; Quality is good/total output. Use the lowest component diagnostically, then review Detailed Line 2 OEE for sensor-aware time and loss accounting.  **Data source:** PostgreSQL v_line_oee_monthly.
 - **Data represented:** The value, row, bar, or trend series described above, using the exact selected fields and inclusion rules in the panel SQL below.
 - **Formula / aggregation:** Defined by the exact panel SQL below; view-backed formulas are identified in the panel description and source view.
 - **Interpretation:** Apply the stated high/low direction, target, status, trend, or ordering guidance before assigning cause.
@@ -718,11 +724,11 @@ SELECT availability_percent AS "Availability (%)", performance_percent AS "Perfo
 - **Drill-down:** Drill from Line 2 and its equipment table to Equipment OEE Detail, then use Maintenance Reliability for RCA.
 - **PostgreSQL source view/table:** v_line_oee_monthly
 
-### Panel 10 - Legacy Monthly Line 2 OEE — Target ≥85%
+### Panel 10 - Line 2 Monthly OEE — Target ≥85%
 
-- **Panel title:** Legacy Monthly Line 2 OEE — Target ≥85%
+- **Panel title:** Line 2 Monthly OEE — Target ≥85%
 - **Visualization type:** stat
-- **Purpose:** Shows the latest monthly Line OEE from the preserved Milestone 2.5 view. That legacy view derives runtime from planned-versus-actual production and uses the historical production-calendar denominator, then calculates OEE as Availability x Performance x Quality. Higher is better. Do not compare it as if it were the newer detailed Line 2 calculation; use the independently calculated Line 2 section and Equipment OEE Detail for sensor-to-loss analysis.  **Data source:** PostgreSQL v_line_oee_monthly.
+- **Purpose:** Shows monthly Line 2 OEE for the selected historical period using the dashboard's monthly rollup model. Runtime is derived from planned-versus-actual production and the historical production-calendar denominator; OEE is Availability x Performance x Quality. Use this panel for directional performance trending. For detailed loss attribution, review Detailed Line 2 OEE and Equipment OEE Detail.  **Data source:** PostgreSQL v_line_oee_monthly.
 - **Data represented:** The value, row, bar, or trend series described above, using the exact selected fields and inclusion rules in the panel SQL below.
 - **Formula / aggregation:** Defined by the exact panel SQL below; view-backed formulas are identified in the panel description and source view.
 - **Interpretation:** Apply the stated high/low direction, target, status, trend, or ordering guidance before assigning cause.
@@ -740,7 +746,7 @@ SELECT oee_percent FROM v_line_oee_monthly WHERE line_code = 'LINE-2' ORDER BY p
 
 - **Panel title:** Line 2 A / P / Q Components
 - **Visualization type:** stat
-- **Purpose:** Shows Availability, Performance, and Quality for the latest month under the preserved Milestone 2.5 line convention. Availability uses the legacy inferred runtime and historical planned-production denominator; Performance compares output with ideal-rate output during that runtime; Quality is good/total output. Use the lowest component diagnostically, then use the detailed Line 2 section for the Milestone 4 time-accounting convention.  **Data source:** PostgreSQL v_line_oee_monthly.
+- **Purpose:** Shows Availability, Performance, and Quality for the latest month under the historical monthly rollup model. Availability uses inferred runtime and the historical planned-production denominator; Performance compares output with ideal-rate output during that runtime; Quality is good/total output. Use the lowest component diagnostically, then review Detailed Line 2 OEE for sensor-aware time and loss accounting.  **Data source:** PostgreSQL v_line_oee_monthly.
 - **Data represented:** The value, row, bar, or trend series described above, using the exact selected fields and inclusion rules in the panel SQL below.
 - **Formula / aggregation:** Defined by the exact panel SQL below; view-backed formulas are identified in the panel description and source view.
 - **Interpretation:** Apply the stated high/low direction, target, status, trend, or ordering guidance before assigning cause.
@@ -754,11 +760,11 @@ SELECT availability_percent AS "Availability (%)", performance_percent AS "Perfo
 - **Drill-down:** Drill from Line 2 and its equipment table to Equipment OEE Detail, then use Maintenance Reliability for RCA.
 - **PostgreSQL source view/table:** v_line_oee_monthly
 
-### Panel 12 - Historical Monthly Line OEE Trend — Legacy Convention
+### Panel 12 - Monthly Line OEE Trend
 
-- **Panel title:** Historical Monthly Line OEE Trend — Legacy Convention
+- **Panel title:** Monthly Line OEE Trend
 - **Visualization type:** timeseries
-- **Purpose:** Shows the latest monthly Line OEE from the preserved Milestone 2.5 view. That legacy view derives runtime from planned-versus-actual production and uses the historical production-calendar denominator, then calculates OEE as Availability x Performance x Quality. Higher is better. Do not compare it as if it were the newer detailed Line 2 calculation; use the independently calculated Line 2 section and Equipment OEE Detail for sensor-to-loss analysis. **Data source:** PostgreSQL v_line_oee_monthly.
+- **Purpose:** Trends monthly Line OEE for Line 1 and Line 2 over the dashboard period using the historical monthly rollup model. Each point is Availability x Performance x Quality. Use the slope and cross-line gap for directional comparison; use Detailed Line 2 OEE for stop-loss and sensor-aware analysis. **Data source:** PostgreSQL v_line_oee_monthly.
 - **Data represented:** The value, row, bar, or trend series described above, using the exact selected fields and inclusion rules in the panel SQL below.
 - **Formula / aggregation:** Defined by the exact panel SQL below; view-backed formulas are identified in the panel description and source view.
 - **Interpretation:** Apply the stated high/low direction, target, status, trend, or ordering guidance before assigning cause.
@@ -789,7 +795,7 @@ SELECT period AS time, line_name AS metric, oee_percent AS value FROM v_line_oee
 
 - **Panel title:** Equipment OEE Ranking (Worst-to-Best — Excludes Utility Air-Comp)
 - **Visualization type:** table
-- **Purpose:** Each row is one completed production asset from the legacy Equipment OEE summary, excluding shared utilities such as Air-Comp-001 and filtered by line/asset variables. Rows sort lowest OEE first and show Availability, Performance, Quality, and Equipment OEE. Low rows identify diagnostic contributors only: Line OEE is not calculated by averaging Equipment OEE. Drill to Equipment OEE Detail for the four instrumented Line 2 machines. Data source: v_asset_oee_components.
+- **Purpose:** Each row is one completed production asset from the historical Equipment OEE summary, excluding shared utilities such as Air-Comp-001 and filtered by line/asset variables. Rows sort lowest OEE first and show Availability, Performance, Quality, and Equipment OEE. Low rows identify diagnostic contributors only: Line OEE is not calculated by averaging Equipment OEE. Drill to Equipment OEE Detail for the four instrumented Line 2 machines. Data source: v_asset_oee_components.
 - **Data represented:** The value, row, bar, or trend series described above, using the exact selected fields and inclusion rules in the panel SQL below.
 - **Formula / aggregation:** Defined by the exact panel SQL below; view-backed formulas are identified in the panel description and source view.
 - **Interpretation:** Apply the stated high/low direction, target, status, trend, or ordering guidance before assigning cause.
@@ -807,7 +813,7 @@ SELECT asset_code AS "Asset", asset_name AS "Asset Name", equipment_type AS "Typ
 
 - **Panel title:** Production Time Loss Categories — August 2026
 - **Visualization type:** barchart
-- **Purpose:** Ranks August 2026 production-time loss minutes by category for the selected line(s), largest first. Categories combine recorded downtime, planned changeover, and planned breaks under the legacy view convention; they explain lost time and are not multiplied into OEE again. Distinguish planned loss from maintenance, production, material, and quality causes before assigning action. Data source: v_oee_loss_by_category.
+- **Purpose:** Ranks August 2026 production-time loss minutes by category for the selected line(s), largest first. Categories combine recorded downtime, planned changeover, and planned breaks under the historical rollup convention; they explain lost time and are not multiplied into OEE again. Distinguish planned loss from maintenance, production, material, and quality causes before assigning action. Data source: v_oee_loss_by_category.
 - **Data represented:** The value, row, bar, or trend series described above, using the exact selected fields and inclusion rules in the panel SQL below.
 - **Formula / aggregation:** Defined by the exact panel SQL below; view-backed formulas are identified in the panel description and source view.
 - **Interpretation:** Apply the stated high/low direction, target, status, trend, or ordering guidance before assigning cause.
@@ -856,7 +862,7 @@ SELECT rca_period AS "Period", availability_percent AS "Availability (%)", perfo
 
 - **Panel title:** Filler-201 Monthly OEE & Availability Recovery Trend
 - **Visualization type:** timeseries
-- **Purpose:** Trends monthly Filler-201 OEE and Availability across the seeded January-August 2026 history. OEE is Availability x Performance x Quality under the legacy monthly equipment convention. The June 2026 RCA/PM revision is the intervention point; sustained improvement afterward supports effectiveness. Drill to Filler-201 Equipment Detail for Stop Loss and sensor evidence. Data source: v_asset_oee_monthly.
+- **Purpose:** Trends monthly Filler-201 OEE and Availability across the seeded January-August 2026 history. OEE is Availability x Performance x Quality under the historical monthly equipment rollup. The June 2026 RCA/PM revision is the intervention point; sustained improvement afterward supports effectiveness. Drill to Filler-201 Equipment Detail for Stop Loss and sensor evidence. Data source: v_asset_oee_monthly.
 - **Data represented:** The value, row, bar, or trend series described above, using the exact selected fields and inclusion rules in the panel SQL below.
 - **Formula / aggregation:** Defined by the exact panel SQL below; view-backed formulas are identified in the panel description and source view.
 - **Interpretation:** Apply the stated high/low direction, target, status, trend, or ordering guidance before assigning cause.
@@ -1102,7 +1108,7 @@ Scheduled Utilization measures scheduled calendar capacity and is not OEE. Conti
 
 - **Panel title:** Selected equipment identity, production context, and latest state
 - **Visualization type:** table
-- **Purpose:** The single row identifies the selected asset and its latest deterministic lot, product, shift, operator, machine state, fault, and sensor timestamp. It is a current/latest snapshot; stale timestamps or faulted/stopped states direct attention to sensor and stop panels.  **Data source:** PostgreSQL v_line2_equipment_current.
+- **Purpose:** The single row identifies the selected asset at the fixed demo anchor: lot, product, shift, operator, machine state, fault, and latest anchor-relative sensor timestamp. It is a hypothetical live-like PostgreSQL snapshot; stale timestamps or faulted/stopped states direct attention to sensor and stop panels. **Data source:** v_line2_equipment_current, derived from the active demo context.
 - **Data represented:** The value, row, bar, or trend series described above, using the exact selected fields and inclusion rules in the panel SQL below.
 - **Formula / aggregation:** Defined by the exact panel SQL below; view-backed formulas are identified in the panel description and source view.
 - **Interpretation:** Apply the stated high/low direction, target, status, trend, or ordering guidance before assigning cause.
@@ -1329,7 +1335,7 @@ SELECT stop_reason AS "Stop Reason Tag",loss_category AS "Loss Category",respons
 
 - **Panel title:** Run/fault, counts, rate/cycle, and asset-specific condition inputs
 - **Visualization type:** timeseries
-- **Purpose:** Trends selected-asset synthetic inputs over the dashboard time range. Discrete run/fault/photoeye states are mapped to 0/1 while counts, rate, cycle, and condition signals retain numeric values. Correlate state changes and flat counters with Stop Reason Tags before assigning cause.  **Data source:** PostgreSQL v_line2_sensor_history.
+- **Purpose:** Trends selected-asset synthetic inputs during the eight hours ending at the fixed demo anchor. Discrete run/fault/photoeye states are mapped to 0/1 while counts, rate, cycle, and condition signals retain numeric values. The fixed window prevents workstation time from producing an empty panel. Data sources: v_line2_sensor_history and v_demo_context_active.
 - **Data represented:** The value, row, bar, or trend series described above, using the exact selected fields and inclusion rules in the panel SQL below.
 - **Formula / aggregation:** Defined by the exact panel SQL below; view-backed formulas are identified in the panel description and source view.
 - **Interpretation:** Apply the stated high/low direction, target, status, trend, or ordering guidance before assigning cause.
@@ -1338,10 +1344,10 @@ SELECT stop_reason AS "Stop Reason Tag",loss_category AS "Loss Category",respons
 - **Exact panel SQL:**
 
 ```sql
-SELECT time,COALESCE(numeric_value,CASE discrete_value WHEN 'RUNNING' THEN 1 WHEN 'ACTIVE' THEN 1 WHEN 'FAULTED' THEN 1 WHEN 'INTERMITTENT' THEN 1 WHEN 'PRESENT' THEN 1 WHEN 'PRODUCT_DETECTED' THEN 1 ELSE 0 END) AS value,functional_class AS metric FROM v_line2_sensor_history WHERE asset_code='$asset' AND $__timeFilter(time) ORDER BY time
+SELECT h.time,COALESCE(h.numeric_value,CASE h.discrete_value WHEN 'RUNNING' THEN 1 WHEN 'ACTIVE' THEN 1 WHEN 'FAULTED' THEN 1 WHEN 'INTERMITTENT' THEN 1 WHEN 'PRESENT' THEN 1 WHEN 'PRODUCT_DETECTED' THEN 1 ELSE 0 END) AS value,h.functional_class AS metric FROM v_line2_sensor_history h CROSS JOIN v_demo_context_active dc WHERE h.asset_code='$asset' AND h.time BETWEEN dc.anchor_timestamp-INTERVAL '8 hours' AND dc.anchor_timestamp ORDER BY h.time
 ```
 - **Drill-down:** Continue downward from scorecard to time, Stop Loss, sensors, and maintenance/RCA trace; return to Production & OEE for line context.
-- **PostgreSQL source view/table:** v_line2_sensor_history
+- **PostgreSQL source view/table:** v_line2_sensor_history, v_demo_context_active
 
 ### Panel 18 - 7. Maintenance and RCA Trace — What action changed the result?
 
@@ -1697,7 +1703,7 @@ SELECT status AS "Status", count(*) AS "Executions" FROM pm_executions GROUP BY 
 - **Exact panel SQL:**
 
 ```sql
-SELECT a.asset_code AS "Asset", p.pm_code AS "PM Plan", p.frequency AS "Frequency", e.scheduled_date AS "Due Date", (CURRENT_DATE - e.scheduled_date) AS "Days Overdue", ac.criticality_class AS "Priority" FROM pm_executions e JOIN pm_plans p USING(pm_plan_id) JOIN assets a USING(asset_id) JOIN asset_criticality ac USING(asset_id) WHERE e.status NOT IN ('COMPLETED', 'CANCELLED') AND e.scheduled_date < CURRENT_DATE AND ('$asset' = '%' OR a.asset_code = '$asset') ORDER BY (CURRENT_DATE - e.scheduled_date) DESC
+SELECT a.asset_code AS "Asset", p.pm_code AS "PM Plan", p.frequency AS "Frequency", e.scheduled_date AS "Due Date", (dc.anchor_timestamp::date - e.scheduled_date) AS "Days Overdue", ac.criticality_class AS "Priority" FROM pm_executions e JOIN pm_plans p USING(pm_plan_id) JOIN assets a USING(asset_id) JOIN asset_criticality ac USING(asset_id) CROSS JOIN v_demo_context_active dc WHERE e.status NOT IN ('COMPLETED', 'CANCELLED') AND e.scheduled_date < dc.anchor_timestamp::date AND ('$asset' = '%' OR a.asset_code = '$asset') ORDER BY (dc.anchor_timestamp::date - e.scheduled_date) DESC
 ```
 - **Drill-down:** Follow poor assets from Pareto to failure timeline, work/RCA/action/PM revision, then return to VP Operations.
 - **PostgreSQL source view/table:** asset_criticality, assets, pm_executions, pm_plans

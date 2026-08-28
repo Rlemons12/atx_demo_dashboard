@@ -135,9 +135,9 @@
                                        "y":  5
                                    },
                        "id":  100,
-                       "title":  "Current Production Status \u0026 Shift Staffing",
+                       "title":  "Current Demo Operating State — Aug 28, 2026",
                        "type":  "row",
-                       "description":  "Section grouping for **Current Production Status \u0026 Shift Staffing**. Read the panels below it together before drilling to the next numbered section or linked dashboard."
+                       "description":  "Displays the hypothetical plant state at the fixed demonstration anchor time. Values are read from PostgreSQL and represent a live-like operating scenario for the interview demo; they are not actual ATX production data. The fixed Aug 28, 2026 10:00 AM anchor makes the scenario repeatable regardless of workstation time."
                    },
                    {
                        "datasource":  {
@@ -192,13 +192,13 @@
                                                           },
                                            "format":  "table",
                                            "rawQuery":  true,
-                                           "rawSql":  "SELECT lot_number AS \"Active Lot\", product_name AS \"Product\", progress_percent || \u0027%\u0027 AS \"Progress\", yield_percent || \u0027%\u0027 AS \"Yield\" FROM v_current_production_lots WHERE line_code = \u0027LINE-1\u0027",
+                                           "rawSql":  "SELECT lot_number AS \"Active Lot\", product_name AS \"Product\", shift_code AS \"Shift\", progress_percent || \u0027%\u0027 AS \"Progress\", yield_percent || \u0027%\u0027 AS \"Yield\", round(current_rate,1) || \u0027 units/min\u0027 AS \"Current Rate\" FROM v_current_line1_production_status",
                                            "refId":  "A"
                                        }
                                    ],
                        "title":  "Line 1 — Active Lot Status (Running)",
                        "type":  "stat",
-                       "description":  "Shows the current Line 1 RUNNING lot from v_current_production_lots: lot, product, progress, and yield. One displayed value set represents the current deterministic snapshot, not a historical period. Low progress versus elapsed schedule or weak yield should be checked against schedule adherence and line OEE; Shift B context is shown in the staffing roster. Data source: v_current_production_lots."
+                       "description":  "Shows the one Line 1 RUNNING lot at the fixed Aug 28, 2026 10:00 AM demonstration anchor: lot, product, Shift A, progress, yield, and current rate. The values are relational PostgreSQL demo data, not workstation-clock or actual ATX production data. Low progress versus elapsed schedule or weak yield should be checked against schedule adherence and line OEE. Data source: v_current_line1_production_status."
                    },
                    {
                        "datasource":  {
@@ -253,13 +253,13 @@
                                                           },
                                            "format":  "table",
                                            "rawQuery":  true,
-                                           "rawSql":  "SELECT lot_number AS \"Active Lot\", product_name AS \"Product\", progress_percent || \u0027%\u0027 AS \"Progress\", yield_percent || \u0027%\u0027 AS \"Yield\" FROM v_current_production_lots WHERE line_code = \u0027LINE-2\u0027",
+                                           "rawSql":  "SELECT lot_number AS \"Active Lot\", product_name AS \"Product\", shift_code AS \"Shift\", progress_percent || \u0027%\u0027 AS \"Progress\", yield_percent || \u0027%\u0027 AS \"Yield\", round(current_rate,1) || \u0027 units/min\u0027 AS \"Current Rate\" FROM v_current_line2_production_status",
                                            "refId":  "A"
                                        }
                                    ],
                        "title":  "Line 2 — Active Lot Status (Running)",
                        "type":  "stat",
-                       "description":  "Shows the current Line 2 RUNNING lot from v_current_production_lots: lot, product, progress, and yield. One displayed value set represents the current deterministic snapshot, not a historical period. Low progress or yield should be followed into detailed Line 2 OEE, equipment contributors, and Filler-201 detail; Shift B context is in the roster. Data source: v_current_production_lots."
+                       "description":  "Shows the one Line 2 RUNNING lot at the fixed Aug 28, 2026 10:00 AM demonstration anchor: lot, product, Shift A, progress, yield, and current rate. The lot is linked to Mixer-201, Conveyor-201, Filler-201, and Labeler-201. Low progress or yield should be followed into Detailed Line 2 OEE and Equipment OEE Detail. Data source: v_current_line2_production_status."
                    },
                    {
                        "datasource":  {
@@ -298,13 +298,13 @@
                                                           },
                                            "format":  "table",
                                            "rawQuery":  true,
-                                           "rawSql":  "SELECT assigned_role AS \"Role\", employee_name AS \"Employee\", line_assignment AS \"Line\", status AS \"Status\" FROM v_employee_schedule_current ORDER BY assigned_role",
+                                           "rawSql":  "SELECT assigned_role AS \"Role\", employee_name AS \"Employee\", line_assignment AS \"Line\", shift_code AS \"Shift\", status AS \"Status\" FROM v_current_shift_staffing ORDER BY assigned_role",
                                            "refId":  "A"
                                        }
                                    ],
-                       "title":  "Current Staffing Roster (Shift B — 1/1/0 Model)",
+                       "title":  "Current Staffing Roster (Shift A — 1/1/0 Model)",
                        "type":  "table",
-                       "description":  "Each row is one employee in the deterministic current Shift B schedule, ordered by role. Columns show assigned role, employee, line/plant assignment, and confirmation status. Expected production coverage is one lead, one operator per line, and one maintenance technician; missing or unconfirmed roles require Operational Risk review. Data source: v_employee_schedule_current."
+                       "description":  "Each row is one confirmed employee whose scheduled interval contains the fixed demo anchor. The roster shows the Shift A production lead, Line 1 operator, Line 2 operator, and plant-wide maintenance technician; sanitation personnel are excluded because sanitation is not active at 10:00 AM. The 1/1/0 model means one maintenance technician per production shift and none normally assigned to sanitation. Data source: v_current_shift_staffing."
                    },
                    {
                        "datasource":  {
@@ -366,13 +366,13 @@
                                                           },
                                            "format":  "table",
                                            "rawQuery":  true,
-                                           "rawSql":  "SELECT round(avg(on_time_start_percent), 1) AS \"On-Time Start %\" FROM v_production_schedule_adherence WHERE period = (SELECT max(period) FROM v_production_schedule_adherence)",
+                                           "rawSql":  "SELECT round(avg(on_time_start_percent), 1) AS \"On-Time Start %\" FROM v_current_month_schedule_adherence",
                                            "refId":  "A"
                                        }
                                    ],
                        "title":  "Schedule Adherence (Current Month)",
                        "type":  "stat",
-                       "description":  "Shows average on-time-start percentage for the latest available monthly period. Higher means scheduled lots began closer to plan; low values indicate execution, staffing, material, shared-asset, or changeover constraints. Review the upcoming schedule and operating-risk panels.\n\n**Data source:** PostgreSQL v_production_schedule_adherence."
+                       "description":  "Shows average on-time-start percentage for August 2026, with the reporting month derived from the active demo anchor rather than workstation time. Higher means completed scheduled lots began within the 10-minute tolerance more consistently; low values indicate execution, staffing, material, shared-asset, or changeover constraints. Current running lots do not enter the completed-lot denominator. Data source: v_current_month_schedule_adherence."
                    },
                    {
                        "collapsed":  false,
@@ -451,9 +451,9 @@
                                            "refId":  "A"
                                        }
                                    ],
-                       "title":  "Legacy Monthly Line 1 OEE — Target ≥85%",
+                       "title":  "Line 1 Monthly OEE — Target ≥85%",
                        "type":  "stat",
-                       "description":  "Shows the latest monthly Line OEE from the preserved Milestone 2.5 view. That legacy view derives runtime from planned-versus-actual production and uses the historical production-calendar denominator, then calculates OEE as Availability x Performance x Quality. Higher is better. Do not compare it as if it were the newer detailed Line 2 calculation; use the independently calculated Line 2 section and Equipment OEE Detail for sensor-to-loss analysis.\n\n**Data source:** PostgreSQL v_line_oee_monthly."
+                       "description":  "Shows monthly Line 1 OEE for the selected historical period using the dashboard's monthly rollup model. Runtime is derived from planned-versus-actual production and the historical production-calendar denominator; OEE is Availability x Performance x Quality. Use this panel for directional performance trending. For detailed loss attribution, review Detailed Line 2 OEE and Equipment OEE Detail.\n\n**Data source:** PostgreSQL v_line_oee_monthly."
                    },
                    {
                        "datasource":  {
@@ -523,7 +523,7 @@
                                    ],
                        "title":  "Line 1 A / P / Q Components",
                        "type":  "stat",
-                       "description":  "Shows Availability, Performance, and Quality for the latest month under the preserved Milestone 2.5 line convention. Availability uses the legacy inferred runtime and historical planned-production denominator; Performance compares output with ideal-rate output during that runtime; Quality is good/total output. Use the lowest component diagnostically, then use the detailed Line 2 section for the Milestone 4 time-accounting convention.\n\n**Data source:** PostgreSQL v_line_oee_monthly."
+                       "description":  "Shows Availability, Performance, and Quality for the latest month under the historical monthly rollup model. Availability uses inferred runtime and the historical planned-production denominator; Performance compares output with ideal-rate output during that runtime; Quality is good/total output. Use the lowest component diagnostically, then review Detailed Line 2 OEE for sensor-aware time and loss accounting.\n\n**Data source:** PostgreSQL v_line_oee_monthly."
                    },
                    {
                        "datasource":  {
@@ -589,9 +589,9 @@
                                            "refId":  "A"
                                        }
                                    ],
-                       "title":  "Legacy Monthly Line 2 OEE — Target ≥85%",
+                       "title":  "Line 2 Monthly OEE — Target ≥85%",
                        "type":  "stat",
-                       "description":  "Shows the latest monthly Line OEE from the preserved Milestone 2.5 view. That legacy view derives runtime from planned-versus-actual production and uses the historical production-calendar denominator, then calculates OEE as Availability x Performance x Quality. Higher is better. Do not compare it as if it were the newer detailed Line 2 calculation; use the independently calculated Line 2 section and Equipment OEE Detail for sensor-to-loss analysis.\n\n**Data source:** PostgreSQL v_line_oee_monthly."
+                       "description":  "Shows monthly Line 2 OEE for the selected historical period using the dashboard's monthly rollup model. Runtime is derived from planned-versus-actual production and the historical production-calendar denominator; OEE is Availability x Performance x Quality. Use this panel for directional performance trending. For detailed loss attribution, review Detailed Line 2 OEE and Equipment OEE Detail.\n\n**Data source:** PostgreSQL v_line_oee_monthly."
                    },
                    {
                        "datasource":  {
@@ -661,7 +661,7 @@
                                    ],
                        "title":  "Line 2 A / P / Q Components",
                        "type":  "stat",
-                       "description":  "Shows Availability, Performance, and Quality for the latest month under the preserved Milestone 2.5 line convention. Availability uses the legacy inferred runtime and historical planned-production denominator; Performance compares output with ideal-rate output during that runtime; Quality is good/total output. Use the lowest component diagnostically, then use the detailed Line 2 section for the Milestone 4 time-accounting convention.\n\n**Data source:** PostgreSQL v_line_oee_monthly."
+                       "description":  "Shows Availability, Performance, and Quality for the latest month under the historical monthly rollup model. Availability uses inferred runtime and the historical planned-production denominator; Performance compares output with ideal-rate output during that runtime; Quality is good/total output. Use the lowest component diagnostically, then review Detailed Line 2 OEE for sensor-aware time and loss accounting.\n\n**Data source:** PostgreSQL v_line_oee_monthly."
                    },
                    {
                        "datasource":  {
@@ -739,9 +739,9 @@
                                            "refId":  "A"
                                        }
                                    ],
-                       "title":  "Historical Monthly Line OEE Trend � Legacy Convention",
+                       "title":  "Monthly Line OEE Trend",
                        "type":  "timeseries",
-                       "description":  "Trends the preserved Milestone 2.5 monthly Line OEE values for Line 1 and Line 2 over the dashboard period, filtered by $line. Each point is Availability x Performance x Quality under the legacy monthly calendar/runtime convention. Use slope and the cross-line gap for historical comparison; use the detailed Line 2 section for the newer sensor-to-loss calculation.\n\n**Data source:** PostgreSQL v_line_oee_monthly."
+                       "description":  "Trends monthly Line OEE for Line 1 and Line 2 over the dashboard period, filtered by $line. Each point is Availability x Performance x Quality using the historical monthly rollup model. Use the slope and cross-line gap for directional comparison; use Detailed Line 2 OEE for stop-loss and sensor-aware analysis.\n\n**Data source:** PostgreSQL v_line_oee_monthly."
                    },
                    {
                        "collapsed":  false,
@@ -826,7 +826,7 @@
                                    ],
                        "title":  "Equipment OEE Ranking (Worst-to-Best — Excludes Utility Air-Comp)",
                        "type":  "table",
-                       "description":  "Each row is one completed production asset from the legacy Equipment OEE summary, excluding shared utilities such as Air-Comp-001 and filtered by line/asset variables. Rows sort lowest OEE first and show Availability, Performance, Quality, and Equipment OEE. Low rows identify diagnostic contributors only: Line OEE is not calculated by averaging Equipment OEE. Drill to Equipment OEE Detail for the four instrumented Line 2 machines. Data source: v_asset_oee_components."
+                       "description":  "Each row is one completed production asset from the historical Equipment OEE summary, excluding shared utilities such as Air-Comp-001 and filtered by line/asset variables. Rows sort lowest OEE first and show Availability, Performance, Quality, and Equipment OEE. Low rows identify diagnostic contributors only: Line OEE is not calculated by averaging Equipment OEE. Drill to Equipment OEE Detail for the four instrumented Line 2 machines. Data source: v_asset_oee_components."
                    },
                    {
                        "datasource":  {
@@ -881,7 +881,7 @@
                                    ],
                        "title":  "Production Time Loss Categories — August 2026",
                        "type":  "barchart",
-                       "description":  "Ranks August 2026 production-time loss minutes by category for the selected line(s), largest first. Categories combine recorded downtime, planned changeover, and planned breaks under the legacy view convention; they explain lost time and are not multiplied into OEE again. Distinguish planned loss from maintenance, production, material, and quality causes before assigning action. Data source: v_oee_loss_by_category."
+                       "description":  "Ranks August 2026 production-time loss minutes by category for the selected line(s), largest first. Categories combine recorded downtime, planned changeover, and planned breaks under the historical rollup convention; they explain lost time and are not multiplied into OEE again. Distinguish planned loss from maintenance, production, material, and quality causes before assigning action. Data source: v_oee_loss_by_category."
                    },
                    {
                        "collapsed":  false,
@@ -1050,7 +1050,7 @@
                                    ],
                        "title":  "Filler-201 Monthly OEE \u0026 Availability Recovery Trend",
                        "type":  "timeseries",
-                       "description":  "Trends monthly Filler-201 OEE and Availability across the seeded January-August 2026 history. OEE is Availability x Performance x Quality under the legacy monthly equipment convention. The June 2026 RCA/PM revision is the intervention point; sustained improvement afterward supports effectiveness. Drill to Filler-201 Equipment Detail for Stop Loss and sensor evidence. Data source: v_asset_oee_monthly."
+                       "description":  "Trends monthly Filler-201 OEE and Availability across the seeded January-August 2026 history. OEE is Availability x Performance x Quality under the historical monthly equipment rollup. The June 2026 RCA/PM revision is the intervention point; sustained improvement afterward supports effectiveness. Drill to Filler-201 Equipment Detail for Stop Loss and sensor evidence. Data source: v_asset_oee_monthly."
                    },
                    {
                        "collapsed":  false,
@@ -1341,7 +1341,7 @@
                                    },
                        "id":  18,
                        "options":  {
-                                       "content":  "### AI Production \u0026 OEE Executive Briefing\n\nAI Production \u0026 OEE Analysis is powered by the **Grafana LLM Plugin** (`grafana-llm-app`) querying live PostgreSQL views (`v_current_production_lots`, `v_line_oee_monthly`, `v_asset_oee_components`, `v_filler201_oee_before_after_rca`, `v_shift_staffing_coverage`, `v_shared_asset_risk`, `v_production_schedule_adherence`).\n\n#### Key Production Inquiries Handled:\n- **Current Execution**: *\"What is running on Line 1 right now?\"* → `ATX-20260827-L1-002` (Classic Sauce) at 69.5% completion and 99.00% yield on Shift B.\n- **Next Scheduled Lots**: *\"What lot runs next on Line 2?\"* → `ATX-20260828-L2-001` (BBQ Blend) scheduled for 06:00 on Shift A.\n- **OEE Performance**: *\"Why is Line 2 OEE lower than Line 1?\"* → Line 2 OEE is 86.38% vs. Line 1 at 88.99%, driven almost entirely by **Availability loss** (93.05% vs. 95.67%) from packaging and conveying stops rather than speed or quality.\n- **RCA ROI**: *\"Did Filler-201 improve after RCA?\"* → Filler-201 OEE jumped from **75.71% to 86.31%** (Availability recovered from 83.81% to 95.62%, reducing downtime by 8,278 minutes).\n- **Staffing Coverage**: *\"Is staffing coverage adequate?\"* → Normal coverage on Shift B (1 Lead, 1 L1 Op, 1 L2 Op, 1 Maintenance Tech) adhering to the 1/1/0 rule.\n\n*Run `.\\scripts\\test-ai-summary.ps1` to validate AI responses against OpenAI Base (`gpt-4o-mini`) and Large (`gpt-4o`) models.*",
+                                       "content":  "### AI Production \u0026 OEE Executive Briefing\n\nAI Production \u0026 OEE Analysis interprets curated PostgreSQL views, including the fixed-anchor current-state views. The current scenario is hypothetical interview data at Aug 28, 2026 10:00 AM, not actual ATX production. AI does not calculate or invent KPI values.\n\n#### Key Production Inquiries Handled:\n- **Current Execution**: *\"What is running on Line 1 at the demo anchor?\"* → `ATX-20260828-L1-001` (Spicy Sauce) at 52.6% completion and 98.81% yield on Shift A.\n- **Next Scheduled Lots**: *\"What lot runs next on Line 2?\"* → `ATX-20260828-L2-002` (Sweet Heat) scheduled for 14:00.\n- **OEE Performance**: *\"Why is Line 2 OEE lower than Line 1?\"* → Compare Availability, Performance, and Quality in the curated monthly and detailed operating views.\n- **RCA ROI**: *\"Did Filler-201 improve after RCA?\"* → Use the curated before/after view and Equipment OEE Detail trace.\n- **Staffing Coverage**: *\"Is staffing coverage adequate at the anchor?\"* → Confirmed Shift A coverage includes 1 Lead, 1 L1 Operator, 1 L2 Operator, and 1 Maintenance Technician.\n\n*Run `.\\scripts\\test-ai-summary.ps1` to validate grounded responses.*",
                                        "mode":  "markdown"
                                    },
                        "title":  "AI Production \u0026 OEE Decision Support",

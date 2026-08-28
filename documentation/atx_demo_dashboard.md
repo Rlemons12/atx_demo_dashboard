@@ -2137,15 +2137,15 @@ Tracks lot execution from initial creation to completion:
 - **Lot Number Format**: Unique identifier encoding date, line, and daily sequence (e.g., `ATX-20260827-L1-002`).
 - **Statuses Supported**: `PLANNED`, `READY`, `RUNNING`, `PAUSED`, `COMPLETE`, `CANCELLED`.
 - **Event History**: Granular timestamps for `CREATED`, `READY`, `STARTED`, `PAUSED`, `RESUMED`, `COMPLETED`, and `CANCELLED`.
-- **Current Real-Time Demo Snapshot** (August 27, 2026, 19:13:00 CDT):
-  - Line 1: `ATX-20260827-L1-002` (Classic Sauce) is **RUNNING** with 69.5% progress and 99.00% yield.
-  - Line 2: `ATX-20260827-L2-002` (Garlic Sauce) is **RUNNING** with 69.5% progress and 99.00% yield.
+- **Current Demo Operating State** (fixed August 28, 2026, 10:00:00 CDT anchor):
+  - Line 1: `ATX-20260828-L1-001` (Spicy Sauce) is **RUNNING** with 52.6% progress and 98.81% yield.
+  - Line 2: `ATX-20260828-L2-001` (BBQ Blend) is **RUNNING** with 52.4% progress and 98.35% yield.
   - Next in queue: `ATX-20260828-L1-001` (Spicy Sauce) and `ATX-20260828-L2-001` (BBQ Blend) in **READY** state for Shift A tomorrow.
 
 ### 5. Employee Scheduling & Staffing Model (`employee_schedules`)
 Maintains employee assignments across all 8 months (1,720 shift records), strictly adhering to the plant staffing model:
 - **Shift A (06:00 – 14:00)**: 1 Production Lead (E005), 1 Line 1 Operator (E003), 1 Line 2 Operator (E004), 1 Maintenance Tech (E001).
-- **Shift B (14:00 – 22:00)**: 1 Production Lead (E008), 1 Line 1 Operator (E006), 1 Line 2 Operator (E007), 1 Maintenance Tech (E002).
+- **Current Shift A (06:00 – 14:00)**: 1 Production Lead (E005), 1 Line 1 Operator (E003), 1 Line 2 Operator (E004), 1 Maintenance Tech (E001).
 - **Sanitation Shift (22:00 – 06:00)**: 1 Sanitation Lead (E009), 1 Sanitation Tech (E010), **0 regular maintenance technicians**.
 
 ### 6. Shared Blender Lot Scheduling (`production_lot_assets`)
@@ -2221,9 +2221,9 @@ The interview demonstration is organized into four interconnected dashboards:
 The dashboard is structured into 7 logical rows:
 
 1. **Current Production Status & Shift Staffing** (`Row ID 100`):
-   - **Line 1 Active Lot Status (Running)**: Stat panel showing Lot `ATX-20260827-L1-002` (Classic Sauce), 69.5% progress, 99.00% yield.
-   - **Line 2 Active Lot Status (Running)**: Stat panel showing Lot `ATX-20260827-L2-002` (Garlic Sauce), 69.5% progress, 99.00% yield.
-   - **Current Staffing Roster (Shift B — 1/1/0 Model)**: Active table showing 1 Production Lead (E008), 1 Line 1 Operator (E006), 1 Line 2 Operator (E007), and 1 Maintenance Tech (E002).
+   - **Line 1 Active Lot Status (Running)**: Stat panel showing Lot `ATX-20260828-L1-001` (Spicy Sauce), 52.6% progress, 98.81% yield.
+   - **Line 2 Active Lot Status (Running)**: Stat panel showing Lot `ATX-20260828-L2-001` (BBQ Blend), 52.4% progress, 98.35% yield.
+   - **Current Staffing Roster (Shift A — 1/1/0 Model)**: Active table showing 1 Production Lead (E005), 1 Line 1 Operator (E003), 1 Line 2 Operator (E004), and 1 Maintenance Tech (E001).
    - **Schedule Adherence (Current Month)**: Stat panel showing 100.0% on-time start compliance under the 10-minute tolerance threshold.
 2. **Line OEE Scorecard & Components** (`Row ID 101`):
    - **Line 1 OEE (Target ≥85%)**: Stat panel displaying current August OEE of **88.99%** (Green threshold).
@@ -2251,8 +2251,8 @@ The dashboard is structured into 7 logical rows:
 A compact **Production & OEE Summary** row (`Row ID 106`) was integrated directly into `vp-operations-overview.json` at position `y: 5`, preserving the 30-second readability of the executive dashboard:
 - **Line 1 OEE**: 88.99% (Target ≥85%)
 - **Line 2 OEE**: 86.38% (Target ≥85%)
-- **Line 1 Current Running Lot**: `ATX-20260827-L1-002 (Classic Sauce)` — Progress: 69.5%, Yield: 99.00%
-- **Line 2 Current Running Lot**: `ATX-20260827-L2-002 (Garlic Sauce)` — Progress: 69.5%, Yield: 99.00%
+- **Line 1 Current Running Lot**: `ATX-20260828-L1-001 (Spicy Sauce)` — Progress: 52.6%, Yield: 98.81%
+- **Line 2 Current Running Lot**: `ATX-20260828-L2-001 (BBQ Blend)` — Progress: 52.4%, Yield: 98.35%
 - **Schedule Adherence (On-Time)**: 100.0%
 - **Shift Staffing (1/1/0 Model)**: `4 On Duty (1 Maint Tech)`
 
@@ -2284,7 +2284,7 @@ Validation script `.\scripts\validate-grafana.ps1` verifies datasource connectiv
 
 1. **Executive Opening (VP Operations Overview)**:
    - Walk through the top Scorecard: Plant Uptime achieved **95.16%** in August, PM Compliance reached **95.71%**, MTTR improved from 81.82 to **69.75 min**, and Repeat Failures dropped from 11/mo to **5/mo**.
-   - Review the new **Production & OEE Summary Row**: Point out Line 1 OEE (**88.99%**) vs Line 2 OEE (**86.38%**), show running lots on both lines (`ATX-20260827-L1-002` and `ATX-20260827-L2-002`), 100% on-time start adherence, and Shift B staffing (4 on duty with 1 maintenance technician).
+   - Review the **Production & OEE Summary Row**: Point out Line 1 OEE (**88.99%**) vs Line 2 OEE (**86.38%**), show the fixed-anchor running lots (`ATX-20260828-L1-001` and `ATX-20260828-L2-001`), 100% August on-time start adherence, and Shift A staffing (4 on duty with 1 maintenance technician).
    - Show Line 1 (97.61%) vs Line 2 (92.71%) uptime trend to establish Line 2 as the primary reliability opportunity.
 2. **Production & OEE Deep-Dive (Production & OEE Performance)**:
    - Click the top navigation link to **Production & OEE Performance**.
@@ -2389,7 +2389,7 @@ v
 GOOD PRODUCTION
 ```
 
-The legacy calendar subtracts breaks and changeovers from its historical planned-minutes field. Milestone 4 preserves breaks outside Scheduled Production Time but restores changeover inside the new Scheduled Production Window, making changeover visible as planned production loss that consumes committed capacity. Sanitation, planned maintenance performed outside production, no-schedule time, and holidays reduce Utilization but do not directly reduce OEE Availability.
+The historical monthly calendar subtracts breaks and changeovers from its planned-minutes field. The detailed operating model preserves breaks outside Scheduled Production Time but restores changeover inside the Scheduled Production Window, making changeover visible as planned production loss that consumes committed capacity. Sanitation, planned maintenance performed outside production, no-schedule time, and holidays reduce Utilization but do not directly reduce OEE Availability.
 
 ## Stop reasons, precedence, and provenance
 
@@ -2428,7 +2428,7 @@ New files are:
 
 The semantic layer includes `v_line2_sensor_latest`, `v_line2_sensor_history`, `v_equipment_state_history`, `v_equipment_stop_loss`, `v_equipment_time_accounting`, `v_equipment_oee_daily`, `v_equipment_oee_summary`, `v_equipment_loss_summary`, `v_filler201_stop_loss_detail`, `v_filler201_stop_loss_before_after_rca`, `v_line2_oee_daily`, `v_line2_oee_summary`, `v_line2_oee_rollup`, `v_line2_equipment_current`, `v_equipment_maintenance_trace`, and `v_plant_operations_oee_rollup`.
 
-Validation covers sensor classes and referential integrity, nonnegative/nonoverlapping state intervals, calendar and availability reconciliation, count integrity, Utilization and A × P × Q math, independent Line OEE, Air-Comp exclusion, Filler photoeye traceability and post-RCA improvement, Conveyor tracking events, views, dashboard provisioning, every panel/variable query for every permitted asset, links, curated AI questions, and legacy suites.
+Validation covers sensor classes and referential integrity, nonnegative/nonoverlapping state intervals, calendar and availability reconciliation, count integrity, Utilization and A × P × Q math, independent Line OEE, Air-Comp exclusion, Filler photoeye traceability and post-RCA improvement, Conveyor tracking events, views, dashboard provisioning, every panel/variable query for every permitted asset, links, curated AI questions, and all prior milestone suites.
 
 ## Interview walkthrough
 
@@ -2447,3 +2447,29 @@ Management message: “We are not just showing an OEE percentage. We can trace t
 ## Grafana dashboard panel catalog
 
 The permanent [Grafana Dashboard Panel Guide](grafana_dashboard_panel_guide.md) documents every current dashboard row and meaningful panel from the provisioned JSON, including its purpose, exact query logic, interpretation, management significance, source view/table, variables, navigation links, and recommended interview flow. Use that guide as the detailed dashboard reference rather than duplicating the full panel catalog here.
+
+## Fixed Current Demo Operating State
+
+The interview demo uses one database-owned operating clock rather than the wall clock. The single active `demo_context` row is named `INTERVIEW_DEMO` and has anchor timestamp **2026-08-28 10:00:00 America/Chicago**. Its description is “Fixed operating-state anchor for repeatable Grafana interview demonstration.” Current semantic views resolve this row through `v_demo_context_active`; current-state logic does not use `NOW()`, `CURRENT_TIMESTAMP`, browser time, or workstation time.
+
+This separation is intentional:
+
+- Historical OEE, downtime, reliability, PM, failure, and Filler-201 pre/post RCA panels continue to use their recorded January–August 2026 event dates.
+- Current lot, current shift, current staffing, current equipment state, latest sensor, and current-month schedule-adherence panels derive their context from `demo_context.anchor_timestamp`.
+- The scenario is hypothetical live-like data for an interview, not actual ATX production data. The displayed state nevertheless comes from real related PostgreSQL rows and uses the same keys, constraints, calculations, and drill paths as an operating system.
+
+At the anchor, Line 1 runs `ATX-20260828-L1-001` for Spicy Sauce on Production Shift A, and Line 2 runs `ATX-20260828-L2-001` for BBQ Blend on Production Shift A. The Line 2 lot retains its existing assignments to Mixer-201, Blender-001, Conveyor-201, Filler-201, and Labeler-201. Mixer-201, Conveyor-201, Filler-201, and Labeler-201 each resolve to a RUNNING state beginning at 09:50, and each sensor definition has a deterministic current observation at 09:59, one minute before the anchor.
+
+The current Shift A roster resolves from scheduled intervals containing the anchor: Morgan Patel as Production Lead, Casey Rivera as Line 1 Operator, Taylor Brooks as Line 2 Operator, and Alex Morgan as the plant-wide Maintenance Technician. Sanitation staffing is excluded because the anchor falls inside Production Shift A, not sanitation.
+
+Current-state files are:
+
+- `sql/013_demo_context_and_current_state.sql`
+- `sql/014_seed_current_demo_state.sql`
+- `sql/validate_current_demo_state.sql`
+- `scripts/seed-current-demo-state.ps1`
+- `scripts/validate-current-demo-state.ps1`
+
+The current semantic layer includes `v_demo_context_active`, `v_current_production_status`, line-specific current-production views, `v_current_shift_staffing`, `v_current_equipment_state`, `v_current_sensor_state`, and `v_current_month_schedule_adherence`. Compatibility views used by existing consumers are retained but now resolve their live-like state through the same anchor. The guarded rebuild applies and validates this layer after Milestone 4.
+
+Interview explanation: “This dashboard is reading real rows from the PostgreSQL demo database. For the interview I use a fixed demo timestamp so the operating state is repeatable and does not depend on when I open the dashboard. The scenario is hypothetical, but the database relationships, calculations, drill-downs, and operating workflow are real.”
