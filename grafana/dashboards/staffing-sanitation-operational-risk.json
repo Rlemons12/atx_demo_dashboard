@@ -1,683 +1,1309 @@
-{
-  "annotations": {
-    "list": [
-      {
-        "builtIn": 1,
-        "datasource": "-- Grafana --",
-        "enable": true,
-        "hide": true,
-        "name": "Annotations & Alerts",
-        "type": "dashboard"
-      },
-      {
-        "datasource": {
-          "type": "grafana-postgresql-datasource",
-          "uid": "atx-postgres"
-        },
-        "enable": true,
-        "hide": false,
-        "iconColor": "rgba(0, 180, 255, 1)",
-        "name": "Air-Comp Planned Intervention",
-        "rawQuery": "SELECT work_completed_at AS time, 'Air-Comp-001 Planned Predictive Overhaul During Sanitation' AS text, 'Predictive' AS tags FROM work_orders WHERE work_order_number='WO-2026-0185'",
-        "showIn": 0,
-        "type": "tags"
-      },
-      {
-        "datasource": {
-          "type": "grafana-postgresql-datasource",
-          "uid": "atx-postgres"
-        },
-        "enable": true,
-        "hide": false,
-        "iconColor": "rgba(255, 140, 0, 1)",
-        "name": "Blender-001 Shared Risk Event",
-        "rawQuery": "SELECT downtime_start AS time, 'Blender-001 Failure: Immediate Line 1 Downtime + 45 min Projected Line 2 Delay' AS text, 'SharedRisk' AS tags FROM downtime_events WHERE work_order_id=(SELECT work_order_id FROM work_orders WHERE work_order_number='WO-2026-0085')",
-        "showIn": 0,
-        "type": "tags"
-      }
-    ]
-  },
-  "editable": false,
-  "fiscalYearStartMonth": 0,
-  "graphTooltip": 1,
-  "id": null,
-  "links": [
-    {
-      "asDropdown": false,
-      "icon": "dashboard",
-      "includeVars": true,
-      "keepTime": true,
-      "tags": [],
-      "targetBlank": false,
-      "title": "VP Operations Overview",
-      "type": "link",
-      "url": "/d/atx-vp-operations/vp-operations-overview"
-    },
-    {
-      "asDropdown": false,
-      "icon": "dashboard",
-      "includeVars": true,
-      "keepTime": true,
-      "tags": [],
-      "targetBlank": false,
-      "title": "Maintenance Reliability",
-      "type": "link",
-      "url": "/d/atx-maintenance-reliability/maintenance-reliability"
-    },
-    {
-      "asDropdown": false,
-      "icon": "dashboard",
-      "includeVars": true,
-      "keepTime": true,
-      "tags": [],
-      "targetBlank": false,
-      "title": "Production & OEE Performance",
-      "type": "link",
-      "url": "/d/atx-production-oee/production-and-oee-performance"
-    }
-  ],
-  "panels": [
-    {
-      "collapsed": false,
-      "gridPos": { "h": 1, "w": 24, "x": 0, "y": 0 },
-      "id": 300,
-      "title": "Staffing Coverage Model & Sanitation Gap",
-      "type": "row"
-    },
-    {
-      "datasource": { "type": "grafana-postgresql-datasource", "uid": "atx-postgres" },
-      "fieldConfig": {
-        "defaults": {
-          "color": { "mode": "thresholds" },
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              { "color": "red", "value": null },
-              { "color": "green", "value": 1 }
-            ]
-          }
-        },
-        "overrides": []
-      },
-      "gridPos": { "h": 4, "w": 8, "x": 0, "y": 1 },
-      "id": 1,
-      "options": {
-        "colorMode": "background",
-        "graphMode": "none",
-        "reduceOptions": { "calcs": ["lastNotNull"], "values": false }
-      },
-      "targets": [
-        {
-          "datasource": { "type": "grafana-postgresql-datasource", "uid": "atx-postgres" },
-          "format": "table",
-          "rawQuery": true,
-          "rawSql": "SELECT maintenance_technicians FROM v_shift_maintenance_coverage WHERE shift_name='Production Shift A'",
-          "refId": "A"
-        }
-      ],
-      "title": "Production Shift A Maintenance Coverage",
-      "type": "stat"
-    },
-    {
-      "datasource": { "type": "grafana-postgresql-datasource", "uid": "atx-postgres" },
-      "fieldConfig": {
-        "defaults": {
-          "color": { "mode": "thresholds" },
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              { "color": "red", "value": null },
-              { "color": "green", "value": 1 }
-            ]
-          }
-        },
-        "overrides": []
-      },
-      "gridPos": { "h": 4, "w": 8, "x": 8, "y": 1 },
-      "id": 2,
-      "options": {
-        "colorMode": "background",
-        "graphMode": "none",
-        "reduceOptions": { "calcs": ["lastNotNull"], "values": false }
-      },
-      "targets": [
-        {
-          "datasource": { "type": "grafana-postgresql-datasource", "uid": "atx-postgres" },
-          "format": "table",
-          "rawQuery": true,
-          "rawSql": "SELECT maintenance_technicians FROM v_shift_maintenance_coverage WHERE shift_name='Production Shift B'",
-          "refId": "A"
-        }
-      ],
-      "title": "Production Shift B Maintenance Coverage",
-      "type": "stat"
-    },
-    {
-      "datasource": { "type": "grafana-postgresql-datasource", "uid": "atx-postgres" },
-      "fieldConfig": {
-        "defaults": {
-          "color": { "mode": "fixedColor", "fixedColor": "yellow" },
-          "mappings": [
-            {
-              "options": {
-                "0": { "color": "yellow", "index": 0, "text": "0 (No Normal Maintenance Coverage)" }
-              },
-              "type": "value"
-            }
-          ]
-        },
-        "overrides": []
-      },
-      "gridPos": { "h": 4, "w": 8, "x": 16, "y": 1 },
-      "id": 3,
-      "options": {
-        "colorMode": "background",
-        "graphMode": "none",
-        "reduceOptions": { "calcs": ["lastNotNull"], "values": false }
-      },
-      "targets": [
-        {
-          "datasource": { "type": "grafana-postgresql-datasource", "uid": "atx-postgres" },
-          "format": "table",
-          "rawQuery": true,
-          "rawSql": "SELECT maintenance_technicians FROM v_shift_maintenance_coverage WHERE shift_name='Sanitation Shift'",
-          "refId": "A"
-        }
-      ],
-      "title": "Sanitation Maintenance Coverage (Coverage Gap)",
-      "type": "stat"
-    },
-    {
-      "collapsed": false,
-      "gridPos": { "h": 1, "w": 24, "x": 0, "y": 5 },
-      "id": 301,
-      "title": "Sanitation Findings & Startup Risk Workflow",
-      "type": "row"
-    },
-    {
-      "datasource": { "type": "grafana-postgresql-datasource", "uid": "atx-postgres" },
-      "fieldConfig": {
-        "defaults": {
-          "color": { "mode": "thresholds" },
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              { "color": "green", "value": null },
-              { "color": "yellow", "value": 1 },
-              { "color": "red", "value": 3 }
-            ]
-          }
-        },
-        "overrides": []
-      },
-      "gridPos": { "h": 4, "w": 4, "x": 0, "y": 6 },
-      "id": 4,
-      "options": {
-        "colorMode": "background",
-        "graphMode": "none",
-        "reduceOptions": { "calcs": ["lastNotNull"], "values": false }
-      },
-      "targets": [
-        {
-          "datasource": { "type": "grafana-postgresql-datasource", "uid": "atx-postgres" },
-          "format": "table",
-          "rawQuery": true,
-          "rawSql": "SELECT count(*) FROM sanitation_findings WHERE status NOT IN ('RESOLVED', 'CLOSED')",
-          "refId": "A"
-        }
-      ],
-      "title": "Open Sanitation Findings",
-      "type": "stat"
-    },
-    {
-      "datasource": { "type": "grafana-postgresql-datasource", "uid": "atx-postgres" },
-      "fieldConfig": {
-        "defaults": {
-          "color": { "mode": "thresholds" },
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              { "color": "green", "value": null },
-              { "color": "yellow", "value": 1 },
-              { "color": "red", "value": 3 }
-            ]
-          }
-        },
-        "overrides": []
-      },
-      "gridPos": { "h": 4, "w": 4, "x": 4, "y": 6 },
-      "id": 5,
-      "options": {
-        "colorMode": "background",
-        "graphMode": "none",
-        "reduceOptions": { "calcs": ["lastNotNull"], "values": false }
-      },
-      "targets": [
-        {
-          "datasource": { "type": "grafana-postgresql-datasource", "uid": "atx-postgres" },
-          "format": "table",
-          "rawQuery": true,
-          "rawSql": "SELECT count(*) FROM sanitation_findings WHERE maintenance_required AND status NOT IN ('RESOLVED', 'CLOSED')",
-          "refId": "A"
-        }
-      ],
-      "title": "Maintenance Required Findings",
-      "type": "stat"
-    },
-    {
-      "datasource": { "type": "grafana-postgresql-datasource", "uid": "atx-postgres" },
-      "fieldConfig": {
-        "defaults": {
-          "color": { "mode": "thresholds" },
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              { "color": "green", "value": null },
-              { "color": "red", "value": 1 }
-            ]
-          }
-        },
-        "overrides": []
-      },
-      "gridPos": { "h": 4, "w": 4, "x": 8, "y": 6 },
-      "id": 6,
-      "options": {
-        "colorMode": "background",
-        "graphMode": "none",
-        "reduceOptions": { "calcs": ["lastNotNull"], "values": false }
-      },
-      "targets": [
-        {
-          "datasource": { "type": "grafana-postgresql-datasource", "uid": "atx-postgres" },
-          "format": "table",
-          "rawQuery": true,
-          "rawSql": "SELECT count(*) FROM sanitation_findings WHERE startup_risk AND status NOT IN ('RESOLVED', 'CLOSED')",
-          "refId": "A"
-        }
-      ],
-      "title": "Startup Risk Findings",
-      "type": "stat"
-    },
-    {
-      "datasource": { "type": "grafana-postgresql-datasource", "uid": "atx-postgres" },
-      "fieldConfig": {
-        "defaults": {
-          "custom": { "drawStyle": "bars", "fillOpacity": 65 },
-          "unit": "short"
-        },
-        "overrides": []
-      },
-      "gridPos": { "h": 8, "w": 12, "x": 12, "y": 6 },
-      "id": 7,
-      "options": {
-        "legend": { "displayMode": "table", "placement": "bottom", "showLegend": true },
-        "tooltip": { "mode": "multi" }
-      },
-      "targets": [
-        {
-          "datasource": { "type": "grafana-postgresql-datasource", "uid": "atx-postgres" },
-          "format": "time_series",
-          "rawQuery": true,
-          "rawSql": "SELECT date_trunc('month', reported_at)::date AS time, count(*) AS \"Total Findings\", count(*) FILTER (WHERE maintenance_required) AS \"Maintenance Required\", count(*) FILTER (WHERE startup_risk) AS \"Startup Risks\" FROM sanitation_findings GROUP BY 1 ORDER BY 1",
-          "refId": "A"
-        }
-      ],
-      "title": "Monthly Sanitation Findings Trend",
-      "type": "timeseries"
-    },
-    {
-      "datasource": { "type": "grafana-postgresql-datasource", "uid": "atx-postgres" },
-      "fieldConfig": { "defaults": {}, "overrides": [] },
-      "gridPos": { "h": 7, "w": 12, "x": 0, "y": 10 },
-      "id": 8,
-      "options": { "footer": { "show": false }, "showHeader": true },
-      "targets": [
-        {
-          "datasource": { "type": "grafana-postgresql-datasource", "uid": "atx-postgres" },
-          "format": "table",
-          "rawQuery": true,
-          "rawSql": "SELECT sf.reported_at::date AS \"Date\", a.asset_code AS \"Asset\", sf.description AS \"Finding Description\", sf.priority AS \"Priority\", CASE WHEN sf.maintenance_required THEN 'Yes' ELSE 'No' END AS \"Maint Req\", CASE WHEN sf.startup_risk THEN 'Yes' ELSE 'No' END AS \"Startup Risk\", COALESCE(w.work_order_number, 'None') AS \"Work Order\", sf.status AS \"Status\" FROM sanitation_findings sf JOIN assets a USING(asset_id) LEFT JOIN work_orders w USING(work_order_id) WHERE sf.status NOT IN ('RESOLVED', 'CLOSED') ORDER BY sf.startup_risk DESC, sf.reported_at DESC",
-          "refId": "A"
-        }
-      ],
-      "title": "Open Sanitation Findings (Startup Risk Prioritized)",
-      "type": "table"
-    },
-    {
-      "collapsed": false,
-      "gridPos": { "h": 1, "w": 24, "x": 0, "y": 17 },
-      "id": 302,
-      "title": "Overtime Economics: Planned Maintenance vs Reactive Breakdowns",
-      "type": "row"
-    },
-    {
-      "datasource": { "type": "grafana-postgresql-datasource", "uid": "atx-postgres" },
-      "fieldConfig": {
-        "defaults": {
-          "custom": {
-            "drawStyle": "bars",
-            "fillOpacity": 70,
-            "stacking": { "group": "A", "mode": "normal" }
-          },
-          "unit": "currencyUSD"
-        },
-        "overrides": [
-          {
-            "matcher": { "id": "byName", "options": "Planned Overtime ($)" },
-            "properties": [{ "id": "color", "value": { "fixedColor": "green", "mode": "fixed" } }]
-          },
-          {
-            "matcher": { "id": "byName", "options": "Reactive Overtime ($)" },
-            "properties": [{ "id": "color", "value": { "fixedColor": "semi-dark-red", "mode": "fixed" } }]
-          }
-        ]
-      },
-      "gridPos": { "h": 8, "w": 12, "x": 0, "y": 18 },
-      "id": 9,
-      "options": {
-        "legend": { "displayMode": "table", "placement": "bottom", "showLegend": true },
-        "tooltip": { "mode": "multi" }
-      },
-      "targets": [
-        {
-          "datasource": { "type": "grafana-postgresql-datasource", "uid": "atx-postgres" },
-          "format": "time_series",
-          "rawQuery": true,
-          "rawSql": "SELECT period AS time, reactive_overtime_cost AS \"Reactive Overtime ($)\", planned_overtime_cost AS \"Planned Overtime ($)\" FROM v_reactive_overtime_monthly ORDER BY period",
-          "refId": "A"
-        }
-      ],
-      "title": "Planned vs Reactive Overtime Spend",
-      "type": "timeseries"
-    },
-    {
-      "datasource": { "type": "grafana-postgresql-datasource", "uid": "atx-postgres" },
-      "fieldConfig": {
-        "defaults": {
-          "custom": { "drawStyle": "line", "fillOpacity": 15, "lineWidth": 2 },
-          "unit": "currencyUSD"
-        },
-        "overrides": []
-      },
-      "gridPos": { "h": 8, "w": 12, "x": 12, "y": 18 },
-      "id": 10,
-      "options": {
-        "legend": { "displayMode": "table", "placement": "bottom", "showLegend": true },
-        "tooltip": { "mode": "single" }
-      },
-      "targets": [
-        {
-          "datasource": { "type": "grafana-postgresql-datasource", "uid": "atx-postgres" },
-          "format": "time_series",
-          "rawQuery": true,
-          "rawSql": "SELECT period AS time, reactive_overtime_cost AS \"Reactive Overtime ($)\" FROM v_reactive_overtime_monthly ORDER BY period",
-          "refId": "A"
-        }
-      ],
-      "title": "Reactive Overtime Reduction Trend",
-      "type": "timeseries"
-    },
-    {
-      "collapsed": false,
-      "gridPos": { "h": 1, "w": 24, "x": 0, "y": 26 },
-      "id": 303,
-      "title": "Technician Capability & Skills Matrix",
-      "type": "row"
-    },
-    {
-      "datasource": { "type": "grafana-postgresql-datasource", "uid": "atx-postgres" },
-      "fieldConfig": { "defaults": {}, "overrides": [] },
-      "gridPos": { "h": 8, "w": 12, "x": 0, "y": 27 },
-      "id": 11,
-      "options": { "footer": { "show": false }, "showHeader": true },
-      "targets": [
-        {
-          "datasource": { "type": "grafana-postgresql-datasource", "uid": "atx-postgres" },
-          "format": "table",
-          "rawQuery": true,
-          "rawSql": "SELECT skill AS \"Skill Area\", shift_a_level AS \"Shift A Level\", shift_b_level AS \"Shift B Level\", independently_qualified AS \"Independent Techs (Level 3+)\", CASE WHEN critical_skill THEN 'Yes' ELSE 'No' END AS \"Critical Skill\" FROM v_technician_skill_coverage ORDER BY skill",
-          "refId": "A"
-        }
-      ],
-      "title": "Maintenance Technician Skills Matrix",
-      "type": "table"
-    },
-    {
-      "datasource": { "type": "grafana-postgresql-datasource", "uid": "atx-postgres" },
-      "fieldConfig": { "defaults": {}, "overrides": [] },
-      "gridPos": { "h": 8, "w": 12, "x": 12, "y": 27 },
-      "id": 12,
-      "options": { "footer": { "show": false }, "showHeader": true },
-      "targets": [
-        {
-          "datasource": { "type": "grafana-postgresql-datasource", "uid": "atx-postgres" },
-          "format": "table",
-          "rawQuery": true,
-          "rawSql": "SELECT sk.name AS \"Skill Area\", count(*) FILTER (WHERE es.proficiency_level >= 3) AS \"Qualified Techs (Level 3+)\", max(es.proficiency_level) FILTER (WHERE s.name='Production Shift A') AS \"Shift A Max Level\", max(es.proficiency_level) FILTER (WHERE s.name='Production Shift B') AS \"Shift B Max Level\", CASE WHEN count(*) FILTER (WHERE es.proficiency_level >= 3) >= 2 THEN 'Full Coverage' WHEN count(*) FILTER (WHERE es.proficiency_level >= 3) = 1 THEN 'Single Tech Risk' ELSE 'Coverage Gap' END AS \"Risk Assessment\" FROM skills sk LEFT JOIN employee_skills es USING(skill_id) LEFT JOIN employee_shift_assignments esa ON esa.employee_id=es.employee_id AND esa.is_primary AND esa.effective_to IS NULL LEFT JOIN shifts s USING(shift_id) WHERE sk.critical_skill GROUP BY sk.skill_id, sk.name ORDER BY sk.name",
-          "refId": "A"
-        }
-      ],
-      "title": "Critical Equipment Skill Coverage & Single-Point Risks",
-      "type": "table"
-    },
-    {
-      "collapsed": false,
-      "gridPos": { "h": 1, "w": 24, "x": 0, "y": 35 },
-      "id": 304,
-      "title": "Critical Spare Parts Management",
-      "type": "row"
-    },
-    {
-      "datasource": { "type": "grafana-postgresql-datasource", "uid": "atx-postgres" },
-      "fieldConfig": {
-        "defaults": {
-          "color": { "mode": "thresholds" },
-          "decimals": 2,
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              { "color": "red", "value": null },
-              { "color": "yellow", "value": 90 },
-              { "color": "green", "value": 98 }
-            ]
-          },
-          "unit": "percent"
-        },
-        "overrides": []
-      },
-      "gridPos": { "h": 8, "w": 6, "x": 0, "y": 36 },
-      "id": 13,
-      "options": {
-        "colorMode": "background",
-        "graphMode": "area",
-        "reduceOptions": { "calcs": ["lastNotNull"], "values": false }
-      },
-      "targets": [
-        {
-          "datasource": { "type": "grafana-postgresql-datasource", "uid": "atx-postgres" },
-          "format": "table",
-          "rawQuery": true,
-          "rawSql": "SELECT availability_percent FROM v_critical_spares_monthly ORDER BY period DESC LIMIT 1",
-          "refId": "A"
-        }
-      ],
-      "title": "Critical Spare Availability — Target ≥98%",
-      "type": "stat"
-    },
-    {
-      "datasource": { "type": "grafana-postgresql-datasource", "uid": "atx-postgres" },
-      "fieldConfig": { "defaults": {}, "overrides": [] },
-      "gridPos": { "h": 8, "w": 18, "x": 6, "y": 36 },
-      "id": 14,
-      "options": { "footer": { "show": false }, "showHeader": true },
-      "targets": [
-        {
-          "datasource": { "type": "grafana-postgresql-datasource", "uid": "atx-postgres" },
-          "format": "table",
-          "rawQuery": true,
-          "rawSql": "SELECT p.part_number AS \"Part Number\", p.description AS \"Description\", string_agg(DISTINCT a.asset_code, ', ' ORDER BY a.asset_code) AS \"Supported Assets\", p.quantity_on_hand AS \"On Hand\", p.minimum_quantity AS \"Minimum\", p.lead_time_days AS \"Lead Time (Days)\", CASE WHEN p.quantity_on_hand < p.minimum_quantity THEN 'Below Minimum (Risk)' ELSE 'Adequate' END AS \"Status\" FROM parts p JOIN asset_parts ap USING(part_id) JOIN assets a USING(asset_id) WHERE p.critical_spare OR ap.critical_for_asset GROUP BY p.part_id, p.part_number, p.description, p.quantity_on_hand, p.minimum_quantity, p.lead_time_days ORDER BY (p.quantity_on_hand < p.minimum_quantity) DESC, p.part_number",
-          "refId": "A"
-        }
-      ],
-      "title": "Critical Spare Inventory & Shortage Status",
-      "type": "table"
-    },
-    {
-      "collapsed": false,
-      "gridPos": { "h": 1, "w": 24, "x": 0, "y": 44 },
-      "id": 305,
-      "title": "Air-Comp-001 Predictive Condition Monitoring (Plant-Wide Utility Risk)",
-      "type": "row"
-    },
-    {
-      "datasource": { "type": "grafana-postgresql-datasource", "uid": "atx-postgres" },
-      "fieldConfig": {
-        "defaults": {
-          "custom": { "drawStyle": "line", "fillOpacity": 12, "lineWidth": 2 },
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              { "color": "green", "value": null },
-              { "color": "yellow", "value": 2.5 },
-              { "color": "red", "value": 4.0 }
-            ]
-          }
-        },
-        "overrides": [
-          {
-            "matcher": { "id": "byName", "options": "Warning Threshold (2.5 mm/s)" },
-            "properties": [
-              { "id": "custom.lineStyle", "value": { "dash": [10, 10], "fill": "dash" } },
-              { "id": "color", "value": { "fixedColor": "yellow", "mode": "fixed" } },
-              { "id": "custom.fillOpacity", "value": 0 }
-            ]
-          },
-          {
-            "matcher": { "id": "byName", "options": "Alarm Threshold (4.0 mm/s)" },
-            "properties": [
-              { "id": "custom.lineStyle", "value": { "dash": [10, 10], "fill": "dash" } },
-              { "id": "color", "value": { "fixedColor": "red", "mode": "fixed" } },
-              { "id": "custom.fillOpacity", "value": 0 }
-            ]
-          }
-        ]
-      },
-      "gridPos": { "h": 8, "w": 12, "x": 0, "y": 45 },
-      "id": 15,
-      "options": {
-        "legend": { "displayMode": "table", "placement": "bottom", "showLegend": true },
-        "tooltip": { "mode": "multi" }
-      },
-      "targets": [
-        {
-          "datasource": { "type": "grafana-postgresql-datasource", "uid": "atx-postgres" },
-          "format": "time_series",
-          "rawQuery": true,
-          "rawSql": "SELECT time, numeric_value AS \"Vibration (mm/s)\", warning_threshold AS \"Warning Threshold (2.5 mm/s)\", alarm_threshold AS \"Alarm Threshold (4.0 mm/s)\" FROM v_condition_measurements WHERE asset_code='AIR-COMP-001' AND measurement_type='VIBRATION' ORDER BY time",
-          "refId": "A"
-        }
-      ],
-      "title": "Air-Comp-001 Vibration — Degradation Before Failure (mm/s)",
-      "type": "timeseries"
-    },
-    {
-      "datasource": { "type": "grafana-postgresql-datasource", "uid": "atx-postgres" },
-      "fieldConfig": {
-        "defaults": {
-          "custom": { "drawStyle": "line", "fillOpacity": 8, "lineWidth": 2 }
-        },
-        "overrides": []
-      },
-      "gridPos": { "h": 8, "w": 12, "x": 12, "y": 45 },
-      "id": 16,
-      "options": {
-        "legend": { "displayMode": "table", "placement": "bottom", "showLegend": true },
-        "tooltip": { "mode": "multi" }
-      },
-      "targets": [
-        {
-          "datasource": { "type": "grafana-postgresql-datasource", "uid": "atx-postgres" },
-          "format": "time_series",
-          "rawQuery": true,
-          "rawSql": "SELECT time, measurement_type AS metric, numeric_value AS value FROM v_condition_measurements WHERE asset_code='AIR-COMP-001' AND measurement_type IN ('DISCHARGE_TEMPERATURE', 'MOTOR_CURRENT', 'DISCHARGE_PRESSURE') ORDER BY time, measurement_type",
-          "refId": "A"
-        }
-      ],
-      "title": "Air-Comp-001 Temperature, Current & Pressure",
-      "type": "timeseries"
-    },
-    {
-      "datasource": { "type": "grafana-postgresql-datasource", "uid": "atx-postgres" },
-      "fieldConfig": { "defaults": {}, "overrides": [] },
-      "gridPos": { "h": 6, "w": 24, "x": 0, "y": 53 },
-      "id": 17,
-      "options": { "footer": { "show": false }, "showHeader": true },
-      "targets": [
-        {
-          "datasource": { "type": "grafana-postgresql-datasource", "uid": "atx-postgres" },
-          "format": "table",
-          "rawQuery": true,
-          "rawSql": "SELECT a.asset_code AS \"Asset\", ac.criticality_class AS \"Criticality\", string_agg(DISTINCT l.name, ', ' ORDER BY l.name) AS \"Dependent Production Lines\", 'SIMULTANEOUS_DEPENDENCY' AS \"Plant Dependency\", 'Degradation detected before failure (vibration 1.63 -> 3.13 mm/s)' AS \"Condition Assessment\", 'Scheduled planned intervention during sanitation window' AS \"Mitigation Action\" FROM assets a JOIN asset_criticality ac USING(asset_id) JOIN asset_line_relationships alr USING(asset_id) JOIN production_lines l USING(line_id) WHERE a.asset_code='AIR-COMP-001' GROUP BY a.asset_code, ac.criticality_class",
-          "refId": "A"
-        }
-      ],
-      "title": "Air-Comp-001 Simultaneous Dual-Line Dependency & Planned Intervention",
-      "type": "table"
-    },
-    {
-      "collapsed": false,
-      "gridPos": { "h": 1, "w": 24, "x": 0, "y": 59 },
-      "id": 306,
-      "title": "Blender-001 Shared Asset Production Risk",
-      "type": "row"
-    },
-    {
-      "datasource": { "type": "grafana-postgresql-datasource", "uid": "atx-postgres" },
-      "fieldConfig": { "defaults": {}, "overrides": [] },
-      "gridPos": { "h": 8, "w": 12, "x": 0, "y": 60 },
-      "id": 18,
-      "options": { "footer": { "show": false }, "showHeader": true },
-      "targets": [
-        {
-          "datasource": { "type": "grafana-postgresql-datasource", "uid": "atx-postgres" },
-          "format": "table",
-          "rawQuery": true,
-          "rawSql": "SELECT aps.production_order AS \"Production Order\", l.name AS \"Scheduled Line\", aps.scheduled_start AS \"Start Time\", aps.scheduled_end AS \"End Time\", aps.status AS \"Schedule Status\" FROM asset_production_schedule aps JOIN production_lines l USING(line_id) JOIN assets a USING(asset_id) WHERE a.asset_code='BLENDER-001' ORDER BY aps.scheduled_start ASC",
-          "refId": "A"
-        }
-      ],
-      "title": "Blender-001 Sequential Line 1 & Line 2 Production Schedule",
-      "type": "table"
-    },
-    {
-      "datasource": { "type": "grafana-postgresql-datasource", "uid": "atx-postgres" },
-      "fieldConfig": { "defaults": {}, "overrides": [] },
-      "gridPos": { "h": 8, "w": 12, "x": 12, "y": 60 },
-      "id": 19,
-      "options": { "footer": { "show": false }, "showHeader": true },
-      "targets": [
-        {
-          "datasource": { "type": "grafana-postgresql-datasource", "uid": "atx-postgres" },
-          "format": "table",
-          "rawQuery": true,
-          "rawSql": "SELECT failure_time AS \"Failure Time\", current_impacted_line AS \"Current Impacted Line\", immediate_delay_minutes AS \"Immediate Delay (min)\", future_line_at_risk AS \"Future Line at Risk\", projected_future_delay_minutes AS \"Projected Delay (min)\", estimated_available_at AS \"Estimated Available\" FROM v_blender_shared_risk_history ORDER BY failure_time DESC",
-          "refId": "A"
-        }
-      ],
-      "title": "Blender-001 Shared Asset Failure & Future Slot Risk",
-      "type": "table"
-    }
-  ],
-  "refresh": "",
-  "schemaVersion": 42,
-  "tags": ["staffing", "sanitation", "risk", "predictive"],
-  "templating": { "list": [] },
-  "time": {
-    "from": "2026-01-01T00:00:00.000Z",
-    "to": "2026-09-01T00:00:00.000Z"
-  },
-  "timezone": "browser",
-  "title": "Staffing, Sanitation & Operational Risk",
-  "uid": "atx-operational-risk",
-  "version": 2
+﻿{
+    "annotations":  {
+                        "list":  [
+                                     {
+                                         "builtIn":  1,
+                                         "datasource":  "-- Grafana --",
+                                         "enable":  true,
+                                         "hide":  true,
+                                         "name":  "Annotations \u0026 Alerts",
+                                         "type":  "dashboard"
+                                     },
+                                     {
+                                         "datasource":  {
+                                                            "type":  "grafana-postgresql-datasource",
+                                                            "uid":  "atx-postgres"
+                                                        },
+                                         "enable":  true,
+                                         "hide":  false,
+                                         "iconColor":  "rgba(0, 180, 255, 1)",
+                                         "name":  "Air-Comp Planned Intervention",
+                                         "rawQuery":  "SELECT work_completed_at AS time, \u0027Air-Comp-001 Planned Predictive Overhaul During Sanitation\u0027 AS text, \u0027Predictive\u0027 AS tags FROM work_orders WHERE work_order_number=\u0027WO-2026-0185\u0027",
+                                         "showIn":  0,
+                                         "type":  "tags"
+                                     },
+                                     {
+                                         "datasource":  {
+                                                            "type":  "grafana-postgresql-datasource",
+                                                            "uid":  "atx-postgres"
+                                                        },
+                                         "enable":  true,
+                                         "hide":  false,
+                                         "iconColor":  "rgba(255, 140, 0, 1)",
+                                         "name":  "Blender-001 Shared Risk Event",
+                                         "rawQuery":  "SELECT downtime_start AS time, \u0027Blender-001 Failure: Immediate Line 1 Downtime + 45 min Projected Line 2 Delay\u0027 AS text, \u0027SharedRisk\u0027 AS tags FROM downtime_events WHERE work_order_id=(SELECT work_order_id FROM work_orders WHERE work_order_number=\u0027WO-2026-0085\u0027)",
+                                         "showIn":  0,
+                                         "type":  "tags"
+                                     }
+                                 ]
+                    },
+    "editable":  false,
+    "fiscalYearStartMonth":  0,
+    "graphTooltip":  1,
+    "id":  null,
+    "links":  [
+                  {
+                      "asDropdown":  false,
+                      "icon":  "dashboard",
+                      "includeVars":  true,
+                      "keepTime":  true,
+                      "tags":  [
+
+                               ],
+                      "targetBlank":  false,
+                      "title":  "VP Operations Overview",
+                      "type":  "link",
+                      "url":  "/d/atx-vp-operations/vp-operations-overview"
+                  },
+                  {
+                      "asDropdown":  false,
+                      "icon":  "dashboard",
+                      "includeVars":  true,
+                      "keepTime":  true,
+                      "tags":  [
+
+                               ],
+                      "targetBlank":  false,
+                      "title":  "Maintenance Reliability",
+                      "type":  "link",
+                      "url":  "/d/atx-maintenance-reliability/maintenance-reliability"
+                  },
+                  {
+                      "asDropdown":  false,
+                      "icon":  "dashboard",
+                      "includeVars":  true,
+                      "keepTime":  true,
+                      "tags":  [
+
+                               ],
+                      "targetBlank":  false,
+                      "title":  "Production \u0026 OEE Performance",
+                      "type":  "link",
+                      "url":  "/d/atx-production-oee/production-and-oee-performance"
+                  }
+              ],
+    "panels":  [
+                   {
+                       "gridPos":  {
+                                       "h":  5,
+                                       "w":  24,
+                                       "x":  0,
+                                       "y":  0
+                                   },
+                       "id":  900,
+                       "options":  {
+                                       "content":  "# How to Read This Dashboard\n\n## Do people, coverage, shared assets, and equipment condition protect production?\n\nThis dashboard focuses on risks that may not appear first as maintenance failures: **staffing gaps, sanitation findings, shared-asset conflicts, overtime, skill coverage, and utility-condition degradation**.",
+                                       "mode":  "markdown"
+                                   },
+                       "title":  "How to Read This Dashboard",
+                       "transparent":  true,
+                       "type":  "text",
+                       "description":  "This dashboard focuses on risks that may not appear first as maintenance failures: staffing gaps, sanitation findings, shared-asset conflicts, overtime, skill coverage, and utility-condition degradation. Use it to decide whether people, planned response, shared capacity, and predictive intervention can protect the next production window. Data source: dashboard navigation narrative."
+                   },
+                   {
+                       "collapsed":  false,
+                       "gridPos":  {
+                                       "h":  1,
+                                       "w":  24,
+                                       "x":  0,
+                                       "y":  5
+                                   },
+                       "id":  300,
+                       "title":  "Staffing Coverage Model \u0026 Sanitation Gap",
+                       "type":  "row",
+                       "description":  "Section grouping for **Staffing Coverage Model \u0026 Sanitation Gap**. Read the panels below it together before drilling to the next numbered section or linked dashboard."
+                   },
+                   {
+                       "datasource":  {
+                                          "type":  "grafana-postgresql-datasource",
+                                          "uid":  "atx-postgres"
+                                      },
+                       "fieldConfig":  {
+                                           "defaults":  {
+                                                            "color":  {
+                                                                          "mode":  "thresholds"
+                                                                      },
+                                                            "thresholds":  {
+                                                                               "mode":  "absolute",
+                                                                               "steps":  [
+                                                                                             {
+                                                                                                 "color":  "red",
+                                                                                                 "value":  null
+                                                                                             },
+                                                                                             {
+                                                                                                 "color":  "green",
+                                                                                                 "value":  1
+                                                                                             }
+                                                                                         ]
+                                                                           }
+                                                        },
+                                           "overrides":  [
+
+                                                         ]
+                                       },
+                       "gridPos":  {
+                                       "h":  4,
+                                       "w":  8,
+                                       "x":  0,
+                                       "y":  6
+                                   },
+                       "id":  1,
+                       "options":  {
+                                       "colorMode":  "background",
+                                       "graphMode":  "none",
+                                       "reduceOptions":  {
+                                                             "calcs":  [
+                                                                           "lastNotNull"
+                                                                       ],
+                                                             "values":  false
+                                                         }
+                                   },
+                       "targets":  [
+                                       {
+                                           "datasource":  {
+                                                              "type":  "grafana-postgresql-datasource",
+                                                              "uid":  "atx-postgres"
+                                                          },
+                                           "format":  "table",
+                                           "rawQuery":  true,
+                                           "rawSql":  "SELECT maintenance_technicians FROM v_shift_maintenance_coverage WHERE shift_name=\u0027Production Shift A\u0027",
+                                           "refId":  "A"
+                                       }
+                                   ],
+                       "title":  "Production Shift A Maintenance Coverage",
+                       "type":  "stat",
+                       "description":  "Shows the number of maintenance technicians assigned to the named production shift. The expected value is one; zero indicates no immediate maintenance coverage and values should be interpreted with skill coverage.\n\n**Data source:** PostgreSQL v_shift_maintenance_coverage."
+                   },
+                   {
+                       "datasource":  {
+                                          "type":  "grafana-postgresql-datasource",
+                                          "uid":  "atx-postgres"
+                                      },
+                       "fieldConfig":  {
+                                           "defaults":  {
+                                                            "color":  {
+                                                                          "mode":  "thresholds"
+                                                                      },
+                                                            "thresholds":  {
+                                                                               "mode":  "absolute",
+                                                                               "steps":  [
+                                                                                             {
+                                                                                                 "color":  "red",
+                                                                                                 "value":  null
+                                                                                             },
+                                                                                             {
+                                                                                                 "color":  "green",
+                                                                                                 "value":  1
+                                                                                             }
+                                                                                         ]
+                                                                           }
+                                                        },
+                                           "overrides":  [
+
+                                                         ]
+                                       },
+                       "gridPos":  {
+                                       "h":  4,
+                                       "w":  8,
+                                       "x":  8,
+                                       "y":  6
+                                   },
+                       "id":  2,
+                       "options":  {
+                                       "colorMode":  "background",
+                                       "graphMode":  "none",
+                                       "reduceOptions":  {
+                                                             "calcs":  [
+                                                                           "lastNotNull"
+                                                                       ],
+                                                             "values":  false
+                                                         }
+                                   },
+                       "targets":  [
+                                       {
+                                           "datasource":  {
+                                                              "type":  "grafana-postgresql-datasource",
+                                                              "uid":  "atx-postgres"
+                                                          },
+                                           "format":  "table",
+                                           "rawQuery":  true,
+                                           "rawSql":  "SELECT maintenance_technicians FROM v_shift_maintenance_coverage WHERE shift_name=\u0027Production Shift B\u0027",
+                                           "refId":  "A"
+                                       }
+                                   ],
+                       "title":  "Production Shift B Maintenance Coverage",
+                       "type":  "stat",
+                       "description":  "Shows the number of maintenance technicians assigned to the named production shift. The expected value is one; zero indicates no immediate maintenance coverage and values should be interpreted with skill coverage.\n\n**Data source:** PostgreSQL v_shift_maintenance_coverage."
+                   },
+                   {
+                       "datasource":  {
+                                          "type":  "grafana-postgresql-datasource",
+                                          "uid":  "atx-postgres"
+                                      },
+                       "fieldConfig":  {
+                                           "defaults":  {
+                                                            "color":  {
+                                                                          "mode":  "fixedColor",
+                                                                          "fixedColor":  "yellow"
+                                                                      },
+                                                            "mappings":  [
+                                                                             {
+                                                                                 "options":  {
+                                                                                                 "0":  {
+                                                                                                           "color":  "yellow",
+                                                                                                           "index":  0,
+                                                                                                           "text":  "0 (No Normal Maintenance Coverage)"
+                                                                                                       }
+                                                                                             },
+                                                                                 "type":  "value"
+                                                                             }
+                                                                         ]
+                                                        },
+                                           "overrides":  [
+
+                                                         ]
+                                       },
+                       "gridPos":  {
+                                       "h":  4,
+                                       "w":  8,
+                                       "x":  16,
+                                       "y":  6
+                                   },
+                       "id":  3,
+                       "options":  {
+                                       "colorMode":  "background",
+                                       "graphMode":  "none",
+                                       "reduceOptions":  {
+                                                             "calcs":  [
+                                                                           "lastNotNull"
+                                                                       ],
+                                                             "values":  false
+                                                         }
+                                   },
+                       "targets":  [
+                                       {
+                                           "datasource":  {
+                                                              "type":  "grafana-postgresql-datasource",
+                                                              "uid":  "atx-postgres"
+                                                          },
+                                           "format":  "table",
+                                           "rawQuery":  true,
+                                           "rawSql":  "SELECT maintenance_technicians FROM v_shift_maintenance_coverage WHERE shift_name=\u0027Sanitation Shift\u0027",
+                                           "refId":  "A"
+                                       }
+                                   ],
+                       "title":  "Sanitation Maintenance Coverage (Coverage Gap)",
+                       "type":  "stat",
+                       "description":  "Shows maintenance technicians assigned to the sanitation shift. The designed value is zero, explicitly exposing a coverage gap—not a data error. Review sanitation findings, startup risk, overtime, and escalation planning.\n\n**Data source:** PostgreSQL v_shift_maintenance_coverage."
+                   },
+                   {
+                       "collapsed":  false,
+                       "gridPos":  {
+                                       "h":  1,
+                                       "w":  24,
+                                       "x":  0,
+                                       "y":  10
+                                   },
+                       "id":  301,
+                       "title":  "Sanitation Findings \u0026 Startup Risk Workflow",
+                       "type":  "row",
+                       "description":  "Section grouping for **Sanitation Findings \u0026 Startup Risk Workflow**. Read the panels below it together before drilling to the next numbered section or linked dashboard."
+                   },
+                   {
+                       "datasource":  {
+                                          "type":  "grafana-postgresql-datasource",
+                                          "uid":  "atx-postgres"
+                                      },
+                       "fieldConfig":  {
+                                           "defaults":  {
+                                                            "color":  {
+                                                                          "mode":  "thresholds"
+                                                                      },
+                                                            "thresholds":  {
+                                                                               "mode":  "absolute",
+                                                                               "steps":  [
+                                                                                             {
+                                                                                                 "color":  "green",
+                                                                                                 "value":  null
+                                                                                             },
+                                                                                             {
+                                                                                                 "color":  "yellow",
+                                                                                                 "value":  1
+                                                                                             },
+                                                                                             {
+                                                                                                 "color":  "red",
+                                                                                                 "value":  3
+                                                                                             }
+                                                                                         ]
+                                                                           }
+                                                        },
+                                           "overrides":  [
+
+                                                         ]
+                                       },
+                       "gridPos":  {
+                                       "h":  4,
+                                       "w":  4,
+                                       "x":  0,
+                                       "y":  11
+                                   },
+                       "id":  4,
+                       "options":  {
+                                       "colorMode":  "background",
+                                       "graphMode":  "none",
+                                       "reduceOptions":  {
+                                                             "calcs":  [
+                                                                           "lastNotNull"
+                                                                       ],
+                                                             "values":  false
+                                                         }
+                                   },
+                       "targets":  [
+                                       {
+                                           "datasource":  {
+                                                              "type":  "grafana-postgresql-datasource",
+                                                              "uid":  "atx-postgres"
+                                                          },
+                                           "format":  "table",
+                                           "rawQuery":  true,
+                                           "rawSql":  "SELECT count(*) FROM sanitation_findings WHERE status NOT IN (\u0027RESOLVED\u0027, \u0027CLOSED\u0027)",
+                                           "refId":  "A"
+                                       }
+                                   ],
+                       "title":  "Open Sanitation Findings",
+                       "type":  "stat",
+                       "description":  "Counts sanitation findings not Resolved or Closed. A high count indicates unresolved conditions; review the prioritized findings table for startup and maintenance impact.\n\n**Data source:** PostgreSQL sanitation_findings."
+                   },
+                   {
+                       "datasource":  {
+                                          "type":  "grafana-postgresql-datasource",
+                                          "uid":  "atx-postgres"
+                                      },
+                       "fieldConfig":  {
+                                           "defaults":  {
+                                                            "color":  {
+                                                                          "mode":  "thresholds"
+                                                                      },
+                                                            "thresholds":  {
+                                                                               "mode":  "absolute",
+                                                                               "steps":  [
+                                                                                             {
+                                                                                                 "color":  "green",
+                                                                                                 "value":  null
+                                                                                             },
+                                                                                             {
+                                                                                                 "color":  "yellow",
+                                                                                                 "value":  1
+                                                                                             },
+                                                                                             {
+                                                                                                 "color":  "red",
+                                                                                                 "value":  3
+                                                                                             }
+                                                                                         ]
+                                                                           }
+                                                        },
+                                           "overrides":  [
+
+                                                         ]
+                                       },
+                       "gridPos":  {
+                                       "h":  4,
+                                       "w":  4,
+                                       "x":  4,
+                                       "y":  11
+                                   },
+                       "id":  5,
+                       "options":  {
+                                       "colorMode":  "background",
+                                       "graphMode":  "none",
+                                       "reduceOptions":  {
+                                                             "calcs":  [
+                                                                           "lastNotNull"
+                                                                       ],
+                                                             "values":  false
+                                                         }
+                                   },
+                       "targets":  [
+                                       {
+                                           "datasource":  {
+                                                              "type":  "grafana-postgresql-datasource",
+                                                              "uid":  "atx-postgres"
+                                                          },
+                                           "format":  "table",
+                                           "rawQuery":  true,
+                                           "rawSql":  "SELECT count(*) FROM sanitation_findings WHERE maintenance_required AND status NOT IN (\u0027RESOLVED\u0027, \u0027CLOSED\u0027)",
+                                           "refId":  "A"
+                                       }
+                                   ],
+                       "title":  "Maintenance Required Findings",
+                       "type":  "stat",
+                       "description":  "Counts open sanitation findings flagged as requiring maintenance. These require work-order linkage or disposition; compare with available coverage and startup timing.\n\n**Data source:** PostgreSQL sanitation_findings."
+                   },
+                   {
+                       "datasource":  {
+                                          "type":  "grafana-postgresql-datasource",
+                                          "uid":  "atx-postgres"
+                                      },
+                       "fieldConfig":  {
+                                           "defaults":  {
+                                                            "color":  {
+                                                                          "mode":  "thresholds"
+                                                                      },
+                                                            "thresholds":  {
+                                                                               "mode":  "absolute",
+                                                                               "steps":  [
+                                                                                             {
+                                                                                                 "color":  "green",
+                                                                                                 "value":  null
+                                                                                             },
+                                                                                             {
+                                                                                                 "color":  "red",
+                                                                                                 "value":  1
+                                                                                             }
+                                                                                         ]
+                                                                           }
+                                                        },
+                                           "overrides":  [
+
+                                                         ]
+                                       },
+                       "gridPos":  {
+                                       "h":  4,
+                                       "w":  4,
+                                       "x":  8,
+                                       "y":  11
+                                   },
+                       "id":  6,
+                       "options":  {
+                                       "colorMode":  "background",
+                                       "graphMode":  "none",
+                                       "reduceOptions":  {
+                                                             "calcs":  [
+                                                                           "lastNotNull"
+                                                                       ],
+                                                             "values":  false
+                                                         }
+                                   },
+                       "targets":  [
+                                       {
+                                           "datasource":  {
+                                                              "type":  "grafana-postgresql-datasource",
+                                                              "uid":  "atx-postgres"
+                                                          },
+                                           "format":  "table",
+                                           "rawQuery":  true,
+                                           "rawSql":  "SELECT count(*) FROM sanitation_findings WHERE startup_risk AND status NOT IN (\u0027RESOLVED\u0027, \u0027CLOSED\u0027)",
+                                           "refId":  "A"
+                                       }
+                                   ],
+                       "title":  "Startup Risk Findings",
+                       "type":  "stat",
+                       "description":  "Counts open sanitation findings flagged as potential startup risks. Any nonzero value deserves pre-start coordination so unresolved conditions do not delay production.\n\n**Data source:** PostgreSQL sanitation_findings."
+                   },
+                   {
+                       "datasource":  {
+                                          "type":  "grafana-postgresql-datasource",
+                                          "uid":  "atx-postgres"
+                                      },
+                       "fieldConfig":  {
+                                           "defaults":  {
+                                                            "custom":  {
+                                                                           "drawStyle":  "bars",
+                                                                           "fillOpacity":  65
+                                                                       },
+                                                            "unit":  "short"
+                                                        },
+                                           "overrides":  [
+
+                                                         ]
+                                       },
+                       "gridPos":  {
+                                       "h":  8,
+                                       "w":  12,
+                                       "x":  12,
+                                       "y":  11
+                                   },
+                       "id":  7,
+                       "options":  {
+                                       "legend":  {
+                                                      "displayMode":  "table",
+                                                      "placement":  "bottom",
+                                                      "showLegend":  true
+                                                  },
+                                       "tooltip":  {
+                                                       "mode":  "multi"
+                                                   }
+                                   },
+                       "targets":  [
+                                       {
+                                           "datasource":  {
+                                                              "type":  "grafana-postgresql-datasource",
+                                                              "uid":  "atx-postgres"
+                                                          },
+                                           "format":  "time_series",
+                                           "rawQuery":  true,
+                                           "rawSql":  "SELECT date_trunc(\u0027month\u0027, reported_at)::date AS time, count(*) AS \"Total Findings\", count(*) FILTER (WHERE maintenance_required) AS \"Maintenance Required\", count(*) FILTER (WHERE startup_risk) AS \"Startup Risks\" FROM sanitation_findings GROUP BY 1 ORDER BY 1",
+                                           "refId":  "A"
+                                       }
+                                   ],
+                       "title":  "Monthly Sanitation Findings Trend",
+                       "type":  "timeseries",
+                       "description":  "Counts sanitation findings by month, with maintenance-required and startup-risk subsets. Rising trends may indicate asset condition, cleaning damage, reporting improvement, or inadequate response; use the open table for current action.\n\n**Data source:** PostgreSQL sanitation_findings."
+                   },
+                   {
+                       "datasource":  {
+                                          "type":  "grafana-postgresql-datasource",
+                                          "uid":  "atx-postgres"
+                                      },
+                       "fieldConfig":  {
+                                           "defaults":  {
+
+                                                        },
+                                           "overrides":  [
+
+                                                         ]
+                                       },
+                       "gridPos":  {
+                                       "h":  7,
+                                       "w":  12,
+                                       "x":  0,
+                                       "y":  15
+                                   },
+                       "id":  8,
+                       "options":  {
+                                       "footer":  {
+                                                      "show":  false
+                                                  },
+                                       "showHeader":  true
+                                   },
+                       "targets":  [
+                                       {
+                                           "datasource":  {
+                                                              "type":  "grafana-postgresql-datasource",
+                                                              "uid":  "atx-postgres"
+                                                          },
+                                           "format":  "table",
+                                           "rawQuery":  true,
+                                           "rawSql":  "SELECT sf.reported_at::date AS \"Date\", a.asset_code AS \"Asset\", sf.description AS \"Finding Description\", sf.priority AS \"Priority\", CASE WHEN sf.maintenance_required THEN \u0027Yes\u0027 ELSE \u0027No\u0027 END AS \"Maint Req\", CASE WHEN sf.startup_risk THEN \u0027Yes\u0027 ELSE \u0027No\u0027 END AS \"Startup Risk\", COALESCE(w.work_order_number, \u0027None\u0027) AS \"Work Order\", sf.status AS \"Status\" FROM sanitation_findings sf JOIN assets a USING(asset_id) LEFT JOIN work_orders w USING(work_order_id) WHERE sf.status NOT IN (\u0027RESOLVED\u0027, \u0027CLOSED\u0027) ORDER BY sf.startup_risk DESC, sf.reported_at DESC",
+                                           "refId":  "A"
+                                       }
+                                   ],
+                       "title":  "Open Sanitation Findings (Startup Risk Prioritized)",
+                       "type":  "table",
+                       "description":  "Each row is one sanitation finding not RESOLVED or CLOSED, so it is a current open snapshot. Columns identify report date, asset, finding, priority, maintenance requirement, startup risk, linked work order, and status. Rows sort startup risks first, then newest report. Startup-risk findings without a work order or disposition require pre-start coordination. Data source: sanitation_findings, assets, work_orders."
+                   },
+                   {
+                       "collapsed":  false,
+                       "gridPos":  {
+                                       "h":  1,
+                                       "w":  24,
+                                       "x":  0,
+                                       "y":  22
+                                   },
+                       "id":  302,
+                       "title":  "Overtime Economics: Planned Maintenance vs Reactive Breakdowns",
+                       "type":  "row",
+                       "description":  "Section grouping for **Overtime Economics: Planned Maintenance vs Reactive Breakdowns**. Read the panels below it together before drilling to the next numbered section or linked dashboard."
+                   },
+                   {
+                       "datasource":  {
+                                          "type":  "grafana-postgresql-datasource",
+                                          "uid":  "atx-postgres"
+                                      },
+                       "fieldConfig":  {
+                                           "defaults":  {
+                                                            "custom":  {
+                                                                           "drawStyle":  "bars",
+                                                                           "fillOpacity":  70,
+                                                                           "stacking":  {
+                                                                                            "group":  "A",
+                                                                                            "mode":  "normal"
+                                                                                        }
+                                                                       },
+                                                            "unit":  "currencyUSD"
+                                                        },
+                                           "overrides":  [
+                                                             {
+                                                                 "matcher":  {
+                                                                                 "id":  "byName",
+                                                                                 "options":  "Planned Overtime ($)"
+                                                                             },
+                                                                 "properties":  [
+                                                                                    {
+                                                                                        "id":  "color",
+                                                                                        "value":  {
+                                                                                                      "fixedColor":  "green",
+                                                                                                      "mode":  "fixed"
+                                                                                                  }
+                                                                                    }
+                                                                                ]
+                                                             },
+                                                             {
+                                                                 "matcher":  {
+                                                                                 "id":  "byName",
+                                                                                 "options":  "Reactive Overtime ($)"
+                                                                             },
+                                                                 "properties":  [
+                                                                                    {
+                                                                                        "id":  "color",
+                                                                                        "value":  {
+                                                                                                      "fixedColor":  "semi-dark-red",
+                                                                                                      "mode":  "fixed"
+                                                                                                  }
+                                                                                    }
+                                                                                ]
+                                                             }
+                                                         ]
+                                       },
+                       "gridPos":  {
+                                       "h":  8,
+                                       "w":  12,
+                                       "x":  0,
+                                       "y":  23
+                                   },
+                       "id":  9,
+                       "options":  {
+                                       "legend":  {
+                                                      "displayMode":  "table",
+                                                      "placement":  "bottom",
+                                                      "showLegend":  true
+                                                  },
+                                       "tooltip":  {
+                                                       "mode":  "multi"
+                                                   }
+                                   },
+                       "targets":  [
+                                       {
+                                           "datasource":  {
+                                                              "type":  "grafana-postgresql-datasource",
+                                                              "uid":  "atx-postgres"
+                                                          },
+                                           "format":  "time_series",
+                                           "rawQuery":  true,
+                                           "rawSql":  "SELECT period AS time, reactive_overtime_cost AS \"Reactive Overtime ($)\", planned_overtime_cost AS \"Planned Overtime ($)\" FROM v_reactive_overtime_monthly ORDER BY period",
+                                           "refId":  "A"
+                                       }
+                                   ],
+                       "title":  "Planned vs Reactive Overtime Spend",
+                       "type":  "timeseries",
+                       "description":  "Trends monthly planned and reactive maintenance overtime cost. Planned overtime can protect production windows; reactive overtime indicates breakdown-driven expense. A shift from reactive to planned is generally favorable when reliability improves.\n\n**Data source:** PostgreSQL v_reactive_overtime_monthly."
+                   },
+                   {
+                       "datasource":  {
+                                          "type":  "grafana-postgresql-datasource",
+                                          "uid":  "atx-postgres"
+                                      },
+                       "fieldConfig":  {
+                                           "defaults":  {
+                                                            "custom":  {
+                                                                           "drawStyle":  "line",
+                                                                           "fillOpacity":  15,
+                                                                           "lineWidth":  2
+                                                                       },
+                                                            "unit":  "currencyUSD"
+                                                        },
+                                           "overrides":  [
+
+                                                         ]
+                                       },
+                       "gridPos":  {
+                                       "h":  8,
+                                       "w":  12,
+                                       "x":  12,
+                                       "y":  23
+                                   },
+                       "id":  10,
+                       "options":  {
+                                       "legend":  {
+                                                      "displayMode":  "table",
+                                                      "placement":  "bottom",
+                                                      "showLegend":  true
+                                                  },
+                                       "tooltip":  {
+                                                       "mode":  "single"
+                                                   }
+                                   },
+                       "targets":  [
+                                       {
+                                           "datasource":  {
+                                                              "type":  "grafana-postgresql-datasource",
+                                                              "uid":  "atx-postgres"
+                                                          },
+                                           "format":  "time_series",
+                                           "rawQuery":  true,
+                                           "rawSql":  "SELECT period AS time, reactive_overtime_cost AS \"Reactive Overtime ($)\" FROM v_reactive_overtime_monthly ORDER BY period",
+                                           "refId":  "A"
+                                       }
+                                   ],
+                       "title":  "Reactive Overtime Reduction Trend",
+                       "type":  "timeseries",
+                       "description":  "Trends monthly reactive overtime cost only. Lower is better when achieved without increasing unresolved risk; compare with downtime, PM compliance, and planned overtime.\n\n**Data source:** PostgreSQL v_reactive_overtime_monthly."
+                   },
+                   {
+                       "collapsed":  false,
+                       "gridPos":  {
+                                       "h":  1,
+                                       "w":  24,
+                                       "x":  0,
+                                       "y":  31
+                                   },
+                       "id":  303,
+                       "title":  "Technician Capability \u0026 Skills Matrix",
+                       "type":  "row",
+                       "description":  "Section grouping for **Technician Capability \u0026 Skills Matrix**. Read the panels below it together before drilling to the next numbered section or linked dashboard."
+                   },
+                   {
+                       "datasource":  {
+                                          "type":  "grafana-postgresql-datasource",
+                                          "uid":  "atx-postgres"
+                                      },
+                       "fieldConfig":  {
+                                           "defaults":  {
+
+                                                        },
+                                           "overrides":  [
+
+                                                         ]
+                                       },
+                       "gridPos":  {
+                                       "h":  8,
+                                       "w":  12,
+                                       "x":  0,
+                                       "y":  32
+                                   },
+                       "id":  11,
+                       "options":  {
+                                       "footer":  {
+                                                      "show":  false
+                                                  },
+                                       "showHeader":  true
+                                   },
+                       "targets":  [
+                                       {
+                                           "datasource":  {
+                                                              "type":  "grafana-postgresql-datasource",
+                                                              "uid":  "atx-postgres"
+                                                          },
+                                           "format":  "table",
+                                           "rawQuery":  true,
+                                           "rawSql":  "SELECT skill AS \"Skill Area\", shift_a_level AS \"Shift A Level\", shift_b_level AS \"Shift B Level\", independently_qualified AS \"Independent Techs (Level 3+)\", CASE WHEN critical_skill THEN \u0027Yes\u0027 ELSE \u0027No\u0027 END AS \"Critical Skill\" FROM v_technician_skill_coverage ORDER BY skill",
+                                           "refId":  "A"
+                                       }
+                                   ],
+                       "title":  "Maintenance Technician Skills Matrix",
+                       "type":  "table",
+                       "description":  "Each row is one maintenance skill with Shift A and Shift B proficiency, count of technicians independently qualified at level 3+, and critical-skill flag. Uneven levels show complementary strengths; zero/one qualified technician identifies training, absence, and response risk. Use the critical-skill risk table for escalation. Data source: v_technician_skill_coverage."
+                   },
+                   {
+                       "datasource":  {
+                                          "type":  "grafana-postgresql-datasource",
+                                          "uid":  "atx-postgres"
+                                      },
+                       "fieldConfig":  {
+                                           "defaults":  {
+
+                                                        },
+                                           "overrides":  [
+
+                                                         ]
+                                       },
+                       "gridPos":  {
+                                       "h":  8,
+                                       "w":  12,
+                                       "x":  12,
+                                       "y":  32
+                                   },
+                       "id":  12,
+                       "options":  {
+                                       "footer":  {
+                                                      "show":  false
+                                                  },
+                                       "showHeader":  true
+                                   },
+                       "targets":  [
+                                       {
+                                           "datasource":  {
+                                                              "type":  "grafana-postgresql-datasource",
+                                                              "uid":  "atx-postgres"
+                                                          },
+                                           "format":  "table",
+                                           "rawQuery":  true,
+                                           "rawSql":  "SELECT sk.name AS \"Skill Area\", count(*) FILTER (WHERE es.proficiency_level \u003e= 3) AS \"Qualified Techs (Level 3+)\", max(es.proficiency_level) FILTER (WHERE s.name=\u0027Production Shift A\u0027) AS \"Shift A Max Level\", max(es.proficiency_level) FILTER (WHERE s.name=\u0027Production Shift B\u0027) AS \"Shift B Max Level\", CASE WHEN count(*) FILTER (WHERE es.proficiency_level \u003e= 3) \u003e= 2 THEN \u0027Full Coverage\u0027 WHEN count(*) FILTER (WHERE es.proficiency_level \u003e= 3) = 1 THEN \u0027Single Tech Risk\u0027 ELSE \u0027Coverage Gap\u0027 END AS \"Risk Assessment\" FROM skills sk LEFT JOIN employee_skills es USING(skill_id) LEFT JOIN employee_shift_assignments esa ON esa.employee_id=es.employee_id AND esa.is_primary AND esa.effective_to IS NULL LEFT JOIN shifts s USING(shift_id) WHERE sk.critical_skill GROUP BY sk.skill_id, sk.name ORDER BY sk.name",
+                                           "refId":  "A"
+                                       }
+                                   ],
+                       "title":  "Critical Equipment Skill Coverage \u0026 Single-Point Risks",
+                       "type":  "table",
+                       "description":  "Each row is one critical skill, showing qualified technician count, maximum proficiency by production shift, and risk classification. Full Coverage means at least two level-3+ technicians; Single Tech Risk means one; Coverage Gap means none. Address gaps through training, coverage, or external support planning. Data source: skills, employee_skills, employee_shift_assignments, shifts."
+                   },
+                   {
+                       "collapsed":  false,
+                       "gridPos":  {
+                                       "h":  1,
+                                       "w":  24,
+                                       "x":  0,
+                                       "y":  40
+                                   },
+                       "id":  304,
+                       "title":  "Critical Spare Parts Management",
+                       "type":  "row",
+                       "description":  "Section grouping for **Critical Spare Parts Management**. Read the panels below it together before drilling to the next numbered section or linked dashboard."
+                   },
+                   {
+                       "datasource":  {
+                                          "type":  "grafana-postgresql-datasource",
+                                          "uid":  "atx-postgres"
+                                      },
+                       "fieldConfig":  {
+                                           "defaults":  {
+                                                            "color":  {
+                                                                          "mode":  "thresholds"
+                                                                      },
+                                                            "decimals":  2,
+                                                            "thresholds":  {
+                                                                               "mode":  "absolute",
+                                                                               "steps":  [
+                                                                                             {
+                                                                                                 "color":  "red",
+                                                                                                 "value":  null
+                                                                                             },
+                                                                                             {
+                                                                                                 "color":  "yellow",
+                                                                                                 "value":  90
+                                                                                             },
+                                                                                             {
+                                                                                                 "color":  "green",
+                                                                                                 "value":  98
+                                                                                             }
+                                                                                         ]
+                                                                           },
+                                                            "unit":  "percent"
+                                                        },
+                                           "overrides":  [
+
+                                                         ]
+                                       },
+                       "gridPos":  {
+                                       "h":  8,
+                                       "w":  6,
+                                       "x":  0,
+                                       "y":  41
+                                   },
+                       "id":  13,
+                       "options":  {
+                                       "colorMode":  "background",
+                                       "graphMode":  "area",
+                                       "reduceOptions":  {
+                                                             "calcs":  [
+                                                                           "lastNotNull"
+                                                                       ],
+                                                             "values":  false
+                                                         }
+                                   },
+                       "targets":  [
+                                       {
+                                           "datasource":  {
+                                                              "type":  "grafana-postgresql-datasource",
+                                                              "uid":  "atx-postgres"
+                                                          },
+                                           "format":  "table",
+                                           "rawQuery":  true,
+                                           "rawSql":  "SELECT availability_percent FROM v_critical_spares_monthly ORDER BY period DESC LIMIT 1",
+                                           "refId":  "A"
+                                       }
+                                   ],
+                       "title":  "Critical Spare Availability — Target ≥98%",
+                       "type":  "stat",
+                       "description":  "Shows the latest availability percentage for critical spare parts, or lists critical inventory by supported asset. Shortages below minimum stock and long lead times increase restoration risk; review affected critical assets and work backlog.\n\n**Data source:** PostgreSQL v_critical_spares_monthly."
+                   },
+                   {
+                       "datasource":  {
+                                          "type":  "grafana-postgresql-datasource",
+                                          "uid":  "atx-postgres"
+                                      },
+                       "fieldConfig":  {
+                                           "defaults":  {
+
+                                                        },
+                                           "overrides":  [
+
+                                                         ]
+                                       },
+                       "gridPos":  {
+                                       "h":  8,
+                                       "w":  18,
+                                       "x":  6,
+                                       "y":  41
+                                   },
+                       "id":  14,
+                       "options":  {
+                                       "footer":  {
+                                                      "show":  false
+                                                  },
+                                       "showHeader":  true
+                                   },
+                       "targets":  [
+                                       {
+                                           "datasource":  {
+                                                              "type":  "grafana-postgresql-datasource",
+                                                              "uid":  "atx-postgres"
+                                                          },
+                                           "format":  "table",
+                                           "rawQuery":  true,
+                                           "rawSql":  "SELECT p.part_number AS \"Part Number\", p.description AS \"Description\", string_agg(DISTINCT a.asset_code, \u0027, \u0027 ORDER BY a.asset_code) AS \"Supported Assets\", p.quantity_on_hand AS \"On Hand\", p.minimum_quantity AS \"Minimum\", p.lead_time_days AS \"Lead Time (Days)\", CASE WHEN p.quantity_on_hand \u003c p.minimum_quantity THEN \u0027Below Minimum (Risk)\u0027 ELSE \u0027Adequate\u0027 END AS \"Status\" FROM parts p JOIN asset_parts ap USING(part_id) JOIN assets a USING(asset_id) WHERE p.critical_spare OR ap.critical_for_asset GROUP BY p.part_id, p.part_number, p.description, p.quantity_on_hand, p.minimum_quantity, p.lead_time_days ORDER BY (p.quantity_on_hand \u003c p.minimum_quantity) DESC, p.part_number",
+                                           "refId":  "A"
+                                       }
+                                   ],
+                       "title":  "Critical Spare Inventory \u0026 Shortage Status",
+                       "type":  "table",
+                       "description":  "Each row is one critical part aggregated across all supported assets. Critical means the part or asset-part relationship is flagged critical. Columns show supported assets, on-hand, minimum, lead time, and Below Minimum/Adequate status; shortages sort first. Below-minimum long-lead parts supporting critical/shared assets require replenishment. Data source: parts, asset_parts, assets."
+                   },
+                   {
+                       "collapsed":  false,
+                       "gridPos":  {
+                                       "h":  1,
+                                       "w":  24,
+                                       "x":  0,
+                                       "y":  49
+                                   },
+                       "id":  305,
+                       "title":  "Air-Comp-001 Predictive Condition Monitoring (Plant-Wide Utility Risk)",
+                       "type":  "row",
+                       "description":  "Section grouping for **Air-Comp-001 Predictive Condition Monitoring (Plant-Wide Utility Risk)**. Read the panels below it together before drilling to the next numbered section or linked dashboard."
+                   },
+                   {
+                       "datasource":  {
+                                          "type":  "grafana-postgresql-datasource",
+                                          "uid":  "atx-postgres"
+                                      },
+                       "fieldConfig":  {
+                                           "defaults":  {
+                                                            "custom":  {
+                                                                           "drawStyle":  "line",
+                                                                           "fillOpacity":  12,
+                                                                           "lineWidth":  2
+                                                                       },
+                                                            "thresholds":  {
+                                                                               "mode":  "absolute",
+                                                                               "steps":  [
+                                                                                             {
+                                                                                                 "color":  "green",
+                                                                                                 "value":  null
+                                                                                             },
+                                                                                             {
+                                                                                                 "color":  "yellow",
+                                                                                                 "value":  2.5
+                                                                                             },
+                                                                                             {
+                                                                                                 "color":  "red",
+                                                                                                 "value":  4.0
+                                                                                             }
+                                                                                         ]
+                                                                           }
+                                                        },
+                                           "overrides":  [
+                                                             {
+                                                                 "matcher":  {
+                                                                                 "id":  "byName",
+                                                                                 "options":  "Warning Threshold (2.5 mm/s)"
+                                                                             },
+                                                                 "properties":  [
+                                                                                    {
+                                                                                        "id":  "custom.lineStyle",
+                                                                                        "value":  {
+                                                                                                      "dash":  [
+                                                                                                                   10,
+                                                                                                                   10
+                                                                                                               ],
+                                                                                                      "fill":  "dash"
+                                                                                                  }
+                                                                                    },
+                                                                                    {
+                                                                                        "id":  "color",
+                                                                                        "value":  {
+                                                                                                      "fixedColor":  "yellow",
+                                                                                                      "mode":  "fixed"
+                                                                                                  }
+                                                                                    },
+                                                                                    {
+                                                                                        "id":  "custom.fillOpacity",
+                                                                                        "value":  0
+                                                                                    }
+                                                                                ]
+                                                             },
+                                                             {
+                                                                 "matcher":  {
+                                                                                 "id":  "byName",
+                                                                                 "options":  "Alarm Threshold (4.0 mm/s)"
+                                                                             },
+                                                                 "properties":  [
+                                                                                    {
+                                                                                        "id":  "custom.lineStyle",
+                                                                                        "value":  {
+                                                                                                      "dash":  [
+                                                                                                                   10,
+                                                                                                                   10
+                                                                                                               ],
+                                                                                                      "fill":  "dash"
+                                                                                                  }
+                                                                                    },
+                                                                                    {
+                                                                                        "id":  "color",
+                                                                                        "value":  {
+                                                                                                      "fixedColor":  "red",
+                                                                                                      "mode":  "fixed"
+                                                                                                  }
+                                                                                    },
+                                                                                    {
+                                                                                        "id":  "custom.fillOpacity",
+                                                                                        "value":  0
+                                                                                    }
+                                                                                ]
+                                                             }
+                                                         ]
+                                       },
+                       "gridPos":  {
+                                       "h":  8,
+                                       "w":  12,
+                                       "x":  0,
+                                       "y":  50
+                                   },
+                       "id":  15,
+                       "options":  {
+                                       "legend":  {
+                                                      "displayMode":  "table",
+                                                      "placement":  "bottom",
+                                                      "showLegend":  true
+                                                  },
+                                       "tooltip":  {
+                                                       "mode":  "multi"
+                                                   }
+                                   },
+                       "targets":  [
+                                       {
+                                           "datasource":  {
+                                                              "type":  "grafana-postgresql-datasource",
+                                                              "uid":  "atx-postgres"
+                                                          },
+                                           "format":  "time_series",
+                                           "rawQuery":  true,
+                                           "rawSql":  "SELECT time, numeric_value AS \"Vibration (mm/s)\", warning_threshold AS \"Warning Threshold (2.8 mm/s)\", alarm_threshold AS \"Alarm Threshold (4.5 mm/s)\" FROM v_condition_measurements WHERE asset_code=\u0027AIR-COMP-001\u0027 AND measurement_type=\u0027VIBRATION\u0027 ORDER BY time",
+                                           "refId":  "A"
+                                       }
+                                   ],
+                       "title":  "Air-Comp-001 Vibration — Degradation Before Failure (mm/s)",
+                       "type":  "timeseries",
+                       "description":  "Trends all seeded Air-Comp-001 vibration readings with 2.8 mm/s warning and 4.5 mm/s alarm references. Rising or threshold-crossing vibration indicates degradation before functional failure. Both lines depend simultaneously on this utility, so predictive sanitation-window intervention is high priority; no piece-rate OEE is assigned. Data source: v_condition_measurements."
+                   },
+                   {
+                       "datasource":  {
+                                          "type":  "grafana-postgresql-datasource",
+                                          "uid":  "atx-postgres"
+                                      },
+                       "fieldConfig":  {
+                                           "defaults":  {
+                                                            "custom":  {
+                                                                           "drawStyle":  "line",
+                                                                           "fillOpacity":  8,
+                                                                           "lineWidth":  2
+                                                                       }
+                                                        },
+                                           "overrides":  [
+
+                                                         ]
+                                       },
+                       "gridPos":  {
+                                       "h":  8,
+                                       "w":  12,
+                                       "x":  12,
+                                       "y":  50
+                                   },
+                       "id":  16,
+                       "options":  {
+                                       "legend":  {
+                                                      "displayMode":  "table",
+                                                      "placement":  "bottom",
+                                                      "showLegend":  true
+                                                  },
+                                       "tooltip":  {
+                                                       "mode":  "multi"
+                                                   }
+                                   },
+                       "targets":  [
+                                       {
+                                           "datasource":  {
+                                                              "type":  "grafana-postgresql-datasource",
+                                                              "uid":  "atx-postgres"
+                                                          },
+                                           "format":  "time_series",
+                                           "rawQuery":  true,
+                                           "rawSql":  "SELECT time, measurement_type AS metric, numeric_value AS value FROM v_condition_measurements WHERE asset_code=\u0027AIR-COMP-001\u0027 AND measurement_type IN (\u0027DISCHARGE_TEMPERATURE\u0027, \u0027MOTOR_CURRENT\u0027, \u0027DISCHARGE_PRESSURE\u0027) ORDER BY time, measurement_type",
+                                           "refId":  "A"
+                                       }
+                                   ],
+                       "title":  "Air-Comp-001 Temperature, Current \u0026 Pressure",
+                       "type":  "timeseries",
+                       "description":  "Trends all seeded Air-Comp-001 discharge temperature, motor current, and discharge pressure observations. These signals have different engineering units and should be interpreted by series, not compared numerically to one another. Sustained excursions or correlated changes support condition investigation with vibration and planned intervention. Data source: v_condition_measurements."
+                   },
+                   {
+                       "datasource":  {
+                                          "type":  "grafana-postgresql-datasource",
+                                          "uid":  "atx-postgres"
+                                      },
+                       "fieldConfig":  {
+                                           "defaults":  {
+
+                                                        },
+                                           "overrides":  [
+
+                                                         ]
+                                       },
+                       "gridPos":  {
+                                       "h":  6,
+                                       "w":  24,
+                                       "x":  0,
+                                       "y":  58
+                                   },
+                       "id":  17,
+                       "options":  {
+                                       "footer":  {
+                                                      "show":  false
+                                                  },
+                                       "showHeader":  true
+                                   },
+                       "targets":  [
+                                       {
+                                           "datasource":  {
+                                                              "type":  "grafana-postgresql-datasource",
+                                                              "uid":  "atx-postgres"
+                                                          },
+                                           "format":  "table",
+                                           "rawQuery":  true,
+                                           "rawSql":  "SELECT a.asset_code AS \"Asset\", ac.criticality_class AS \"Criticality\", string_agg(DISTINCT l.name, \u0027, \u0027 ORDER BY l.name) AS \"Dependent Production Lines\", \u0027SIMULTANEOUS_DEPENDENCY\u0027 AS \"Plant Dependency\", \u0027Degradation detected before failure (vibration 1.63 -\u003e 3.13 mm/s)\u0027 AS \"Condition Assessment\", \u0027Scheduled planned intervention during sanitation window\u0027 AS \"Mitigation Action\" FROM assets a JOIN asset_criticality ac USING(asset_id) JOIN asset_line_relationships alr USING(asset_id) JOIN production_lines l USING(line_id) WHERE a.asset_code=\u0027AIR-COMP-001\u0027 GROUP BY a.asset_code, ac.criticality_class",
+                                           "refId":  "A"
+                                       }
+                                   ],
+                       "title":  "Air-Comp-001 Simultaneous Dual-Line Dependency \u0026 Planned Intervention",
+                       "type":  "table",
+                       "description":  "The single current narrative row identifies Air-Comp-001 criticality, both dependent lines, simultaneous dependency, detected degradation, and planned sanitation-window mitigation. It excludes unrelated assets. Any unplanned loss threatens both lines, which justifies predictive priority without utility OEE. Data source: assets, asset_criticality, asset_line_relationships, production_lines."
+                   },
+                   {
+                       "collapsed":  false,
+                       "gridPos":  {
+                                       "h":  1,
+                                       "w":  24,
+                                       "x":  0,
+                                       "y":  64
+                                   },
+                       "id":  306,
+                       "title":  "Blender-001 Shared Asset Production Risk",
+                       "type":  "row",
+                       "description":  "Section grouping for **Blender-001 Shared Asset Production Risk**. Read the panels below it together before drilling to the next numbered section or linked dashboard."
+                   },
+                   {
+                       "datasource":  {
+                                          "type":  "grafana-postgresql-datasource",
+                                          "uid":  "atx-postgres"
+                                      },
+                       "fieldConfig":  {
+                                           "defaults":  {
+
+                                                        },
+                                           "overrides":  [
+
+                                                         ]
+                                       },
+                       "gridPos":  {
+                                       "h":  8,
+                                       "w":  12,
+                                       "x":  0,
+                                       "y":  65
+                                   },
+                       "id":  18,
+                       "options":  {
+                                       "footer":  {
+                                                      "show":  false
+                                                  },
+                                       "showHeader":  true
+                                   },
+                       "targets":  [
+                                       {
+                                           "datasource":  {
+                                                              "type":  "grafana-postgresql-datasource",
+                                                              "uid":  "atx-postgres"
+                                                          },
+                                           "format":  "table",
+                                           "rawQuery":  true,
+                                           "rawSql":  "SELECT aps.production_order AS \"Production Order\", l.name AS \"Scheduled Line\", aps.scheduled_start AS \"Start Time\", aps.scheduled_end AS \"End Time\", aps.status AS \"Schedule Status\" FROM asset_production_schedule aps JOIN production_lines l USING(line_id) JOIN assets a USING(asset_id) WHERE a.asset_code=\u0027BLENDER-001\u0027 ORDER BY aps.scheduled_start ASC",
+                                           "refId":  "A"
+                                       }
+                                   ],
+                       "title":  "Blender-001 Sequential Line 1 \u0026 Line 2 Production Schedule",
+                       "type":  "table",
+                       "description":  "Each row is one Blender-001 scheduled production slot, ordered from earliest to latest, with order, assigned line, start/end, and status. Blender allocation is sequential; overlapping or delayed slots can starve the next line. Coordinate the current and next line when a slot changes. Data source: asset_production_schedule, assets, production_lines."
+                   },
+                   {
+                       "datasource":  {
+                                          "type":  "grafana-postgresql-datasource",
+                                          "uid":  "atx-postgres"
+                                      },
+                       "fieldConfig":  {
+                                           "defaults":  {
+
+                                                        },
+                                           "overrides":  [
+
+                                                         ]
+                                       },
+                       "gridPos":  {
+                                       "h":  8,
+                                       "w":  12,
+                                       "x":  12,
+                                       "y":  65
+                                   },
+                       "id":  19,
+                       "options":  {
+                                       "footer":  {
+                                                      "show":  false
+                                                  },
+                                       "showHeader":  true
+                                   },
+                       "targets":  [
+                                       {
+                                           "datasource":  {
+                                                              "type":  "grafana-postgresql-datasource",
+                                                              "uid":  "atx-postgres"
+                                                          },
+                                           "format":  "table",
+                                           "rawQuery":  true,
+                                           "rawSql":  "SELECT failure_time AS \"Failure Time\", current_impacted_line AS \"Current Impacted Line\", immediate_delay_minutes AS \"Immediate Delay (min)\", future_line_at_risk AS \"Future Line at Risk\", projected_future_delay_minutes AS \"Projected Delay (min)\", estimated_available_at AS \"Estimated Available\" FROM v_blender_shared_risk_history ORDER BY failure_time DESC",
+                                           "refId":  "A"
+                                       }
+                                   ],
+                       "title":  "Blender-001 Shared Asset Failure \u0026 Future Slot Risk",
+                       "type":  "table",
+                       "description":  "Each historical row is one Blender-001 failure showing failure time, currently affected line, immediate delay, future line at risk, projected delay, and estimated availability, newest first. Large current or projected delays require cross-line schedule and maintenance coordination. Data source: v_blender_shared_risk_history."
+                   }
+               ],
+    "refresh":  "",
+    "schemaVersion":  42,
+    "tags":  [
+                 "staffing",
+                 "sanitation",
+                 "risk",
+                 "predictive"
+             ],
+    "templating":  {
+                       "list":  [
+
+                                ]
+                   },
+    "time":  {
+                 "from":  "2026-01-01T00:00:00.000Z",
+                 "to":  "2026-09-01T00:00:00.000Z"
+             },
+    "timezone":  "browser",
+    "title":  "Staffing, Sanitation \u0026 Operational Risk",
+    "uid":  "atx-operational-risk",
+    "version":  2
 }

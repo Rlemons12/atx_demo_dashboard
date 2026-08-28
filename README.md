@@ -61,6 +61,37 @@ The project uses the installed Grafana binary but keeps its runtime database, lo
 .\scripts\test-ai-summary.ps1
 ```
 
+## Milestone 4 — Line 2 sensor-to-OEE demonstration
+
+Milestone 4 instruments only `MIXER-201`, `CONVEYOR-201`, `FILLER-201`, and `LABELER-201` in depth. Deterministic PostgreSQL telemetry resolves into auditable states and primary Stop Reason Tags, then into Equipment OEE and Loss Analysis. Line 2 OEE is independently calculated from line time, product-specific rate, and line counts; it is never the average of machine OEE percentages.
+
+The aligned terms are Asset Utilization / Scheduled Utilization, Equipment OEE, Line OEE, and Loss Analysis—not the legacy draft labels “OEE1” and “OEE2.” Asset Utilization is Scheduled Production Time / Total Calendar Time and is not OEE. OEE is Availability × Performance / Speed × Quality. Loss Analysis separately explains scheduled capacity, stop, unplanned-maintenance, speed, and quality losses; it is not multiplied into OEE.
+
+Planned breaks preserve the existing convention and are outside Scheduled Production Time. Planned changeover is inside Scheduled Production Time and visible as planned production loss. Sanitation, outside-schedule planned maintenance, and no-schedule time reduce utilization but not OEE Availability. `AIR-COMP-001` remains a shared utility and is excluded from piece-rate OEE.
+
+Apply or validate Milestone 4 on an existing database:
+
+```powershell
+.\scripts\seed-line2-equipment-inputs.ps1
+.\scripts\validate-milestone4.ps1
+.\scripts\validate-grafana.ps1
+.\scripts\test-ai-summary.ps1
+```
+
+The guarded `rebuild-database.ps1 -ConfirmRebuild` command also applies and validates Milestone 4 after Milestone 2.5.
+
+Open Equipment OEE Detail (Filler-201 default): <http://127.0.0.1:3001/d/atx-equipment-oee-detail/equipment-oee-detail?var-asset=FILLER-201>
+
+Filler-201 is the primary drill-down: photoeye evidence → stopped/faulted state → Photoeye Fault → downtime → work order → failure mode → RCA → bracket/locking corrective action → weekly PM revision → lower post-RCA stop loss. Conveyor-201 provides the secondary belt-tracking story.
+
+Interview flow: start at VP Operations Overview, open Production & OEE Performance, show the independently calculated Line 2 OEE and four equipment contributors, then click Filler-201. Show raw time/rate/count/quality inputs; scheduled versus unscheduled time; Utilization, Availability, Performance, Quality, and OEE; separate stop/speed/quality losses; the photoeye Pareto; and the downtime-to-PM trace. Show post-RCA improvement, then return to Line 2 and the plant operations rollup without calling an average of percentages “Plant OEE.”
+
+> We are not just showing an OEE percentage. We can trace the line KPI all the way back to the machine inputs, the specific losses, and the maintenance actions that change the result.
+
+## Grafana panel reference
+
+For a panel-by-panel explanation of every dashboard—including visualization type, calculation/query logic, interpretation, management significance, PostgreSQL source, variables, links, and recommended interview navigation—see [Grafana Dashboard Panel Guide](documentation/grafana_dashboard_panel_guide.md).
+
 Open:
 
 - VP Operations Overview: <http://127.0.0.1:3001/d/atx-vp-operations/vp-operations-overview>

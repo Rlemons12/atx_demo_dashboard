@@ -10,7 +10,8 @@ $datasourceHealth=Invoke-RestMethod -Uri "$baseUrl/api/datasources/uid/atx-postg
 if($datasourceHealth.status -ne 'OK'){throw "Datasource health failed: $($datasourceHealth.message)"}
 Write-Output "Datasource health: $($datasourceHealth.message)"
 
-$expected=@('atx-vp-operations','atx-maintenance-reliability','atx-operational-risk','atx-production-oee')
+$expected=@('atx-vp-operations','atx-maintenance-reliability','atx-operational-risk','atx-production-oee','atx-equipment-oee-detail')
+$allowedLine2Assets=@('MIXER-201','CONVEYOR-201','FILLER-201','LABELER-201')
 $provisioned=Invoke-RestMethod -Uri "$baseUrl/api/search?type=dash-db"
 foreach($uid in $expected){
     if($uid -notin $provisioned.uid){throw "Dashboard $uid was not provisioned."}
@@ -39,10 +40,12 @@ foreach($file in $dashboardFiles){
                 $frameCount+=@($result.frames).Count
             }catch{$failures+="$($dashboard.title) / $($panel.title): $($_.Exception.Message)"}
             if($rawSql.Contains('$asset')){
-                $queryCount++
-                $drillSql=$rawSql.Replace('$asset','FILLER-201').Replace('$line','%').Replace('$product','%')
-                $drillBody=@{from='1767247200000';to='1788238800000';queries=@(@{refId='A';datasource=@{uid='atx-postgres';type='grafana-postgresql-datasource'};rawSql=$drillSql;format=$target.format;intervalMs=3600000;maxDataPoints=2000})}|ConvertTo-Json -Depth 10
-                try{$drillResponse=Invoke-RestMethod -Uri "$baseUrl/api/ds/query" -Method Post -ContentType 'application/json' -Body $drillBody;$drillResult=$drillResponse.results.A;if($drillResult.status -ne 200 -or $drillResult.error){throw "Query status $($drillResult.status): $($drillResult.error)"};$frameCount+=@($drillResult.frames).Count}catch{$failures+="$($dashboard.title) / $($panel.title) Filler-201 drill-down: $($_.Exception.Message)"}
+                foreach($assetCode in $allowedLine2Assets){
+                    $queryCount++
+                    $drillSql=$rawSql.Replace('$asset',$assetCode).Replace('$line','%').Replace('$product','%')
+                    $drillBody=@{from='1767247200000';to='1788238800000';queries=@(@{refId='A';datasource=@{uid='atx-postgres';type='grafana-postgresql-datasource'};rawSql=$drillSql;format=$target.format;intervalMs=3600000;maxDataPoints=2000})}|ConvertTo-Json -Depth 10
+                    try{$drillResponse=Invoke-RestMethod -Uri "$baseUrl/api/ds/query" -Method Post -ContentType 'application/json' -Body $drillBody;$drillResult=$drillResponse.results.A;if($drillResult.status -ne 200 -or $drillResult.error){throw "Query status $($drillResult.status): $($drillResult.error)"};$frameCount+=@($drillResult.frames).Count}catch{$failures+="$($dashboard.title) / $($panel.title) $assetCode drill-down: $($_.Exception.Message)"}
+                }
             }
         }
     }
@@ -53,7 +56,17 @@ foreach($file in $dashboardFiles){
         $body=@{from='1767247200000';to='1788238800000';queries=@(@{refId='A';datasource=@{uid='atx-postgres';type='grafana-postgresql-datasource'};rawSql=$varSql;format='table';intervalMs=3600000;maxDataPoints=2000})}|ConvertTo-Json -Depth 10
         try{$response=Invoke-RestMethod -Uri "$baseUrl/api/ds/query" -Method Post -ContentType 'application/json' -Body $body;$frameCount+=@($response.results.A.frames).Count}catch{$failures+="$($dashboard.title) / variable $($variable.name): $($_.Exception.Message)"}
     }
+    if($dashboard.uid -eq 'atx-equipment-oee-detail'){
+        $assetVariable=@($dashboard.templating.list|Where-Object name -eq 'asset')
+        if($assetVariable.Count -ne 1){$failures+='Equipment OEE Detail / required asset variable missing.'}
+        foreach($assetCode in $allowedLine2Assets){if($assetVariable.query -notmatch [regex]::Escape($assetCode)){$failures+="Equipment OEE Detail / asset variable omits $assetCode."}}
+    }
+    if($dashboard.uid -eq 'atx-production-oee'){
+        $linkText=($dashboard|ConvertTo-Json -Depth 100)
+        foreach($assetCode in $allowedLine2Assets){if($linkText -notmatch 'atx-equipment-oee-detail'){$failures+="Production OEE / missing Equipment OEE Detail drill-down for $assetCode."}}
+        if($linkText -match 'AIR-COMP-001[^\r\n]{0,160}(oee|OEE)' -and $linkText -notmatch 'No OEE'){$failures+='Production OEE / Air-Comp-001 may be included in OEE query.'}
+    }
 }
-if($failures.Count){$failures|ForEach-Object{Write-Error $_};throw "$($failures.Count) Grafana queries failed."}
-Write-Output "Panel and variable queries: $queryCount passed, 0 failed, $frameCount data frames returned"
+if($failures.Count){Write-Output "Grafana query/link validation: $queryCount checked, $($queryCount-$failures.Count) passed, $($failures.Count) failed";$failures|ForEach-Object{Write-Error $_};throw "$($failures.Count) Grafana validations failed."}
+Write-Output "Grafana query/link validation: $queryCount checked, $queryCount passed, 0 failed, $frameCount data frames returned"
 Write-Output 'GRAFANA VALIDATION PASSED'

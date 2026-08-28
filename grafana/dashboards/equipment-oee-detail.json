@@ -1,0 +1,820 @@
+﻿{
+    "annotations":  {
+                        "list":  [
+
+                                 ]
+                    },
+    "editable":  false,
+    "fiscalYearStartMonth":  0,
+    "graphTooltip":  1,
+    "id":  null,
+    "links":  [
+                  {
+                      "asDropdown":  false,
+                      "icon":  "dashboard",
+                      "includeVars":  false,
+                      "keepTime":  true,
+                      "targetBlank":  false,
+                      "title":  "Production \u0026 OEE Performance",
+                      "type":  "link",
+                      "url":  "/d/atx-production-oee/production-and-oee-performance"
+                  },
+                  {
+                      "asDropdown":  false,
+                      "icon":  "dashboard",
+                      "includeVars":  false,
+                      "keepTime":  true,
+                      "targetBlank":  false,
+                      "title":  "VP Operations Overview",
+                      "type":  "link",
+                      "url":  "/d/atx-vp-operations/vp-operations-overview"
+                  },
+                  {
+                      "asDropdown":  true,
+                      "icon":  "dashboard",
+                      "includeVars":  true,
+                      "keepTime":  true,
+                      "tags":  [
+
+                               ],
+                      "targetBlank":  false,
+                      "title":  "All Dashboards",
+                      "type":  "dashboards"
+                  }
+              ],
+    "panels":  [
+                   {
+                       "collapsed":  false,
+                       "gridPos":  {
+                                       "h":  1,
+                                       "w":  24,
+                                       "x":  0,
+                                       "y":  0
+                                   },
+                       "id":  100,
+                       "title":  "1. Selected Line 2 Equipment — What is running and what are we measuring?",
+                       "type":  "row",
+                       "description":  "Section grouping for **1. Selected Line 2 Equipment — What is running and what are we measuring?**. Read the panels below it together before drilling to the next numbered section or linked dashboard."
+                   },
+                   {
+                       "gridPos":  {
+                                       "h":  4,
+                                       "w":  24,
+                                       "x":  0,
+                                       "y":  1
+                                   },
+                       "id":  9,
+                       "options":  {
+                                       "content":  "# How to Read This Dashboard\n\n## Why is this specific machine performing the way it is?\n\nFollow the selected Line 2 asset through **Calendar Capacity / Scheduled Utilization -\u003e OEE = Availability x Performance x Quality -\u003e Time Accounting -\u003e Stop Reason and Loss Analysis -\u003e Sensor Evidence -\u003e Work Order / RCA / Corrective Action / PM Revision**.\n\n**Scheduled Utilization** measures scheduled calendar capacity and is not OEE. Continue downward to distinguish planned changeover, unscheduled Stop Loss, speed loss, quality loss, and maintenance-attributable loss.",
+                                       "mode":  "markdown"
+                                   },
+                       "title":  "How to Read This Dashboard",
+                       "transparent":  true,
+                       "type":  "text",
+                       "description":  "Dashboard guidance and decision-support narrative. It explains the management question, intended reading order, and next drill-down; it does not calculate a KPI. Data source: dashboard narrative."
+                   },
+                   {
+                       "datasource":  {
+                                          "type":  "grafana-postgresql-datasource",
+                                          "uid":  "atx-postgres"
+                                      },
+                       "gridPos":  {
+                                       "h":  5,
+                                       "w":  24,
+                                       "x":  0,
+                                       "y":  5
+                                   },
+                       "id":  1,
+                       "options":  {
+                                       "footer":  {
+                                                      "show":  false
+                                                  },
+                                       "showHeader":  true
+                                   },
+                       "targets":  [
+                                       {
+                                           "datasource":  {
+                                                              "type":  "grafana-postgresql-datasource",
+                                                              "uid":  "atx-postgres"
+                                                          },
+                                           "format":  "table",
+                                           "rawQuery":  true,
+                                           "rawSql":  "SELECT asset_code AS \"Asset\",equipment_type AS \"Equipment Type\",line_code AS \"Line\",lot_number AS \"Current Lot\",product_name AS \"Product\",shift_code AS \"Shift\",operator_name AS \"Operator\",state_code AS \"Current Machine State\",COALESCE(current_fault,\u0027None\u0027) AS \"Current Fault\",last_sensor_update AS \"Last Sensor Update\" FROM v_line2_equipment_current WHERE asset_code=\u0027$asset\u0027",
+                                           "refId":  "A"
+                                       }
+                                   ],
+                       "title":  "Selected equipment identity, production context, and latest state",
+                       "type":  "table",
+                       "description":  "The single row identifies the selected asset and its latest deterministic lot, product, shift, operator, machine state, fault, and sensor timestamp. It is a current/latest snapshot; stale timestamps or faulted/stopped states direct attention to sensor and stop panels.\n\n**Data source:** PostgreSQL v_line2_equipment_current."
+                   },
+                   {
+                       "collapsed":  false,
+                       "gridPos":  {
+                                       "h":  1,
+                                       "w":  24,
+                                       "x":  0,
+                                       "y":  10
+                                   },
+                       "id":  101,
+                       "title":  "2. Equipment Scorecard — OEE = Availability × Performance × Quality",
+                       "type":  "row",
+                       "description":  "Section grouping for **2. Equipment Scorecard — OEE = Availability × Performance × Quality**. Read the panels below it together before drilling to the next numbered section or linked dashboard."
+                   },
+                   {
+                       "datasource":  {
+                                          "type":  "grafana-postgresql-datasource",
+                                          "uid":  "atx-postgres"
+                                      },
+                       "fieldConfig":  {
+                                           "defaults":  {
+                                                            "decimals":  2,
+                                                            "unit":  "percent",
+                                                            "thresholds":  {
+                                                                               "mode":  "absolute",
+                                                                               "steps":  [
+                                                                                             {
+                                                                                                 "color":  "red",
+                                                                                                 "value":  null
+                                                                                             },
+                                                                                             {
+                                                                                                 "color":  "yellow",
+                                                                                                 "value":  70
+                                                                                             },
+                                                                                             {
+                                                                                                 "color":  "green",
+                                                                                                 "value":  85
+                                                                                             }
+                                                                                         ]
+                                                                           }
+                                                        },
+                                           "overrides":  [
+
+                                                         ]
+                                       },
+                       "gridPos":  {
+                                       "h":  6,
+                                       "w":  5,
+                                       "x":  0,
+                                       "y":  11
+                                   },
+                       "id":  2,
+                       "options":  {
+                                       "colorMode":  "background",
+                                       "graphMode":  "area",
+                                       "justifyMode":  "center",
+                                       "orientation":  "auto",
+                                       "reduceOptions":  {
+                                                             "calcs":  [
+                                                                           "lastNotNull"
+                                                                       ],
+                                                             "fields":  "",
+                                                             "values":  false
+                                                         },
+                                       "textMode":  "value_and_name",
+                                       "wideLayout":  true
+                                   },
+                       "targets":  [
+                                       {
+                                           "datasource":  {
+                                                              "type":  "grafana-postgresql-datasource",
+                                                              "uid":  "atx-postgres"
+                                                          },
+                                           "format":  "table",
+                                           "rawQuery":  true,
+                                           "rawSql":  "SELECT oee_percent AS \"Equipment OEE\" FROM v_equipment_oee_summary WHERE asset_code=\u0027$asset\u0027",
+                                           "refId":  "A"
+                                       }
+                                   ],
+                       "title":  "Equipment OEE",
+                       "type":  "stat",
+                       "description":  "Shows Equipment OEE for the selected asset: Availability × Performance × Quality during scheduled production. Higher is better, but the component cards and loss panels identify the actionable cause.\n\n**Data source:** PostgreSQL v_equipment_oee_summary."
+                   },
+                   {
+                       "datasource":  {
+                                          "type":  "grafana-postgresql-datasource",
+                                          "uid":  "atx-postgres"
+                                      },
+                       "fieldConfig":  {
+                                           "defaults":  {
+                                                            "decimals":  2,
+                                                            "unit":  "percent",
+                                                            "thresholds":  {
+                                                                               "mode":  "absolute",
+                                                                               "steps":  [
+                                                                                             {
+                                                                                                 "color":  "blue",
+                                                                                                 "value":  null
+                                                                                             }
+                                                                                         ]
+                                                                           }
+                                                        },
+                                           "overrides":  [
+
+                                                         ]
+                                       },
+                       "gridPos":  {
+                                       "h":  6,
+                                       "w":  5,
+                                       "x":  5,
+                                       "y":  11
+                                   },
+                       "id":  21,
+                       "options":  {
+                                       "colorMode":  "background",
+                                       "graphMode":  "none",
+                                       "justifyMode":  "center",
+                                       "orientation":  "auto",
+                                       "reduceOptions":  {
+                                                             "calcs":  [
+                                                                           "lastNotNull"
+                                                                       ],
+                                                             "fields":  "",
+                                                             "values":  false
+                                                         },
+                                       "textMode":  "value_and_name",
+                                       "wideLayout":  true
+                                   },
+                       "targets":  [
+                                       {
+                                           "datasource":  {
+                                                              "type":  "grafana-postgresql-datasource",
+                                                              "uid":  "atx-postgres"
+                                                          },
+                                           "format":  "table",
+                                           "rawQuery":  true,
+                                           "rawSql":  "SELECT utilization_percent AS \"Scheduled Utilization\" FROM v_equipment_oee_summary WHERE asset_code=\u0027$asset\u0027",
+                                           "refId":  "A"
+                                       }
+                                   ],
+                       "title":  "Scheduled Utilization",
+                       "type":  "stat",
+                       "description":  "Shows Scheduled Production Time ÷ Total Calendar Time for the selected asset. This is not OEE: low utilization may reflect no schedule, sanitation, planned maintenance, or shutdowns rather than poor equipment performance.\n\n**Data source:** PostgreSQL v_equipment_oee_summary."
+                   },
+                   {
+                       "datasource":  {
+                                          "type":  "grafana-postgresql-datasource",
+                                          "uid":  "atx-postgres"
+                                      },
+                       "fieldConfig":  {
+                                           "defaults":  {
+                                                            "decimals":  2,
+                                                            "unit":  "percent",
+                                                            "thresholds":  {
+                                                                               "mode":  "absolute",
+                                                                               "steps":  [
+                                                                                             {
+                                                                                                 "color":  "red",
+                                                                                                 "value":  null
+                                                                                             },
+                                                                                             {
+                                                                                                 "color":  "yellow",
+                                                                                                 "value":  80
+                                                                                             },
+                                                                                             {
+                                                                                                 "color":  "green",
+                                                                                                 "value":  90
+                                                                                             }
+                                                                                         ]
+                                                                           }
+                                                        },
+                                           "overrides":  [
+
+                                                         ]
+                                       },
+                       "gridPos":  {
+                                       "h":  6,
+                                       "w":  5,
+                                       "x":  10,
+                                       "y":  11
+                                   },
+                       "id":  22,
+                       "options":  {
+                                       "colorMode":  "background",
+                                       "graphMode":  "area",
+                                       "justifyMode":  "center",
+                                       "orientation":  "auto",
+                                       "reduceOptions":  {
+                                                             "calcs":  [
+                                                                           "lastNotNull"
+                                                                       ],
+                                                             "fields":  "",
+                                                             "values":  false
+                                                         },
+                                       "textMode":  "value_and_name",
+                                       "wideLayout":  true
+                                   },
+                       "targets":  [
+                                       {
+                                           "datasource":  {
+                                                              "type":  "grafana-postgresql-datasource",
+                                                              "uid":  "atx-postgres"
+                                                          },
+                                           "format":  "table",
+                                           "rawQuery":  true,
+                                           "rawSql":  "SELECT availability_percent AS \"Availability\" FROM v_equipment_oee_summary WHERE asset_code=\u0027$asset\u0027",
+                                           "refId":  "A"
+                                       }
+                                   ],
+                       "title":  "Availability",
+                       "type":  "stat",
+                       "description":  "Shows Runtime ÷ Scheduled Production Time. Low Availability means scheduled time was consumed while the asset was not running; inspect planned changeover and unscheduled Stop Loss separately.\n\n**Data source:** PostgreSQL v_equipment_oee_summary."
+                   },
+                   {
+                       "datasource":  {
+                                          "type":  "grafana-postgresql-datasource",
+                                          "uid":  "atx-postgres"
+                                      },
+                       "fieldConfig":  {
+                                           "defaults":  {
+                                                            "decimals":  2,
+                                                            "unit":  "percent",
+                                                            "thresholds":  {
+                                                                               "mode":  "absolute",
+                                                                               "steps":  [
+                                                                                             {
+                                                                                                 "color":  "red",
+                                                                                                 "value":  null
+                                                                                             },
+                                                                                             {
+                                                                                                 "color":  "yellow",
+                                                                                                 "value":  85
+                                                                                             },
+                                                                                             {
+                                                                                                 "color":  "green",
+                                                                                                 "value":  95
+                                                                                             }
+                                                                                         ]
+                                                                           }
+                                                        },
+                                           "overrides":  [
+
+                                                         ]
+                                       },
+                       "gridPos":  {
+                                       "h":  6,
+                                       "w":  5,
+                                       "x":  15,
+                                       "y":  11
+                                   },
+                       "id":  23,
+                       "options":  {
+                                       "colorMode":  "background",
+                                       "graphMode":  "area",
+                                       "justifyMode":  "center",
+                                       "orientation":  "auto",
+                                       "reduceOptions":  {
+                                                             "calcs":  [
+                                                                           "lastNotNull"
+                                                                       ],
+                                                             "fields":  "",
+                                                             "values":  false
+                                                         },
+                                       "textMode":  "value_and_name",
+                                       "wideLayout":  true
+                                   },
+                       "targets":  [
+                                       {
+                                           "datasource":  {
+                                                              "type":  "grafana-postgresql-datasource",
+                                                              "uid":  "atx-postgres"
+                                                          },
+                                           "format":  "table",
+                                           "rawQuery":  true,
+                                           "rawSql":  "SELECT performance_percent AS \"Performance / Speed\" FROM v_equipment_oee_summary WHERE asset_code=\u0027$asset\u0027",
+                                           "refId":  "A"
+                                       }
+                                   ],
+                       "title":  "Performance / Speed",
+                       "type":  "stat",
+                       "description":  "Shows Actual Output ÷ Theoretical Output at the ideal rate during Runtime. Low Performance isolates running-below-standard speed loss; inspect rate and cycle-time sensor trends.\n\n**Data source:** PostgreSQL v_equipment_oee_summary."
+                   },
+                   {
+                       "datasource":  {
+                                          "type":  "grafana-postgresql-datasource",
+                                          "uid":  "atx-postgres"
+                                      },
+                       "fieldConfig":  {
+                                           "defaults":  {
+                                                            "decimals":  2,
+                                                            "unit":  "percent",
+                                                            "thresholds":  {
+                                                                               "mode":  "absolute",
+                                                                               "steps":  [
+                                                                                             {
+                                                                                                 "color":  "red",
+                                                                                                 "value":  null
+                                                                                             },
+                                                                                             {
+                                                                                                 "color":  "yellow",
+                                                                                                 "value":  95
+                                                                                             },
+                                                                                             {
+                                                                                                 "color":  "green",
+                                                                                                 "value":  98
+                                                                                             }
+                                                                                         ]
+                                                                           }
+                                                        },
+                                           "overrides":  [
+
+                                                         ]
+                                       },
+                       "gridPos":  {
+                                       "h":  6,
+                                       "w":  4,
+                                       "x":  20,
+                                       "y":  11
+                                   },
+                       "id":  24,
+                       "options":  {
+                                       "colorMode":  "background",
+                                       "graphMode":  "area",
+                                       "justifyMode":  "center",
+                                       "orientation":  "auto",
+                                       "reduceOptions":  {
+                                                             "calcs":  [
+                                                                           "lastNotNull"
+                                                                       ],
+                                                             "fields":  "",
+                                                             "values":  false
+                                                         },
+                                       "textMode":  "value_and_name",
+                                       "wideLayout":  true
+                                   },
+                       "targets":  [
+                                       {
+                                           "datasource":  {
+                                                              "type":  "grafana-postgresql-datasource",
+                                                              "uid":  "atx-postgres"
+                                                          },
+                                           "format":  "table",
+                                           "rawQuery":  true,
+                                           "rawSql":  "SELECT quality_percent AS \"Quality\" FROM v_equipment_oee_summary WHERE asset_code=\u0027$asset\u0027",
+                                           "refId":  "A"
+                                       }
+                                   ],
+                       "title":  "Quality",
+                       "type":  "stat",
+                       "description":  "Shows Good Output ÷ Total Output. Low Quality means a larger rejected share; inspect reject counts and quality-hold context.\n\n**Data source:** PostgreSQL v_equipment_oee_summary."
+                   },
+                   {
+                       "collapsed":  false,
+                       "gridPos":  {
+                                       "h":  1,
+                                       "w":  24,
+                                       "x":  0,
+                                       "y":  17
+                                   },
+                       "id":  102,
+                       "title":  "3. Time Accounting — Where calendar and scheduled minutes went",
+                       "type":  "row",
+                       "description":  "Section grouping for **3. Time Accounting — Where calendar and scheduled minutes went**. Read the panels below it together before drilling to the next numbered section or linked dashboard."
+                   },
+                   {
+                       "datasource":  {
+                                          "type":  "grafana-postgresql-datasource",
+                                          "uid":  "atx-postgres"
+                                      },
+                       "fieldConfig":  {
+                                           "defaults":  {
+                                                            "unit":  "m"
+                                                        },
+                                           "overrides":  [
+
+                                                         ]
+                                       },
+                       "gridPos":  {
+                                       "h":  6,
+                                       "w":  24,
+                                       "x":  0,
+                                       "y":  18
+                                   },
+                       "id":  3,
+                       "options":  {
+                                       "legend":  {
+                                                      "displayMode":  "list",
+                                                      "placement":  "bottom",
+                                                      "showLegend":  true
+                                                  },
+                                       "orientation":  "horizontal",
+                                       "showValue":  "always",
+                                       "stacking":  "none"
+                                   },
+                       "targets":  [
+                                       {
+                                           "datasource":  {
+                                                              "type":  "grafana-postgresql-datasource",
+                                                              "uid":  "atx-postgres"
+                                                          },
+                                           "format":  "table",
+                                           "rawQuery":  true,
+                                           "rawSql":  "SELECT calendar_minutes AS \"Total Calendar Time\",scheduled_downtime_minutes AS \"Scheduled Downtime\",scheduled_production_minutes AS \"Scheduled Production Time\",changeover_minutes AS \"Planned Changeover (inside schedule)\",unscheduled_downtime_minutes AS \"Unscheduled Downtime\",runtime_minutes AS \"Actual Runtime\" FROM v_equipment_time_accounting WHERE asset_code=\u0027$asset\u0027",
+                                           "refId":  "A"
+                                       }
+                                   ],
+                       "title":  "Calendar → Scheduled Production → Runtime (minutes)",
+                       "type":  "barchart",
+                       "description":  "Shows time disposition for the selected asset: calendar time, scheduled downtime, scheduled production, planned changeover, unscheduled downtime, and runtime. Changeover is inside the scheduled window; sanitation/no-schedule time is outside it. Follow unexpected gaps into loss accounting.\n\n**Data source:** PostgreSQL v_equipment_time_accounting."
+                   },
+                   {
+                       "collapsed":  false,
+                       "gridPos":  {
+                                       "h":  1,
+                                       "w":  24,
+                                       "x":  0,
+                                       "y":  24
+                                   },
+                       "id":  103,
+                       "title":  "4. Loss Accounting — Which kind of loss is reducing the result?",
+                       "type":  "row",
+                       "description":  "Section grouping for **4. Loss Accounting — Which kind of loss is reducing the result?**. Read the panels below it together before drilling to the next numbered section or linked dashboard."
+                   },
+                   {
+                       "datasource":  {
+                                          "type":  "grafana-postgresql-datasource",
+                                          "uid":  "atx-postgres"
+                                      },
+                       "fieldConfig":  {
+                                           "defaults":  {
+                                                            "decimals":  2
+                                                        },
+                                           "overrides":  [
+
+                                                         ]
+                                       },
+                       "gridPos":  {
+                                       "h":  5,
+                                       "w":  24,
+                                       "x":  0,
+                                       "y":  25
+                                   },
+                       "id":  4,
+                       "options":  {
+                                       "colorMode":  "value",
+                                       "graphMode":  "none",
+                                       "justifyMode":  "center",
+                                       "orientation":  "vertical",
+                                       "reduceOptions":  {
+                                                             "calcs":  [
+                                                                           "lastNotNull"
+                                                                       ],
+                                                             "fields":  "",
+                                                             "values":  false
+                                                         },
+                                       "textMode":  "value_and_name",
+                                       "wideLayout":  true
+                                   },
+                       "targets":  [
+                                       {
+                                           "datasource":  {
+                                                              "type":  "grafana-postgresql-datasource",
+                                                              "uid":  "atx-postgres"
+                                                          },
+                                           "format":  "table",
+                                           "rawQuery":  true,
+                                           "rawSql":  "SELECT stop_loss_minutes AS \"Stop Loss Minutes\",stop_loss_opportunity_units AS \"Stop Opportunity\",performance_loss_percent AS \"Performance Loss %\",performance_loss_units AS \"Performance Loss Units\",performance_loss_equivalent_minutes AS \"Equivalent Speed-Loss Minutes\",quality_loss_percent AS \"Quality Loss %\",quality_loss_units AS \"Quality Loss Units\",unplanned_maintenance_loss_minutes AS \"Maintenance-attributable Minutes\" FROM v_equipment_oee_summary WHERE asset_code=\u0027$asset\u0027",
+                                           "refId":  "A"
+                                       }
+                                   ],
+                       "title":  "Separate stop, speed, quality, and maintenance-attributable losses",
+                       "type":  "stat",
+                       "description":  "Shows separate loss measures for the selected asset. Stop Loss is unscheduled stopped time with one primary reason; opportunity converts it using ideal rate. Performance and Quality losses remain separate, and maintenance-attributable minutes exclude operations, material, quality, safety, and scheduling causes.\n\n**Data source:** PostgreSQL v_equipment_oee_summary."
+                   },
+                   {
+                       "collapsed":  false,
+                       "gridPos":  {
+                                       "h":  1,
+                                       "w":  24,
+                                       "x":  0,
+                                       "y":  30
+                                   },
+                       "id":  104,
+                       "title":  "5. Stop Loss Pareto — Why was the machine stopped?",
+                       "type":  "row",
+                       "description":  "Section grouping for **5. Stop Loss Pareto — Why was the machine stopped?**. Read the panels below it together before drilling to the next numbered section or linked dashboard."
+                   },
+                   {
+                       "datasource":  {
+                                          "type":  "grafana-postgresql-datasource",
+                                          "uid":  "atx-postgres"
+                                      },
+                       "gridPos":  {
+                                       "h":  8,
+                                       "w":  24,
+                                       "x":  0,
+                                       "y":  31
+                                   },
+                       "id":  5,
+                       "options":  {
+                                       "footer":  {
+                                                      "show":  false
+                                                  },
+                                       "showHeader":  true
+                                   },
+                       "targets":  [
+                                       {
+                                           "datasource":  {
+                                                              "type":  "grafana-postgresql-datasource",
+                                                              "uid":  "atx-postgres"
+                                                          },
+                                           "format":  "table",
+                                           "rawQuery":  true,
+                                           "rawSql":  "SELECT stop_reason AS \"Stop Reason Tag\",loss_category AS \"Loss Category\",responsible_function AS \"Responsible Function (routing, not blame)\",maintenance_related AS \"Maintenance Related\",classification_method AS \"Classification\",stop_count AS \"Stop Count\",stop_loss_minutes AS \"Total Minutes\",average_duration_minutes AS \"Average Duration\",stop_loss_opportunity_units AS \"Lost Production Opportunity\",round(100*stop_loss_minutes/(SELECT scheduled_production_minutes FROM v_equipment_oee_summary WHERE asset_code=\u0027$asset\u0027),2) AS \"% Scheduled Production\" FROM v_equipment_loss_summary WHERE asset_code=\u0027$asset\u0027 ORDER BY stop_loss_minutes DESC",
+                                           "refId":  "A"
+                                       }
+                                   ],
+                       "title":  "Primary Stop Reason Pareto — a stopped machine is not automatically a maintenance problem",
+                       "type":  "table",
+                       "description":  "Each row aggregates one primary Stop Reason Tag for the selected asset, sorted by total minutes. It shows category, responsible function, maintenance flag, automatic/manual provenance, count, duration, opportunity, and scheduled-time share. WAITING_UPSTREAM means unavailable infeed; WAITING_DOWNSTREAM means unavailable takeaway. E-stops and jams are not automatically maintenance. UNCLASSIFIED_STOP means evidence was insufficient. A stopped machine is not automatically a maintenance problem.\n\n**Data source:** PostgreSQL v_equipment_loss_summary, v_equipment_oee_summary."
+                   },
+                   {
+                       "collapsed":  false,
+                       "gridPos":  {
+                                       "h":  1,
+                                       "w":  24,
+                                       "x":  0,
+                                       "y":  39
+                                   },
+                       "id":  105,
+                       "title":  "6. Sensor and Input Trends — What evidence supports the equipment result?",
+                       "type":  "row",
+                       "description":  "Section grouping for **6. Sensor and Input Trends — What evidence supports the equipment result?**. Read the panels below it together before drilling to the next numbered section or linked dashboard."
+                   },
+                   {
+                       "datasource":  {
+                                          "type":  "grafana-postgresql-datasource",
+                                          "uid":  "atx-postgres"
+                                      },
+                       "fieldConfig":  {
+                                           "defaults":  {
+
+                                                        },
+                                           "overrides":  [
+
+                                                         ]
+                                       },
+                       "gridPos":  {
+                                       "h":  9,
+                                       "w":  24,
+                                       "x":  0,
+                                       "y":  40
+                                   },
+                       "id":  6,
+                       "options":  {
+                                       "legend":  {
+                                                      "calcs":  [
+
+                                                                ],
+                                                      "displayMode":  "list",
+                                                      "placement":  "bottom",
+                                                      "showLegend":  true
+                                                  },
+                                       "tooltip":  {
+                                                       "mode":  "multi",
+                                                       "sort":  "none"
+                                                   }
+                                   },
+                       "targets":  [
+                                       {
+                                           "datasource":  {
+                                                              "type":  "grafana-postgresql-datasource",
+                                                              "uid":  "atx-postgres"
+                                                          },
+                                           "format":  "time_series",
+                                           "rawQuery":  true,
+                                           "rawSql":  "SELECT time,COALESCE(numeric_value,CASE discrete_value WHEN \u0027RUNNING\u0027 THEN 1 WHEN \u0027ACTIVE\u0027 THEN 1 WHEN \u0027FAULTED\u0027 THEN 1 WHEN \u0027INTERMITTENT\u0027 THEN 1 WHEN \u0027PRESENT\u0027 THEN 1 WHEN \u0027PRODUCT_DETECTED\u0027 THEN 1 ELSE 0 END) AS value,functional_class AS metric FROM v_line2_sensor_history WHERE asset_code=\u0027$asset\u0027 AND $__timeFilter(time) ORDER BY time",
+                                           "refId":  "A"
+                                       }
+                                   ],
+                       "title":  "Run/fault, counts, rate/cycle, and asset-specific condition inputs",
+                       "type":  "timeseries",
+                       "description":  "Trends selected-asset synthetic inputs over the dashboard time range. Discrete run/fault/photoeye states are mapped to 0/1 while counts, rate, cycle, and condition signals retain numeric values. Correlate state changes and flat counters with Stop Reason Tags before assigning cause.\n\n**Data source:** PostgreSQL v_line2_sensor_history."
+                   },
+                   {
+                       "collapsed":  false,
+                       "gridPos":  {
+                                       "h":  1,
+                                       "w":  24,
+                                       "x":  0,
+                                       "y":  49
+                                   },
+                       "id":  106,
+                       "title":  "7. Maintenance and RCA Trace — What action changed the result?",
+                       "type":  "row",
+                       "description":  "Section grouping for **7. Maintenance and RCA Trace — What action changed the result?**. Read the panels below it together before drilling to the next numbered section or linked dashboard."
+                   },
+                   {
+                       "datasource":  {
+                                          "type":  "grafana-postgresql-datasource",
+                                          "uid":  "atx-postgres"
+                                      },
+                       "gridPos":  {
+                                       "h":  9,
+                                       "w":  24,
+                                       "x":  0,
+                                       "y":  50
+                                   },
+                       "id":  7,
+                       "options":  {
+                                       "footer":  {
+                                                      "show":  false
+                                                  },
+                                       "showHeader":  true
+                                   },
+                       "targets":  [
+                                       {
+                                           "datasource":  {
+                                                              "type":  "grafana-postgresql-datasource",
+                                                              "uid":  "atx-postgres"
+                                                          },
+                                           "format":  "table",
+                                           "rawQuery":  true,
+                                           "rawSql":  "SELECT downtime_start AS \"Downtime\",downtime_reason AS \"Downtime Event\",work_order_number AS \"Work Order\",failure_mode AS \"Failure Mode\",rca_number AS \"RCA\",root_cause AS \"Root Cause\",action_description AS \"Corrective Action\",pm_code AS \"PM Plan\",pm_revision AS \"PM Revision\",change_reason AS \"PM Change\" FROM v_equipment_maintenance_trace WHERE asset_code=\u0027$asset\u0027 ORDER BY downtime_start DESC",
+                                           "refId":  "A"
+                                       }
+                                   ],
+                       "title":  "Sensor/Stop → Downtime → Work Order → Failure Mode → RCA → Corrective Action → PM Revision",
+                       "type":  "table",
+                       "description":  "Each row is one task in a Filler-201 weekly PM revision, ordered by revision and task sequence. Compare revisions to confirm RCA learning changed preventive work content.\n\n**Data source:** PostgreSQL v_equipment_maintenance_trace."
+                   },
+                   {
+                       "datasource":  {
+                                          "type":  "grafana-postgresql-datasource",
+                                          "uid":  "atx-postgres"
+                                      },
+                       "gridPos":  {
+                                       "h":  5,
+                                       "w":  24,
+                                       "x":  0,
+                                       "y":  59
+                                   },
+                       "id":  8,
+                       "options":  {
+                                       "footer":  {
+                                                      "show":  false
+                                                  },
+                                       "showHeader":  true
+                                   },
+                       "targets":  [
+                                       {
+                                           "datasource":  {
+                                                              "type":  "grafana-postgresql-datasource",
+                                                              "uid":  "atx-postgres"
+                                                          },
+                                           "format":  "table",
+                                           "rawQuery":  true,
+                                           "rawSql":  "SELECT rca_period AS \"Filler-201 RCA Period\",stop_count AS \"Stops\",stop_loss_minutes AS \"Stop Loss Minutes\",photoeye_stop_minutes AS \"Photoeye Stop Minutes\",average_stop_minutes AS \"Average Stop Minutes\" FROM v_filler201_stop_loss_before_after_rca WHERE \u0027$asset\u0027=\u0027FILLER-201\u0027 ORDER BY rca_period",
+                                           "refId":  "A"
+                                       }
+                                   ],
+                       "title":  "Filler-201 Before vs After RCA — did the corrective action work?",
+                       "type":  "table",
+                       "description":  "For Filler-201 only, each row summarizes PRE_RCA or POST_RCA unscheduled stops, total minutes, photoeye minutes, and average duration. Lower post-RCA values support effectiveness of the bracket/locking correction and PM revision.\n\n**Data source:** PostgreSQL v_filler201_stop_loss_before_after_rca."
+                   }
+               ],
+    "refresh":  "",
+    "schemaVersion":  42,
+    "tags":  [
+                 "atx-demo",
+                 "milestone-4",
+                 "equipment-oee"
+             ],
+    "templating":  {
+                       "list":  [
+                                    {
+                                        "current":  {
+                                                        "selected":  true,
+                                                        "text":  "Filler-201",
+                                                        "value":  "FILLER-201"
+                                                    },
+                                        "datasource":  {
+                                                           "type":  "grafana-postgresql-datasource",
+                                                           "uid":  "atx-postgres"
+                                                       },
+                                        "definition":  "SELECT name AS __text,asset_code AS __value FROM assets WHERE asset_code IN (\u0027MIXER-201\u0027,\u0027CONVEYOR-201\u0027,\u0027FILLER-201\u0027,\u0027LABELER-201\u0027) ORDER BY CASE asset_code WHEN \u0027FILLER-201\u0027 THEN 0 ELSE 1 END,asset_code",
+                                        "hide":  0,
+                                        "includeAll":  false,
+                                        "label":  "Line 2 Equipment",
+                                        "multi":  false,
+                                        "name":  "asset",
+                                        "options":  [
+
+                                                    ],
+                                        "query":  "SELECT name AS __text,asset_code AS __value FROM assets WHERE asset_code IN (\u0027MIXER-201\u0027,\u0027CONVEYOR-201\u0027,\u0027FILLER-201\u0027,\u0027LABELER-201\u0027) ORDER BY CASE asset_code WHEN \u0027FILLER-201\u0027 THEN 0 ELSE 1 END,asset_code",
+                                        "refresh":  1,
+                                        "regex":  "",
+                                        "skipUrlSync":  false,
+                                        "sort":  0,
+                                        "type":  "query"
+                                    }
+                                ]
+                   },
+    "time":  {
+                 "from":  "2026-01-01T00:00:00.000Z",
+                 "to":  "2026-09-01T00:00:00.000Z"
+             },
+    "timezone":  "browser",
+    "title":  "Equipment OEE Detail",
+    "uid":  "atx-equipment-oee-detail",
+    "version":  1
+}

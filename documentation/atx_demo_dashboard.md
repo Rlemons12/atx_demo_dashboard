@@ -2304,3 +2304,146 @@ Validation script `.\scripts\validate-grafana.ps1` verifies datasource connectiv
 5. **Executive Summary & AI Decision Support**:
    - Demonstrate the AI Executive Briefing in Grafana (tested via `.\scripts\test-ai-summary.ps1`) answering complex reliability, OEE, active lot, and staffing questions grounded strictly in PostgreSQL views.
    - Conclude back on the VP Operations Overview dashboard.
+
+---
+
+# Milestone 4 — Sensor-to-Equipment-to-Line OEE Architecture
+
+Milestone 4 adds a deterministic PostgreSQL demonstration of where operational effectiveness measures come from. Detailed telemetry is intentionally limited to Line 2 and Mixer-201, Conveyor-201, Filler-201, and Labeler-201. Blender-001 remains a shared scheduled upstream dependency. Air-Comp-001 remains a shared utility and never receives piece-rate OEE.
+
+```text
+SENSORS
+  ↓
+EQUIPMENT
+├─ Utilization
+├─ OEE
+└─ Loss Analysis
+  ↓
+LINE
+├─ Utilization
+├─ OEE
+└─ Loss Analysis
+  ↓
+PLANT
+```
+
+The data chain is raw sensor/schedule inputs → machine state → primary Stop Reason Tag → loss category and responsible function → equipment reporting → independently calculated line reporting → plant operations rollup.
+
+## Definitions and formulas
+
+“OEE1”, “OEE2”, and “OEE3” are not SMRP-standard terms and are not presented in Grafana. The UI uses Asset Utilization / Scheduled Utilization, Equipment OEE, Line OEE, and Loss Analysis.
+
+Total Calendar Time is elapsed wall-clock duration. One day is 1,440 minutes; a 365-day year is 525,600 minutes or 8,760 hours.
+
+```text
+Asset Utilization = Scheduled Production Time / Total Calendar Time
+Availability = Actual Runtime / Scheduled Production Time
+Theoretical Runtime Output = Actual Runtime × Ideal Rate
+Performance = Actual Total Count / Theoretical Runtime Output
+Performance Loss % = 1 - Performance
+Performance Loss Units = Theoretical Runtime Output - Actual Total Count
+Equivalent Performance Loss Minutes = Performance Loss Units / Ideal Rate
+Quality = Good Count / Total Count
+Quality Loss % = 1 - Quality
+Quality Loss Units = Reject Count
+Stop Loss Minutes = sum(unscheduled primary stop-event duration)
+Stop Loss % = Stop Loss Minutes / Scheduled Production Time
+Stop Loss Opportunity Units = Stop Loss Minutes × Ideal Rate
+Unplanned Maintenance Loss % = Maintenance-related unscheduled stop minutes / Scheduled Production Time
+Equipment OEE = Availability × Performance × Quality
+Line OEE = Line Availability × Line Performance × Line Quality
+```
+
+Asset Utilization is a scheduling/capacity measure, not OEE. Loss Analysis explains the separately exposed calendar/scheduled loss, changeover, unscheduled stop, unplanned maintenance, performance/speed, and quality losses. Loss Analysis is not multiplied into OEE, and these losses are not summed in a way that double-counts the same opportunity.
+
+Mixer-201 uses batch equivalents: deterministic unit totals and product batch size convert to completed-batch equivalents, and ideal units/minute converts to ideal batches/minute. The model does not invent piece counts for the batch process.
+
+Line 2 OEE uses line scheduled minutes, bottleneck runtime, product-specific line ideal rate, line total output, and line good output. It is explicitly not the arithmetic average of the four Equipment OEE percentages. The plant level is labeled Plant Operations Rollup, not “Plant OEE,” because the demo does not fabricate a plant formula from averaged line percentages.
+
+## Time-accounting convention
+
+```text
+TOTAL CALENDAR TIME
+|
++-- No Production Scheduled
++-- Sanitation
++-- Planned Maintenance
++-- Planned Plant Shutdown / Holiday
+|
+v
+SCHEDULED PRODUCTION WINDOW
+|
++-- Planned Changeover
++-- Unscheduled Downtime
+|
++-- Planned Breaks are excluded under the preserved project convention
+v
+ACTUAL RUN TIME
+|
++-- Performance / Speed Loss
+v
+ACTUAL PRODUCTION
+|
++-- Quality Loss
+v
+GOOD PRODUCTION
+```
+
+The legacy calendar subtracts breaks and changeovers from its historical planned-minutes field. Milestone 4 preserves breaks outside Scheduled Production Time but restores changeover inside the new Scheduled Production Window, making changeover visible as planned production loss that consumes committed capacity. Sanitation, planned maintenance performed outside production, no-schedule time, and holidays reduce Utilization but do not directly reduce OEE Availability.
+
+## Stop reasons, precedence, and provenance
+
+`stop_reason_definitions` normalizes code, human-readable display value, high-level loss category, responsible function, planned and maintenance-related flags, automatic-detection permission, priority, and description. Responsible function supports analysis and routing, never blame.
+
+Classification precedence is calendar/planned states → safety → explicit machine faults → jams/process → waiting downstream → waiting upstream → material/quality/operator → unclassified. An exit/takeaway constraint is downstream; an infeed/source constraint is upstream. Exactly one primary reason owns a stopped interval, preventing duplicate loss minutes. Reason source and confidence are stored. Original inferred reason/source/confidence, corrected reason, corrector, and correction timestamp fields preserve auditability without silently overwriting history.
+
+The master includes Waiting on Upstream/Downstream, E-Stop Pushed, Guard Open, commodity/product jams, Break Time, Changeover, photoeye/sensor/mechanical/electrical/controls faults, Belt Tracking Fault, material shortage, quality hold, operator delay, planned maintenance, sanitation, no schedule, and unclassified stop. Ambiguous evidence remains `UNCLASSIFIED_STOP` at low confidence.
+
+## Instrumented inputs and failure stories
+
+- Mixer-201: run/fault, batch count and cycle equivalent, motor current, temperature, vibration.
+- Conveyor-201: run/fault, product count, speed, jam, motor current, belt tracking.
+- Filler-201: run/fault, total/good/reject counts, rate, photoeye state/fault, cycle time.
+- Labeler-201: run/fault, total/reject counts, rate, label-present state, cycle time.
+
+Inputs are deterministic synthetic PostgreSQL observations at state-change density; no PLC, OPC-UA, MQTT, or other real industrial connectivity is implied.
+
+Filler-201 is the primary story. Intermittent/misaligned photoeye evidence plus a stopped/faulted machine halts its counter. The event receives a sensor-inferred Photoeye Fault and links where possible to historical downtime, work order, failure mode, RCA, corrective action, and weekly PM revision. The RCA identifies vibration-loosened mounting hardware; corrective action replaces the bracket and adds locking hardware, while the revised PM verifies mounting security. Curated pre/post reporting shows fewer stops and much lower stop loss after June 1, 2026.
+
+Conveyor-201 is the secondary story. Tracking deviation supports a sensor-inferred Belt Tracking Fault and connects the recurring guide-roller/alignment context to loss reporting.
+
+## Grafana, files, and validation
+
+`Equipment OEE Detail` (`atx-equipment-oee-detail`) is one reusable `$asset` dashboard restricted to the four Line 2 machines and defaulting to Filler-201. It shows equipment identity/current state, Utilization and OEE, time disposition, separate loss measures, primary-reason Pareto, sensor trends, and maintenance/RCA traceability. `Production & OEE Performance` retains its existing content and adds Line 2 OEE plus four clickable equipment contributors.
+
+New files are:
+
+- `sql/010_line2_equipment_inputs.sql`
+- `sql/011_seed_line2_equipment_inputs.sql`
+- `sql/012_line2_oee_views.sql`
+- `sql/validate_milestone4.sql`
+- `scripts/seed-line2-equipment-inputs.ps1`
+- `scripts/validate-milestone4.ps1`
+- `grafana/dashboards/equipment-oee-detail.json`
+
+The semantic layer includes `v_line2_sensor_latest`, `v_line2_sensor_history`, `v_equipment_state_history`, `v_equipment_stop_loss`, `v_equipment_time_accounting`, `v_equipment_oee_daily`, `v_equipment_oee_summary`, `v_equipment_loss_summary`, `v_filler201_stop_loss_detail`, `v_filler201_stop_loss_before_after_rca`, `v_line2_oee_daily`, `v_line2_oee_summary`, `v_line2_oee_rollup`, `v_line2_equipment_current`, `v_equipment_maintenance_trace`, and `v_plant_operations_oee_rollup`.
+
+Validation covers sensor classes and referential integrity, nonnegative/nonoverlapping state intervals, calendar and availability reconciliation, count integrity, Utilization and A × P × Q math, independent Line OEE, Air-Comp exclusion, Filler photoeye traceability and post-RCA improvement, Conveyor tracking events, views, dashboard provisioning, every panel/variable query for every permitted asset, links, curated AI questions, and legacy suites.
+
+## Interview walkthrough
+
+1. Start on VP Operations Overview and open Production & OEE Performance.
+2. Show Line 2 OEE and its independent line calculation.
+3. Compare the four machines' Utilization and Equipment OEE values.
+4. Click Filler-201 and show raw scheduled time, runtime, ideal rate, and total/good/reject counts.
+5. Explain scheduled versus unscheduled downtime and Utilization versus Availability.
+6. Compare stop, performance/speed, quality, and maintenance-attributable loss without double counting.
+7. Show Photoeye Fault in the Pareto and trace downtime → work order → RCA → corrective action → PM revision.
+8. Show post-RCA reduction in stop loss and improved OEE.
+9. Return to Line 2, then the VP/plant rollup, and explain business impact without averaging OEE percentages.
+
+Management message: “We are not just showing an OEE percentage. We can trace the line KPI all the way back to the machine inputs, the specific losses, and the maintenance actions that change the result.”
+
+## Grafana dashboard panel catalog
+
+The permanent [Grafana Dashboard Panel Guide](grafana_dashboard_panel_guide.md) documents every current dashboard row and meaningful panel from the provisioned JSON, including its purpose, exact query logic, interpretation, management significance, source view/table, variables, navigation links, and recommended interview flow. Use that guide as the detailed dashboard reference rather than duplicating the full panel catalog here.
