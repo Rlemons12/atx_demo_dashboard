@@ -6,7 +6,7 @@ $health=Invoke-RestMethod -Uri "$baseUrl/api/health"
 if($health.database -ne 'ok'){throw "Grafana health failed: $($health.database)"}
 Write-Output "Grafana health: OK (version $($health.version))"
 
-$datasourceHealth=Invoke-RestMethod -Uri "$baseUrl/api/datasources/uid/atx-postgres/health"
+$datasourceHealth=Invoke-RestMethod -Uri "$baseUrl/api/datasources/uid/bfwp0qtw81z40a/health"
 if($datasourceHealth.status -ne 'OK'){throw "Datasource health failed: $($datasourceHealth.message)"}
 Write-Output "Datasource health: $($datasourceHealth.message)"
 
@@ -31,7 +31,7 @@ foreach($file in $dashboardFiles){
             $sql=$rawSql.Replace('$asset','%').Replace('$line','%').Replace('$product','%')
             $body=@{
                 from='1767247200000';to='1788238800000';
-                queries=@(@{refId='A';datasource=@{uid='atx-postgres';type='grafana-postgresql-datasource'};rawSql=$sql;format=$target.format;intervalMs=3600000;maxDataPoints=2000})
+                queries=@(@{refId='A';datasource=@{uid='bfwp0qtw81z40a';type='grafana-postgresql-datasource'};rawSql=$sql;format=$target.format;intervalMs=3600000;maxDataPoints=2000})
             }|ConvertTo-Json -Depth 10
             try{
                 $response=Invoke-RestMethod -Uri "$baseUrl/api/ds/query" -Method Post -ContentType 'application/json' -Body $body
@@ -43,7 +43,7 @@ foreach($file in $dashboardFiles){
                 foreach($assetCode in $allowedLine2Assets){
                     $queryCount++
                     $drillSql=$rawSql.Replace('$asset',$assetCode).Replace('$line','%').Replace('$product','%')
-                    $drillBody=@{from='1767247200000';to='1788238800000';queries=@(@{refId='A';datasource=@{uid='atx-postgres';type='grafana-postgresql-datasource'};rawSql=$drillSql;format=$target.format;intervalMs=3600000;maxDataPoints=2000})}|ConvertTo-Json -Depth 10
+                    $drillBody=@{from='1767247200000';to='1788238800000';queries=@(@{refId='A';datasource=@{uid='bfwp0qtw81z40a';type='grafana-postgresql-datasource'};rawSql=$drillSql;format=$target.format;intervalMs=3600000;maxDataPoints=2000})}|ConvertTo-Json -Depth 10
                     try{$drillResponse=Invoke-RestMethod -Uri "$baseUrl/api/ds/query" -Method Post -ContentType 'application/json' -Body $drillBody;$drillResult=$drillResponse.results.A;if($drillResult.status -ne 200 -or $drillResult.error){throw "Query status $($drillResult.status): $($drillResult.error)"};$frameCount+=@($drillResult.frames).Count}catch{$failures+="$($dashboard.title) / $($panel.title) $assetCode drill-down: $($_.Exception.Message)"}
                 }
             }
@@ -53,7 +53,7 @@ foreach($file in $dashboardFiles){
         if([string]::IsNullOrWhiteSpace($variable.query)){continue}
         $queryCount++
         $varSql = $variable.query.Replace('$line','%').Replace('$asset','%').Replace('$product','%')
-        $body=@{from='1767247200000';to='1788238800000';queries=@(@{refId='A';datasource=@{uid='atx-postgres';type='grafana-postgresql-datasource'};rawSql=$varSql;format='table';intervalMs=3600000;maxDataPoints=2000})}|ConvertTo-Json -Depth 10
+        $body=@{from='1767247200000';to='1788238800000';queries=@(@{refId='A';datasource=@{uid='bfwp0qtw81z40a';type='grafana-postgresql-datasource'};rawSql=$varSql;format='table';intervalMs=3600000;maxDataPoints=2000})}|ConvertTo-Json -Depth 10
         try{$response=Invoke-RestMethod -Uri "$baseUrl/api/ds/query" -Method Post -ContentType 'application/json' -Body $body;$frameCount+=@($response.results.A.frames).Count}catch{$failures+="$($dashboard.title) / variable $($variable.name): $($_.Exception.Message)"}
     }
     if($dashboard.uid -eq 'atx-equipment-oee-detail'){

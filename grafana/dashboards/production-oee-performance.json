@@ -1,1571 +1,1574 @@
-﻿{
-    "annotations":  {
-                        "list":  [
-                                     {
-                                         "builtIn":  1,
-                                         "datasource":  "-- Grafana --",
-                                         "enable":  true,
-                                         "hide":  true,
-                                         "name":  "Annotations \u0026 Alerts",
-                                         "type":  "dashboard"
-                                     },
-                                     {
-                                         "datasource":  {
-                                                            "type":  "grafana-postgresql-datasource",
-                                                            "uid":  "atx-postgres"
-                                                        },
-                                         "enable":  true,
-                                         "hide":  false,
-                                         "iconColor":  "rgba(255, 96, 96, 1)",
-                                         "name":  "Filler-201 RCA",
-                                         "rawQuery":  "SELECT completed_at AS time, \u0027RCA-2026-008 Completed: Filler-201 bracket fatigue identified\u0027 AS text, \u0027RCA\u0027 AS tags FROM rca_events WHERE rca_number=\u0027RCA-2026-008\u0027",
-                                         "showIn":  0,
-                                         "type":  "tags"
-                                     },
-                                     {
-                                         "datasource":  {
-                                                            "type":  "grafana-postgresql-datasource",
-                                                            "uid":  "atx-postgres"
-                                                        },
-                                         "enable":  true,
-                                         "hide":  false,
-                                         "iconColor":  "rgba(50, 200, 50, 1)",
-                                         "name":  "Filler-201 PM Revision",
-                                         "rawQuery":  "SELECT effective_from::timestamptz AS time, \u0027PM Rev 2 Active: Bracket security \u0026 locking verified\u0027 AS text, \u0027PM\u0027 AS tags FROM pm_plan_revisions r JOIN pm_plans p USING(pm_plan_id) JOIN assets a USING(asset_id) WHERE a.asset_code=\u0027FILLER-201\u0027 AND r.revision_number=2 AND p.pm_code LIKE \u0027%WEEKLY\u0027",
-                                         "showIn":  0,
-                                         "type":  "tags"
-                                     },
-                                     {
-                                         "datasource":  {
-                                                            "type":  "grafana-postgresql-datasource",
-                                                            "uid":  "atx-postgres"
-                                                        },
-                                         "enable":  true,
-                                         "hide":  false,
-                                         "iconColor":  "rgba(0, 180, 255, 1)",
-                                         "name":  "Air-Comp Predictive Intervention",
-                                         "rawQuery":  "SELECT work_completed_at AS time, \u0027Air-Comp-001 planned predictive overhaul during sanitation\u0027 AS text, \u0027CBM\u0027 AS tags FROM work_orders WHERE work_order_number=\u0027WO-2026-0185\u0027",
-                                         "showIn":  0,
-                                         "type":  "tags"
-                                     }
-                                 ]
+{
+    "annotations": {
+        "list": [
+            {
+                "builtIn": 1,
+                "datasource": "-- Grafana --",
+                "enable": true,
+                "hide": true,
+                "name": "Annotations & Alerts",
+                "type": "dashboard"
+            },
+            {
+                "datasource": {
+                    "type": "grafana-postgresql-datasource",
+                    "uid": "bfwp0qtw81z40a"
+                },
+                "enable": true,
+                "hide": false,
+                "iconColor": "rgba(255, 96, 96, 1)",
+                "name": "Filler-201 RCA",
+                "rawQuery": "SELECT completed_at AS time, 'RCA-2026-008 Completed: Filler-201 bracket fatigue identified' AS text, 'RCA' AS tags FROM rca_events WHERE rca_number='RCA-2026-008'",
+                "showIn": 0,
+                "type": "tags"
+            },
+            {
+                "datasource": {
+                    "type": "grafana-postgresql-datasource",
+                    "uid": "bfwp0qtw81z40a"
+                },
+                "enable": true,
+                "hide": false,
+                "iconColor": "rgba(50, 200, 50, 1)",
+                "name": "Filler-201 PM Revision",
+                "rawQuery": "SELECT effective_from::timestamptz AS time, 'PM Rev 2 Active: Bracket security & locking verified' AS text, 'PM' AS tags FROM pm_plan_revisions r JOIN pm_plans p USING(pm_plan_id) JOIN assets a USING(asset_id) WHERE a.asset_code='FILLER-201' AND r.revision_number=2 AND p.pm_code LIKE '%WEEKLY'",
+                "showIn": 0,
+                "type": "tags"
+            },
+            {
+                "datasource": {
+                    "type": "grafana-postgresql-datasource",
+                    "uid": "bfwp0qtw81z40a"
+                },
+                "enable": true,
+                "hide": false,
+                "iconColor": "rgba(0, 180, 255, 1)",
+                "name": "Air-Comp Predictive Intervention",
+                "rawQuery": "SELECT work_completed_at AS time, 'Air-Comp-001 planned predictive overhaul during sanitation' AS text, 'CBM' AS tags FROM work_orders WHERE work_order_number='WO-2026-0185'",
+                "showIn": 0,
+                "type": "tags"
+            }
+        ]
+    },
+    "editable": true,
+    "fiscalYearStartMonth": 0,
+    "graphTooltip": 1,
+    "id": null,
+    "links": [
+        {
+            "asDropdown": false,
+            "icon": "dashboard",
+            "includeVars": true,
+            "keepTime": true,
+            "tags": [],
+            "targetBlank": false,
+            "title": "VP Operations Overview",
+            "type": "link",
+            "url": "/d/atx-vp-operations/vp-operations-overview"
+        },
+        {
+            "asDropdown": false,
+            "icon": "dashboard",
+            "includeVars": true,
+            "keepTime": true,
+            "tags": [],
+            "targetBlank": false,
+            "title": "Maintenance Reliability",
+            "type": "link",
+            "url": "/d/atx-maintenance-reliability/maintenance-reliability"
+        },
+        {
+            "asDropdown": false,
+            "icon": "dashboard",
+            "includeVars": true,
+            "keepTime": true,
+            "tags": [],
+            "targetBlank": false,
+            "title": "Staffing, Sanitation & Operational Risk",
+            "type": "link",
+            "url": "/d/atx-operational-risk/staffing-sanitation-and-operational-risk"
+        },
+        {
+            "asDropdown": false,
+            "icon": "dashboard",
+            "includeVars": true,
+            "keepTime": true,
+            "tags": [],
+            "targetBlank": false,
+            "title": "Equipment OEE Detail",
+            "type": "link",
+            "url": "/d/atx-equipment-oee-detail/equipment-oee-detail?var-asset=FILLER-201"
+        }
+    ],
+    "panels": [
+        {
+            "gridPos": {
+                "h": 5,
+                "w": 24,
+                "x": 0,
+                "y": 0
+            },
+            "id": 900,
+            "options": {
+                "content": "# How to Read This Dashboard\n\n## How are the lines performing, and where are we losing productive capacity?\n\nStart with line utilization and OEE, identify whether **Availability, Performance / Speed, or Quality** is driving loss, then drill into the equipment ranking and selected-machine detail. Scheduled Utilization is not OEE, and Line OEE is not average machine OEE.",
+                "mode": "markdown"
+            },
+            "title": "How to Read This Dashboard",
+            "transparent": true,
+            "type": "text",
+            "description": "Start with line utilization and OEE, identify whether Availability, Performance, or Quality is driving loss, then drill into equipment ranking and selected-machine detail. Scheduled Utilization is scheduled production time / calendar time and is not OEE. Line OEE is calculated from line inputs, not average machine OEE. Data source: dashboard navigation narrative."
+        },
+        {
+            "collapsed": false,
+            "gridPos": {
+                "h": 1,
+                "w": 24,
+                "x": 0,
+                "y": 5
+            },
+            "id": 100,
+            "title": "Current Demo Operating State \u2014 Aug 28, 2026",
+            "type": "row",
+            "description": "Displays the hypothetical plant state at the fixed demonstration anchor time. Values are read from PostgreSQL and represent a live-like operating scenario for the interview demo; they are not actual ATX production data. The fixed Aug 28, 2026 10:00 AM anchor makes the scenario repeatable regardless of workstation time."
+        },
+        {
+            "datasource": {
+                "type": "grafana-postgresql-datasource",
+                "uid": "bfwp0qtw81z40a"
+            },
+            "fieldConfig": {
+                "defaults": {
+                    "color": {
+                        "mode": "thresholds"
                     },
-    "editable":  false,
-    "fiscalYearStartMonth":  0,
-    "graphTooltip":  1,
-    "id":  null,
-    "links":  [
-                  {
-                      "asDropdown":  false,
-                      "icon":  "dashboard",
-                      "includeVars":  true,
-                      "keepTime":  true,
-                      "tags":  [
-
-                               ],
-                      "targetBlank":  false,
-                      "title":  "VP Operations Overview",
-                      "type":  "link",
-                      "url":  "/d/atx-vp-operations/vp-operations-overview"
-                  },
-                  {
-                      "asDropdown":  false,
-                      "icon":  "dashboard",
-                      "includeVars":  true,
-                      "keepTime":  true,
-                      "tags":  [
-
-                               ],
-                      "targetBlank":  false,
-                      "title":  "Maintenance Reliability",
-                      "type":  "link",
-                      "url":  "/d/atx-maintenance-reliability/maintenance-reliability"
-                  },
-                  {
-                      "asDropdown":  false,
-                      "icon":  "dashboard",
-                      "includeVars":  true,
-                      "keepTime":  true,
-                      "tags":  [
-
-                               ],
-                      "targetBlank":  false,
-                      "title":  "Staffing, Sanitation \u0026 Operational Risk",
-                      "type":  "link",
-                      "url":  "/d/atx-operational-risk/staffing-sanitation-and-operational-risk"
-                  },
-                  {
-                      "asDropdown":  false,
-                      "icon":  "dashboard",
-                      "includeVars":  true,
-                      "keepTime":  true,
-                      "tags":  [
-
-                               ],
-                      "targetBlank":  false,
-                      "title":  "Equipment OEE Detail",
-                      "type":  "link",
-                      "url":  "/d/atx-equipment-oee-detail/equipment-oee-detail?var-asset=FILLER-201"
-                  }
-              ],
-    "panels":  [
-                   {
-                       "gridPos":  {
-                                       "h":  5,
-                                       "w":  24,
-                                       "x":  0,
-                                       "y":  0
-                                   },
-                       "id":  900,
-                       "options":  {
-                                       "content":  "# How to Read This Dashboard\n\n## How are the lines performing, and where are we losing productive capacity?\n\nStart with line utilization and OEE, identify whether **Availability, Performance / Speed, or Quality** is driving loss, then drill into the equipment ranking and selected-machine detail. Scheduled Utilization is not OEE, and Line OEE is not average machine OEE.",
-                                       "mode":  "markdown"
-                                   },
-                       "title":  "How to Read This Dashboard",
-                       "transparent":  true,
-                       "type":  "text",
-                       "description":  "Start with line utilization and OEE, identify whether Availability, Performance, or Quality is driving loss, then drill into equipment ranking and selected-machine detail. Scheduled Utilization is scheduled production time / calendar time and is not OEE. Line OEE is calculated from line inputs, not average machine OEE. Data source: dashboard navigation narrative."
-                   },
-                   {
-                       "collapsed":  false,
-                       "gridPos":  {
-                                       "h":  1,
-                                       "w":  24,
-                                       "x":  0,
-                                       "y":  5
-                                   },
-                       "id":  100,
-                       "title":  "Current Demo Operating State — Aug 28, 2026",
-                       "type":  "row",
-                       "description":  "Displays the hypothetical plant state at the fixed demonstration anchor time. Values are read from PostgreSQL and represent a live-like operating scenario for the interview demo; they are not actual ATX production data. The fixed Aug 28, 2026 10:00 AM anchor makes the scenario repeatable regardless of workstation time."
-                   },
-                   {
-                       "datasource":  {
-                                          "type":  "grafana-postgresql-datasource",
-                                          "uid":  "atx-postgres"
-                                      },
-                       "fieldConfig":  {
-                                           "defaults":  {
-                                                            "color":  {
-                                                                          "mode":  "thresholds"
-                                                                      },
-                                                            "thresholds":  {
-                                                                               "mode":  "absolute",
-                                                                               "steps":  [
-                                                                                             {
-                                                                                                 "color":  "blue",
-                                                                                                 "value":  null
-                                                                                             }
-                                                                                         ]
-                                                                           }
-                                                        },
-                                           "overrides":  [
-
-                                                         ]
-                                       },
-                       "gridPos":  {
-                                       "h":  4,
-                                       "w":  6,
-                                       "x":  0,
-                                       "y":  6
-                                   },
-                       "id":  1,
-                       "options":  {
-                                       "colorMode":  "background",
-                                       "graphMode":  "none",
-                                       "justifyMode":  "auto",
-                                       "orientation":  "auto",
-                                       "reduceOptions":  {
-                                                             "calcs":  [
-                                                                           "lastNotNull"
-                                                                       ],
-                                                             "fields":  "",
-                                                             "values":  false
-                                                         },
-                                       "textMode":  "value_and_name"
-                                   },
-                       "targets":  [
-                                       {
-                                           "datasource":  {
-                                                              "type":  "grafana-postgresql-datasource",
-                                                              "uid":  "atx-postgres"
-                                                          },
-                                           "format":  "table",
-                                           "rawQuery":  true,
-                                           "rawSql":  "SELECT lot_number AS \"Active Lot\", product_name AS \"Product\", shift_code AS \"Shift\", progress_percent || \u0027%\u0027 AS \"Progress\", yield_percent || \u0027%\u0027 AS \"Yield\", round(current_rate,1) || \u0027 units/min\u0027 AS \"Current Rate\" FROM v_current_line1_production_status",
-                                           "refId":  "A"
-                                       }
-                                   ],
-                       "title":  "Line 1 — Active Lot Status (Running)",
-                       "type":  "stat",
-                       "description":  "Shows the one Line 1 RUNNING lot at the fixed Aug 28, 2026 10:00 AM demonstration anchor: lot, product, Shift A, progress, yield, and current rate. The values are relational PostgreSQL demo data, not workstation-clock or actual ATX production data. Low progress versus elapsed schedule or weak yield should be checked against schedule adherence and line OEE. Data source: v_current_line1_production_status."
-                   },
-                   {
-                       "datasource":  {
-                                          "type":  "grafana-postgresql-datasource",
-                                          "uid":  "atx-postgres"
-                                      },
-                       "fieldConfig":  {
-                                           "defaults":  {
-                                                            "color":  {
-                                                                          "mode":  "thresholds"
-                                                                      },
-                                                            "thresholds":  {
-                                                                               "mode":  "absolute",
-                                                                               "steps":  [
-                                                                                             {
-                                                                                                 "color":  "purple",
-                                                                                                 "value":  null
-                                                                                             }
-                                                                                         ]
-                                                                           }
-                                                        },
-                                           "overrides":  [
-
-                                                         ]
-                                       },
-                       "gridPos":  {
-                                       "h":  4,
-                                       "w":  6,
-                                       "x":  6,
-                                       "y":  6
-                                   },
-                       "id":  2,
-                       "options":  {
-                                       "colorMode":  "background",
-                                       "graphMode":  "none",
-                                       "justifyMode":  "auto",
-                                       "orientation":  "auto",
-                                       "reduceOptions":  {
-                                                             "calcs":  [
-                                                                           "lastNotNull"
-                                                                       ],
-                                                             "fields":  "",
-                                                             "values":  false
-                                                         },
-                                       "textMode":  "value_and_name"
-                                   },
-                       "targets":  [
-                                       {
-                                           "datasource":  {
-                                                              "type":  "grafana-postgresql-datasource",
-                                                              "uid":  "atx-postgres"
-                                                          },
-                                           "format":  "table",
-                                           "rawQuery":  true,
-                                           "rawSql":  "SELECT lot_number AS \"Active Lot\", product_name AS \"Product\", shift_code AS \"Shift\", progress_percent || \u0027%\u0027 AS \"Progress\", yield_percent || \u0027%\u0027 AS \"Yield\", round(current_rate,1) || \u0027 units/min\u0027 AS \"Current Rate\" FROM v_current_line2_production_status",
-                                           "refId":  "A"
-                                       }
-                                   ],
-                       "title":  "Line 2 — Active Lot Status (Running)",
-                       "type":  "stat",
-                       "description":  "Shows the one Line 2 RUNNING lot at the fixed Aug 28, 2026 10:00 AM demonstration anchor: lot, product, Shift A, progress, yield, and current rate. The lot is linked to Mixer-201, Conveyor-201, Filler-201, and Labeler-201. Low progress or yield should be followed into Detailed Line 2 OEE and Equipment OEE Detail. Data source: v_current_line2_production_status."
-                   },
-                   {
-                       "datasource":  {
-                                          "type":  "grafana-postgresql-datasource",
-                                          "uid":  "atx-postgres"
-                                      },
-                       "fieldConfig":  {
-                                           "defaults":  {
-                                                            "custom":  {
-                                                                           "align":  "auto",
-                                                                           "displayMode":  "auto"
-                                                                       }
-                                                        },
-                                           "overrides":  [
-
-                                                         ]
-                                       },
-                       "gridPos":  {
-                                       "h":  4,
-                                       "w":  7,
-                                       "x":  12,
-                                       "y":  6
-                                   },
-                       "id":  3,
-                       "options":  {
-                                       "footer":  {
-                                                      "show":  false
-                                                  },
-                                       "showHeader":  true
-                                   },
-                       "targets":  [
-                                       {
-                                           "datasource":  {
-                                                              "type":  "grafana-postgresql-datasource",
-                                                              "uid":  "atx-postgres"
-                                                          },
-                                           "format":  "table",
-                                           "rawQuery":  true,
-                                           "rawSql":  "SELECT assigned_role AS \"Role\", employee_name AS \"Employee\", line_assignment AS \"Line\", shift_code AS \"Shift\", status AS \"Status\" FROM v_current_shift_staffing ORDER BY assigned_role",
-                                           "refId":  "A"
-                                       }
-                                   ],
-                       "title":  "Current Staffing Roster (Shift A — 1/1/0 Model)",
-                       "type":  "table",
-                       "description":  "Each row is one confirmed employee whose scheduled interval contains the fixed demo anchor. The roster shows the Shift A production lead, Line 1 operator, Line 2 operator, and plant-wide maintenance technician; sanitation personnel are excluded because sanitation is not active at 10:00 AM. The 1/1/0 model means one maintenance technician per production shift and none normally assigned to sanitation. Data source: v_current_shift_staffing."
-                   },
-                   {
-                       "datasource":  {
-                                          "type":  "grafana-postgresql-datasource",
-                                          "uid":  "atx-postgres"
-                                      },
-                       "fieldConfig":  {
-                                           "defaults":  {
-                                                            "color":  {
-                                                                          "mode":  "thresholds"
-                                                                      },
-                                                            "decimals":  1,
-                                                            "thresholds":  {
-                                                                               "mode":  "absolute",
-                                                                               "steps":  [
-                                                                                             {
-                                                                                                 "color":  "red",
-                                                                                                 "value":  null
-                                                                                             },
-                                                                                             {
-                                                                                                 "color":  "yellow",
-                                                                                                 "value":  90
-                                                                                             },
-                                                                                             {
-                                                                                                 "color":  "green",
-                                                                                                 "value":  95
-                                                                                             }
-                                                                                         ]
-                                                                           },
-                                                            "unit":  "percent"
-                                                        },
-                                           "overrides":  [
-
-                                                         ]
-                                       },
-                       "gridPos":  {
-                                       "h":  4,
-                                       "w":  5,
-                                       "x":  19,
-                                       "y":  6
-                                   },
-                       "id":  4,
-                       "options":  {
-                                       "colorMode":  "background",
-                                       "graphMode":  "area",
-                                       "reduceOptions":  {
-                                                             "calcs":  [
-                                                                           "lastNotNull"
-                                                                       ],
-                                                             "fields":  "",
-                                                             "values":  false
-                                                         }
-                                   },
-                       "targets":  [
-                                       {
-                                           "datasource":  {
-                                                              "type":  "grafana-postgresql-datasource",
-                                                              "uid":  "atx-postgres"
-                                                          },
-                                           "format":  "table",
-                                           "rawQuery":  true,
-                                           "rawSql":  "SELECT round(avg(on_time_start_percent), 1) AS \"On-Time Start %\" FROM v_current_month_schedule_adherence",
-                                           "refId":  "A"
-                                       }
-                                   ],
-                       "title":  "Schedule Adherence (Current Month)",
-                       "type":  "stat",
-                       "description":  "Shows average on-time-start percentage for August 2026, with the reporting month derived from the active demo anchor rather than workstation time. Higher means completed scheduled lots began within the 10-minute tolerance more consistently; low values indicate execution, staffing, material, shared-asset, or changeover constraints. Current running lots do not enter the completed-lot denominator. Data source: v_current_month_schedule_adherence."
-                   },
-                   {
-                       "collapsed":  false,
-                       "gridPos":  {
-                                       "h":  1,
-                                       "w":  24,
-                                       "x":  0,
-                                       "y":  10
-                                   },
-                       "id":  101,
-                       "title":  "Line OEE Scorecard \u0026 Components",
-                       "type":  "row",
-                       "description":  "Section grouping for **Line OEE Scorecard \u0026 Components**. Read the panels below it together before drilling to the next numbered section or linked dashboard."
-                   },
-                   {
-                       "datasource":  {
-                                          "type":  "grafana-postgresql-datasource",
-                                          "uid":  "atx-postgres"
-                                      },
-                       "fieldConfig":  {
-                                           "defaults":  {
-                                                            "color":  {
-                                                                          "mode":  "thresholds"
-                                                                      },
-                                                            "decimals":  2,
-                                                            "thresholds":  {
-                                                                               "mode":  "absolute",
-                                                                               "steps":  [
-                                                                                             {
-                                                                                                 "color":  "red",
-                                                                                                 "value":  null
-                                                                                             },
-                                                                                             {
-                                                                                                 "color":  "yellow",
-                                                                                                 "value":  75
-                                                                                             },
-                                                                                             {
-                                                                                                 "color":  "green",
-                                                                                                 "value":  85
-                                                                                             }
-                                                                                         ]
-                                                                           },
-                                                            "unit":  "percent"
-                                                        },
-                                           "overrides":  [
-
-                                                         ]
-                                       },
-                       "gridPos":  {
-                                       "h":  4,
-                                       "w":  4,
-                                       "x":  0,
-                                       "y":  11
-                                   },
-                       "id":  5,
-                       "options":  {
-                                       "colorMode":  "background",
-                                       "graphMode":  "area",
-                                       "reduceOptions":  {
-                                                             "calcs":  [
-                                                                           "lastNotNull"
-                                                                       ],
-                                                             "fields":  "",
-                                                             "values":  false
-                                                         }
-                                   },
-                       "targets":  [
-                                       {
-                                           "datasource":  {
-                                                              "type":  "grafana-postgresql-datasource",
-                                                              "uid":  "atx-postgres"
-                                                          },
-                                           "format":  "table",
-                                           "rawQuery":  true,
-                                           "rawSql":  "SELECT oee_percent FROM v_line_oee_monthly WHERE line_code = \u0027LINE-1\u0027 ORDER BY period DESC LIMIT 1",
-                                           "refId":  "A"
-                                       }
-                                   ],
-                       "title":  "Line 1 Monthly OEE — Target ≥85%",
-                       "type":  "stat",
-                       "description":  "Shows monthly Line 1 OEE for the selected historical period using the dashboard's monthly rollup model. Runtime is derived from planned-versus-actual production and the historical production-calendar denominator; OEE is Availability x Performance x Quality. Use this panel for directional performance trending. For detailed loss attribution, review Detailed Line 2 OEE and Equipment OEE Detail.\n\n**Data source:** PostgreSQL v_line_oee_monthly."
-                   },
-                   {
-                       "datasource":  {
-                                          "type":  "grafana-postgresql-datasource",
-                                          "uid":  "atx-postgres"
-                                      },
-                       "fieldConfig":  {
-                                           "defaults":  {
-                                                            "color":  {
-                                                                          "mode":  "thresholds"
-                                                                      },
-                                                            "decimals":  2,
-                                                            "thresholds":  {
-                                                                               "mode":  "absolute",
-                                                                               "steps":  [
-                                                                                             {
-                                                                                                 "color":  "red",
-                                                                                                 "value":  null
-                                                                                             },
-                                                                                             {
-                                                                                                 "color":  "yellow",
-                                                                                                 "value":  90
-                                                                                             },
-                                                                                             {
-                                                                                                 "color":  "green",
-                                                                                                 "value":  95
-                                                                                             }
-                                                                                         ]
-                                                                           },
-                                                            "unit":  "percent"
-                                                        },
-                                           "overrides":  [
-
-                                                         ]
-                                       },
-                       "gridPos":  {
-                                       "h":  4,
-                                       "w":  4,
-                                       "x":  4,
-                                       "y":  11
-                                   },
-                       "id":  6,
-                       "options":  {
-                                       "colorMode":  "value",
-                                       "graphMode":  "none",
-                                       "orientation":  "vertical",
-                                       "reduceOptions":  {
-                                                             "calcs":  [
-                                                                           "lastNotNull"
-                                                                       ],
-                                                             "fields":  "",
-                                                             "values":  false
-                                                         },
-                                       "textMode":  "value_and_name"
-                                   },
-                       "targets":  [
-                                       {
-                                           "datasource":  {
-                                                              "type":  "grafana-postgresql-datasource",
-                                                              "uid":  "atx-postgres"
-                                                          },
-                                           "format":  "table",
-                                           "rawQuery":  true,
-                                           "rawSql":  "SELECT availability_percent AS \"Availability (%)\", performance_percent AS \"Performance (%)\", quality_percent AS \"Quality (%)\" FROM v_line_oee_monthly WHERE line_code = \u0027LINE-1\u0027 ORDER BY period DESC LIMIT 1",
-                                           "refId":  "A"
-                                       }
-                                   ],
-                       "title":  "Line 1 A / P / Q Components",
-                       "type":  "stat",
-                       "description":  "Shows Availability, Performance, and Quality for the latest month under the historical monthly rollup model. Availability uses inferred runtime and the historical planned-production denominator; Performance compares output with ideal-rate output during that runtime; Quality is good/total output. Use the lowest component diagnostically, then review Detailed Line 2 OEE for sensor-aware time and loss accounting.\n\n**Data source:** PostgreSQL v_line_oee_monthly."
-                   },
-                   {
-                       "datasource":  {
-                                          "type":  "grafana-postgresql-datasource",
-                                          "uid":  "atx-postgres"
-                                      },
-                       "fieldConfig":  {
-                                           "defaults":  {
-                                                            "color":  {
-                                                                          "mode":  "thresholds"
-                                                                      },
-                                                            "decimals":  2,
-                                                            "thresholds":  {
-                                                                               "mode":  "absolute",
-                                                                               "steps":  [
-                                                                                             {
-                                                                                                 "color":  "red",
-                                                                                                 "value":  null
-                                                                                             },
-                                                                                             {
-                                                                                                 "color":  "yellow",
-                                                                                                 "value":  75
-                                                                                             },
-                                                                                             {
-                                                                                                 "color":  "green",
-                                                                                                 "value":  85
-                                                                                             }
-                                                                                         ]
-                                                                           },
-                                                            "unit":  "percent"
-                                                        },
-                                           "overrides":  [
-
-                                                         ]
-                                       },
-                       "gridPos":  {
-                                       "h":  4,
-                                       "w":  4,
-                                       "x":  8,
-                                       "y":  11
-                                   },
-                       "id":  7,
-                       "options":  {
-                                       "colorMode":  "background",
-                                       "graphMode":  "area",
-                                       "reduceOptions":  {
-                                                             "calcs":  [
-                                                                           "lastNotNull"
-                                                                       ],
-                                                             "fields":  "",
-                                                             "values":  false
-                                                         }
-                                   },
-                       "targets":  [
-                                       {
-                                           "datasource":  {
-                                                              "type":  "grafana-postgresql-datasource",
-                                                              "uid":  "atx-postgres"
-                                                          },
-                                           "format":  "table",
-                                           "rawQuery":  true,
-                                           "rawSql":  "SELECT oee_percent FROM v_line_oee_monthly WHERE line_code = \u0027LINE-2\u0027 ORDER BY period DESC LIMIT 1",
-                                           "refId":  "A"
-                                       }
-                                   ],
-                       "title":  "Line 2 Monthly OEE — Target ≥85%",
-                       "type":  "stat",
-                       "description":  "Shows monthly Line 2 OEE for the selected historical period using the dashboard's monthly rollup model. Runtime is derived from planned-versus-actual production and the historical production-calendar denominator; OEE is Availability x Performance x Quality. Use this panel for directional performance trending. For detailed loss attribution, review Detailed Line 2 OEE and Equipment OEE Detail.\n\n**Data source:** PostgreSQL v_line_oee_monthly."
-                   },
-                   {
-                       "datasource":  {
-                                          "type":  "grafana-postgresql-datasource",
-                                          "uid":  "atx-postgres"
-                                      },
-                       "fieldConfig":  {
-                                           "defaults":  {
-                                                            "color":  {
-                                                                          "mode":  "thresholds"
-                                                                      },
-                                                            "decimals":  2,
-                                                            "thresholds":  {
-                                                                               "mode":  "absolute",
-                                                                               "steps":  [
-                                                                                             {
-                                                                                                 "color":  "red",
-                                                                                                 "value":  null
-                                                                                             },
-                                                                                             {
-                                                                                                 "color":  "yellow",
-                                                                                                 "value":  90
-                                                                                             },
-                                                                                             {
-                                                                                                 "color":  "green",
-                                                                                                 "value":  95
-                                                                                             }
-                                                                                         ]
-                                                                           },
-                                                            "unit":  "percent"
-                                                        },
-                                           "overrides":  [
-
-                                                         ]
-                                       },
-                       "gridPos":  {
-                                       "h":  4,
-                                       "w":  4,
-                                       "x":  12,
-                                       "y":  11
-                                   },
-                       "id":  8,
-                       "options":  {
-                                       "colorMode":  "value",
-                                       "graphMode":  "none",
-                                       "orientation":  "vertical",
-                                       "reduceOptions":  {
-                                                             "calcs":  [
-                                                                           "lastNotNull"
-                                                                       ],
-                                                             "fields":  "",
-                                                             "values":  false
-                                                         },
-                                       "textMode":  "value_and_name"
-                                   },
-                       "targets":  [
-                                       {
-                                           "datasource":  {
-                                                              "type":  "grafana-postgresql-datasource",
-                                                              "uid":  "atx-postgres"
-                                                          },
-                                           "format":  "table",
-                                           "rawQuery":  true,
-                                           "rawSql":  "SELECT availability_percent AS \"Availability (%)\", performance_percent AS \"Performance (%)\", quality_percent AS \"Quality (%)\" FROM v_line_oee_monthly WHERE line_code = \u0027LINE-2\u0027 ORDER BY period DESC LIMIT 1",
-                                           "refId":  "A"
-                                       }
-                                   ],
-                       "title":  "Line 2 A / P / Q Components",
-                       "type":  "stat",
-                       "description":  "Shows Availability, Performance, and Quality for the latest month under the historical monthly rollup model. Availability uses inferred runtime and the historical planned-production denominator; Performance compares output with ideal-rate output during that runtime; Quality is good/total output. Use the lowest component diagnostically, then review Detailed Line 2 OEE for sensor-aware time and loss accounting.\n\n**Data source:** PostgreSQL v_line_oee_monthly."
-                   },
-                   {
-                       "datasource":  {
-                                          "type":  "grafana-postgresql-datasource",
-                                          "uid":  "atx-postgres"
-                                      },
-                       "fieldConfig":  {
-                                           "defaults":  {
-                                                            "custom":  {
-                                                                           "drawStyle":  "line",
-                                                                           "fillOpacity":  12,
-                                                                           "lineWidth":  2
-                                                                       },
-                                                            "unit":  "percent"
-                                                        },
-                                           "overrides":  [
-                                                             {
-                                                                 "matcher":  {
-                                                                                 "id":  "byName",
-                                                                                 "options":  "Line 1"
-                                                                             },
-                                                                 "properties":  [
-                                                                                    {
-                                                                                        "id":  "color",
-                                                                                        "value":  {
-                                                                                                      "fixedColor":  "green",
-                                                                                                      "mode":  "fixed"
-                                                                                                  }
-                                                                                    }
-                                                                                ]
-                                                             },
-                                                             {
-                                                                 "matcher":  {
-                                                                                 "id":  "byName",
-                                                                                 "options":  "Line 2"
-                                                                             },
-                                                                 "properties":  [
-                                                                                    {
-                                                                                        "id":  "color",
-                                                                                        "value":  {
-                                                                                                      "fixedColor":  "semi-dark-red",
-                                                                                                      "mode":  "fixed"
-                                                                                                  }
-                                                                                    }
-                                                                                ]
-                                                             }
-                                                         ]
-                                       },
-                       "gridPos":  {
-                                       "h":  8,
-                                       "w":  8,
-                                       "x":  16,
-                                       "y":  11
-                                   },
-                       "id":  9,
-                       "options":  {
-                                       "legend":  {
-                                                      "displayMode":  "table",
-                                                      "placement":  "bottom",
-                                                      "showLegend":  true
-                                                  },
-                                       "tooltip":  {
-                                                       "mode":  "multi"
-                                                   }
-                                   },
-                       "targets":  [
-                                       {
-                                           "datasource":  {
-                                                              "type":  "grafana-postgresql-datasource",
-                                                              "uid":  "atx-postgres"
-                                                          },
-                                           "format":  "time_series",
-                                           "rawQuery":  true,
-                                           "rawSql":  "SELECT period AS time, line_name AS metric, oee_percent AS value FROM v_line_oee_monthly WHERE (\u0027$line\u0027 = \u0027%\u0027 OR line_code = \u0027$line\u0027) ORDER BY period, line_name",
-                                           "refId":  "A"
-                                       }
-                                   ],
-                       "title":  "Monthly Line OEE Trend",
-                       "type":  "timeseries",
-                       "description":  "Trends monthly Line OEE for Line 1 and Line 2 over the dashboard period, filtered by $line. Each point is Availability x Performance x Quality using the historical monthly rollup model. Use the slope and cross-line gap for directional comparison; use Detailed Line 2 OEE for stop-loss and sensor-aware analysis.\n\n**Data source:** PostgreSQL v_line_oee_monthly."
-                   },
-                   {
-                       "collapsed":  false,
-                       "gridPos":  {
-                                       "h":  1,
-                                       "w":  24,
-                                       "x":  0,
-                                       "y":  19
-                                   },
-                       "id":  102,
-                       "title":  "Equipment OEE Ranking \u0026 Loss Breakdown",
-                       "type":  "row",
-                       "description":  "Section grouping for **Equipment OEE Ranking \u0026 Loss Breakdown**. Read the panels below it together before drilling to the next numbered section or linked dashboard."
-                   },
-                   {
-                       "datasource":  {
-                                          "type":  "grafana-postgresql-datasource",
-                                          "uid":  "atx-postgres"
-                                      },
-                       "fieldConfig":  {
-                                           "defaults":  {
-                                                            "color":  {
-                                                                          "mode":  "thresholds"
-                                                                      },
-                                                            "thresholds":  {
-                                                                               "mode":  "absolute",
-                                                                               "steps":  [
-                                                                                             {
-                                                                                                 "color":  "red",
-                                                                                                 "value":  null
-                                                                                             },
-                                                                                             {
-                                                                                                 "color":  "yellow",
-                                                                                                 "value":  75
-                                                                                             },
-                                                                                             {
-                                                                                                 "color":  "green",
-                                                                                                 "value":  85
-                                                                                             }
-                                                                                         ]
-                                                                           }
-                                                        },
-                                           "overrides":  [
-                                                             {
-                                                                 "matcher":  {
-                                                                                 "id":  "byName",
-                                                                                 "options":  "OEE (%)"
-                                                                             },
-                                                                 "properties":  [
-                                                                                    {
-                                                                                        "id":  "custom.displayMode",
-                                                                                        "value":  "color-background"
-                                                                                    }
-                                                                                ]
-                                                             }
-                                                         ]
-                                       },
-                       "gridPos":  {
-                                       "h":  8,
-                                       "w":  14,
-                                       "x":  0,
-                                       "y":  20
-                                   },
-                       "id":  10,
-                       "options":  {
-                                       "footer":  {
-                                                      "show":  false
-                                                  },
-                                       "showHeader":  true
-                                   },
-                       "targets":  [
-                                       {
-                                           "datasource":  {
-                                                              "type":  "grafana-postgresql-datasource",
-                                                              "uid":  "atx-postgres"
-                                                          },
-                                           "format":  "table",
-                                           "rawQuery":  true,
-                                           "rawSql":  "SELECT asset_code AS \"Asset\", asset_name AS \"Asset Name\", equipment_type AS \"Type\", line_code AS \"Line\", overall_availability_percent AS \"Availability (%)\", overall_performance_percent AS \"Performance (%)\", overall_quality_percent AS \"Quality (%)\", overall_oee_percent AS \"OEE (%)\" FROM v_asset_oee_components WHERE (\u0027$line\u0027 = \u0027%\u0027 OR line_code = \u0027$line\u0027) AND (\u0027$asset\u0027 = \u0027%\u0027 OR asset_code = \u0027$asset\u0027) ORDER BY overall_oee_percent ASC",
-                                           "refId":  "A"
-                                       }
-                                   ],
-                       "title":  "Equipment OEE Ranking (Worst-to-Best — Excludes Utility Air-Comp)",
-                       "type":  "table",
-                       "description":  "Each row is one completed production asset from the historical Equipment OEE summary, excluding shared utilities such as Air-Comp-001 and filtered by line/asset variables. Rows sort lowest OEE first and show Availability, Performance, Quality, and Equipment OEE. Low rows identify diagnostic contributors only: Line OEE is not calculated by averaging Equipment OEE. Drill to Equipment OEE Detail for the four instrumented Line 2 machines. Data source: v_asset_oee_components."
-                   },
-                   {
-                       "datasource":  {
-                                          "type":  "grafana-postgresql-datasource",
-                                          "uid":  "atx-postgres"
-                                      },
-                       "fieldConfig":  {
-                                           "defaults":  {
-                                                            "color":  {
-                                                                          "mode":  "palette-classic"
-                                                                      },
-                                                            "unit":  "m"
-                                                        },
-                                           "overrides":  [
-
-                                                         ]
-                                       },
-                       "gridPos":  {
-                                       "h":  8,
-                                       "w":  10,
-                                       "x":  14,
-                                       "y":  20
-                                   },
-                       "id":  11,
-                       "options":  {
-                                       "barWidth":  0.8,
-                                       "groupWidth":  0.7,
-                                       "legend":  {
-                                                      "displayMode":  "list",
-                                                      "placement":  "bottom",
-                                                      "showLegend":  false
-                                                  },
-                                       "orientation":  "horizontal",
-                                       "showValue":  "always",
-                                       "stacking":  "none",
-                                       "tooltip":  {
-                                                       "mode":  "single"
-                                                   },
-                                       "xTickLabelRotation":  0
-                                   },
-                       "targets":  [
-                                       {
-                                           "datasource":  {
-                                                              "type":  "grafana-postgresql-datasource",
-                                                              "uid":  "atx-postgres"
-                                                          },
-                                           "format":  "table",
-                                           "rawQuery":  true,
-                                           "rawSql":  "SELECT loss_category AS \"Loss Category\", sum(loss_minutes) AS \"Loss (Minutes)\" FROM v_oee_loss_by_category WHERE period = \u00272026-08-01\u0027 AND (\u0027$line\u0027 = \u0027%\u0027 OR line_code = \u0027$line\u0027) GROUP BY loss_category ORDER BY 2 DESC",
-                                           "refId":  "A"
-                                       }
-                                   ],
-                       "title":  "Production Time Loss Categories — August 2026",
-                       "type":  "barchart",
-                       "description":  "Ranks August 2026 production-time loss minutes by category for the selected line(s), largest first. Categories combine recorded downtime, planned changeover, and planned breaks under the historical rollup convention; they explain lost time and are not multiplied into OEE again. Distinguish planned loss from maintenance, production, material, and quality causes before assigning action. Data source: v_oee_loss_by_category."
-                   },
-                   {
-                       "collapsed":  false,
-                       "gridPos":  {
-                                       "h":  1,
-                                       "w":  24,
-                                       "x":  0,
-                                       "y":  28
-                                   },
-                       "id":  103,
-                       "title":  "Filler-201 Case Study: RCA Impact on OEE",
-                       "type":  "row",
-                       "description":  "Section grouping for **Filler-201 Case Study: RCA Impact on OEE**. Read the panels below it together before drilling to the next numbered section or linked dashboard."
-                   },
-                   {
-                       "datasource":  {
-                                          "type":  "grafana-postgresql-datasource",
-                                          "uid":  "atx-postgres"
-                                      },
-                       "fieldConfig":  {
-                                           "defaults":  {
-                                                            "custom":  {
-                                                                           "align":  "auto",
-                                                                           "displayMode":  "auto"
-                                                                       }
-                                                        },
-                                           "overrides":  [
-                                                             {
-                                                                 "matcher":  {
-                                                                                 "id":  "byName",
-                                                                                 "options":  "OEE (%)"
-                                                                             },
-                                                                 "properties":  [
-                                                                                    {
-                                                                                        "id":  "thresholds",
-                                                                                        "value":  {
-                                                                                                      "mode":  "absolute",
-                                                                                                      "steps":  [
-                                                                                                                    {
-                                                                                                                        "color":  "red",
-                                                                                                                        "value":  null
-                                                                                                                    },
-                                                                                                                    {
-                                                                                                                        "color":  "yellow",
-                                                                                                                        "value":  75
-                                                                                                                    },
-                                                                                                                    {
-                                                                                                                        "color":  "green",
-                                                                                                                        "value":  85
-                                                                                                                    }
-                                                                                                                ]
-                                                                                                  }
-                                                                                    },
-                                                                                    {
-                                                                                        "id":  "custom.displayMode",
-                                                                                        "value":  "color-background"
-                                                                                    }
-                                                                                ]
-                                                             }
-                                                         ]
-                                       },
-                       "gridPos":  {
-                                       "h":  8,
-                                       "w":  12,
-                                       "x":  0,
-                                       "y":  29
-                                   },
-                       "id":  12,
-                       "options":  {
-                                       "footer":  {
-                                                      "show":  false
-                                                  },
-                                       "showHeader":  true
-                                   },
-                       "targets":  [
-                                       {
-                                           "datasource":  {
-                                                              "type":  "grafana-postgresql-datasource",
-                                                              "uid":  "atx-postgres"
-                                                          },
-                                           "format":  "table",
-                                           "rawQuery":  true,
-                                           "rawSql":  "SELECT rca_period AS \"Period\", availability_percent AS \"Availability (%)\", performance_percent AS \"Performance (%)\", quality_percent AS \"Quality (%)\", oee_percent AS \"OEE (%)\", total_downtime_minutes AS \"Downtime (Min)\", total_failures AS \"Failures\", repeat_failures AS \"Repeat Failures\" FROM v_filler201_oee_before_after_rca ORDER BY rca_period DESC",
-                                           "refId":  "A"
-                                       }
-                                   ],
-                       "title":  "Filler-201 Pre vs Post RCA OEE Transformation (Bracket Root Cause Fix)",
-                       "type":  "table",
-                       "description":  "Each row compares Filler-201 PRE_RCA (Jan-May 2026) with POST_RCA (Jun-Aug 2026), showing Availability, Performance, Quality, OEE, downtime, failures, and repeat failures. The post period follows bracket replacement, locking hardware, and weekly PM revision. Higher Availability/OEE with lower downtime and recurrence supports corrective-action effectiveness. Drill to Equipment Detail or Maintenance Reliability for stop and RCA evidence. Data source: v_filler201_oee_before_after_rca."
-                   },
-                   {
-                       "datasource":  {
-                                          "type":  "grafana-postgresql-datasource",
-                                          "uid":  "atx-postgres"
-                                      },
-                       "fieldConfig":  {
-                                           "defaults":  {
-                                                            "custom":  {
-                                                                           "drawStyle":  "line",
-                                                                           "fillOpacity":  15,
-                                                                           "lineWidth":  2
-                                                                       },
-                                                            "unit":  "percent"
-                                                        },
-                                           "overrides":  [
-                                                             {
-                                                                 "matcher":  {
-                                                                                 "id":  "byName",
-                                                                                 "options":  "Filler-201 OEE (%)"
-                                                                             },
-                                                                 "properties":  [
-                                                                                    {
-                                                                                        "id":  "color",
-                                                                                        "value":  {
-                                                                                                      "fixedColor":  "green",
-                                                                                                      "mode":  "fixed"
-                                                                                                  }
-                                                                                    }
-                                                                                ]
-                                                             },
-                                                             {
-                                                                 "matcher":  {
-                                                                                 "id":  "byName",
-                                                                                 "options":  "Availability (%)"
-                                                                             },
-                                                                 "properties":  [
-                                                                                    {
-                                                                                        "id":  "color",
-                                                                                        "value":  {
-                                                                                                      "fixedColor":  "blue",
-                                                                                                      "mode":  "fixed"
-                                                                                                  }
-                                                                                    }
-                                                                                ]
-                                                             }
-                                                         ]
-                                       },
-                       "gridPos":  {
-                                       "h":  8,
-                                       "w":  12,
-                                       "x":  12,
-                                       "y":  29
-                                   },
-                       "id":  13,
-                       "options":  {
-                                       "legend":  {
-                                                      "displayMode":  "table",
-                                                      "placement":  "bottom",
-                                                      "showLegend":  true
-                                                  },
-                                       "tooltip":  {
-                                                       "mode":  "multi"
-                                                   }
-                                   },
-                       "targets":  [
-                                       {
-                                           "datasource":  {
-                                                              "type":  "grafana-postgresql-datasource",
-                                                              "uid":  "atx-postgres"
-                                                          },
-                                           "format":  "time_series",
-                                           "rawQuery":  true,
-                                           "rawSql":  "SELECT period AS time, oee_percent AS \"Filler-201 OEE (%)\", availability_percent AS \"Availability (%)\" FROM v_asset_oee_monthly WHERE asset_code = \u0027FILLER-201\u0027 ORDER BY period",
-                                           "refId":  "A"
-                                       }
-                                   ],
-                       "title":  "Filler-201 Monthly OEE \u0026 Availability Recovery Trend",
-                       "type":  "timeseries",
-                       "description":  "Trends monthly Filler-201 OEE and Availability across the seeded January-August 2026 history. OEE is Availability x Performance x Quality under the historical monthly equipment rollup. The June 2026 RCA/PM revision is the intervention point; sustained improvement afterward supports effectiveness. Drill to Filler-201 Equipment Detail for Stop Loss and sensor evidence. Data source: v_asset_oee_monthly."
-                   },
-                   {
-                       "collapsed":  false,
-                       "gridPos":  {
-                                       "h":  1,
-                                       "w":  24,
-                                       "x":  0,
-                                       "y":  37
-                                   },
-                       "id":  104,
-                       "title":  "Production Scheduling \u0026 Performance Standards",
-                       "type":  "row",
-                       "description":  "Section grouping for **Production Scheduling \u0026 Performance Standards**. Read the panels below it together before drilling to the next numbered section or linked dashboard."
-                   },
-                   {
-                       "datasource":  {
-                                          "type":  "grafana-postgresql-datasource",
-                                          "uid":  "atx-postgres"
-                                      },
-                       "fieldConfig":  {
-                                           "defaults":  {
-
-                                                        },
-                                           "overrides":  [
-
-                                                         ]
-                                       },
-                       "gridPos":  {
-                                       "h":  8,
-                                       "w":  12,
-                                       "x":  0,
-                                       "y":  38
-                                   },
-                       "id":  14,
-                       "options":  {
-                                       "footer":  {
-                                                      "show":  false
-                                                  },
-                                       "showHeader":  true
-                                   },
-                       "targets":  [
-                                       {
-                                           "datasource":  {
-                                                              "type":  "grafana-postgresql-datasource",
-                                                              "uid":  "atx-postgres"
-                                                          },
-                                           "format":  "table",
-                                           "rawQuery":  true,
-                                           "rawSql":  "SELECT ps.sequence_number AS \"Seq\", l.line_code AS \"Line\", pl.lot_number AS \"Lot Number\", p.product_name AS \"Product\", ps.scheduled_start AS \"Scheduled Start\", ps.scheduled_end AS \"Scheduled End\", pl.planned_quantity AS \"Planned Qty\", pl.status AS \"Status\" FROM production_schedule ps JOIN production_lots pl USING(lot_id) JOIN production_lines l ON l.line_id=ps.line_id JOIN products p ON p.product_id=pl.product_id WHERE pl.status IN (\u0027READY\u0027, \u0027PLANNED\u0027) ORDER BY ps.scheduled_start, l.line_code LIMIT 10",
-                                           "refId":  "A"
-                                       }
-                                   ],
-                       "title":  "Upcoming Production Lots Schedule",
-                       "type":  "table",
-                       "description":  "Each row is one upcoming READY or PLANNED production lot, ordered by scheduled start then line and limited to ten. Columns show sequence, line, lot, product, scheduled window, planned quantity, and status; running/completed/cancelled lots are excluded. Conflicts, delays, or large shared-resource demand should be checked against Blender scheduling and staffing. Data source: production_schedule, production_lots, production_lines, products."
-                   },
-                   {
-                       "datasource":  {
-                                          "type":  "grafana-postgresql-datasource",
-                                          "uid":  "atx-postgres"
-                                      },
-                       "fieldConfig":  {
-                                           "defaults":  {
-
-                                                        },
-                                           "overrides":  [
-
-                                                         ]
-                                       },
-                       "gridPos":  {
-                                       "h":  8,
-                                       "w":  12,
-                                       "x":  12,
-                                       "y":  38
-                                   },
-                       "id":  15,
-                       "options":  {
-                                       "footer":  {
-                                                      "show":  false
-                                                  },
-                                       "showHeader":  true
-                                   },
-                       "targets":  [
-                                       {
-                                           "datasource":  {
-                                                              "type":  "grafana-postgresql-datasource",
-                                                              "uid":  "atx-postgres"
-                                                          },
-                                           "format":  "table",
-                                           "rawQuery":  true,
-                                           "rawSql":  "SELECT p.product_code AS \"SKU\", p.product_name AS \"Product Name\", l.line_code AS \"Line\", pls.ideal_units_per_minute AS \"Ideal Rate (Units/Min)\", pls.expected_yield_pct AS \"Expected Yield (%)\", pls.standard_changeover_minutes AS \"Std Changeover (Min)\" FROM product_line_standards pls JOIN products p USING(product_id) JOIN production_lines l USING(line_id) WHERE (\u0027$line\u0027 = \u0027%\u0027 OR l.line_code = \u0027$line\u0027) AND (\u0027$product\u0027 = \u0027%\u0027 OR p.product_code = \u0027$product\u0027) ORDER BY l.line_code, p.product_code",
-                                           "refId":  "A"
-                                       }
-                                   ],
-                       "title":  "Product-Line Speed \u0026 Changeover Standards (OEE Benchmark)",
-                       "type":  "table",
-                       "description":  "Each row is one product/line standard filtered by line and product: ideal units/minute, expected yield, and standard changeover minutes. Ideal rate sets the theoretical Performance denominator; expected yield supports quality planning; changeover standard supports planned-loss review. Stale or unrealistic standards distort interpretation and require Production/Engineering review. Data source: product_line_standards, products, production_lines."
-                   },
-                   {
-                       "collapsed":  false,
-                       "gridPos":  {
-                                       "h":  1,
-                                       "w":  24,
-                                       "x":  0,
-                                       "y":  46
-                                   },
-                       "id":  105,
-                       "title":  "Shared Assets \u0026 Plant Utilities Risk",
-                       "type":  "row",
-                       "description":  "Section grouping for **Shared Assets \u0026 Plant Utilities Risk**. Read the panels below it together before drilling to the next numbered section or linked dashboard."
-                   },
-                   {
-                       "datasource":  {
-                                          "type":  "grafana-postgresql-datasource",
-                                          "uid":  "atx-postgres"
-                                      },
-                       "fieldConfig":  {
-                                           "defaults":  {
-
-                                                        },
-                                           "overrides":  [
-
-                                                         ]
-                                       },
-                       "gridPos":  {
-                                       "h":  8,
-                                       "w":  12,
-                                       "x":  0,
-                                       "y":  47
-                                   },
-                       "id":  16,
-                       "options":  {
-                                       "footer":  {
-                                                      "show":  false
-                                                  },
-                                       "showHeader":  true
-                                   },
-                       "targets":  [
-                                       {
-                                           "datasource":  {
-                                                              "type":  "grafana-postgresql-datasource",
-                                                              "uid":  "atx-postgres"
-                                                          },
-                                           "format":  "table",
-                                           "rawQuery":  true,
-                                           "rawSql":  "SELECT line_code AS \"Line\", scheduled_start AS \"Start\", scheduled_end AS \"End\", production_order AS \"Production Order\", risk_timing AS \"Risk Status\", CASE WHEN asset_currently_down THEN \u0027DOWN\u0027 ELSE \u0027OPERATIONAL\u0027 END AS \"Equipment Status\" FROM v_shared_asset_risk WHERE asset_code = \u0027BLENDER-001\u0027 ORDER BY scheduled_start",
-                                           "refId":  "A"
-                                       }
-                                   ],
-                       "title":  "Blender-001 Shared Production Schedule \u0026 Conflict Risk",
-                       "type":  "table",
-                       "description":  "Each row is a scheduled Blender-001 slot with line, start/end, order, current/future risk status, and current equipment status, ordered chronologically. Blender-001 is allocated sequentially, so a current failure can delay the active line and the next reserved line. Coordinate Production and Maintenance when risk_timing indicates future exposure. Data source: v_shared_asset_risk."
-                   },
-                   {
-                       "datasource":  {
-                                          "type":  "grafana-postgresql-datasource",
-                                          "uid":  "atx-postgres"
-                                      },
-                       "fieldConfig":  {
-                                           "defaults":  {
-                                                            "custom":  {
-                                                                           "drawStyle":  "line",
-                                                                           "fillOpacity":  10,
-                                                                           "lineWidth":  2
-                                                                       },
-                                                            "unit":  "mm/s"
-                                                        },
-                                           "overrides":  [
-                                                             {
-                                                                 "matcher":  {
-                                                                                 "id":  "byName",
-                                                                                 "options":  "Vibration (mm/s)"
-                                                                             },
-                                                                 "properties":  [
-                                                                                    {
-                                                                                        "id":  "color",
-                                                                                        "value":  {
-                                                                                                      "fixedColor":  "orange",
-                                                                                                      "mode":  "fixed"
-                                                                                                  }
-                                                                                    }
-                                                                                ]
-                                                             },
-                                                             {
-                                                                 "matcher":  {
-                                                                                 "id":  "byName",
-                                                                                 "options":  "Warning (2.8 mm/s)"
-                                                                             },
-                                                                 "properties":  [
-                                                                                    {
-                                                                                        "id":  "custom.lineStyle",
-                                                                                        "value":  {
-                                                                                                      "dash":  [
-                                                                                                                   8,
-                                                                                                                   8
-                                                                                                               ],
-                                                                                                      "fill":  "dash"
-                                                                                                  }
-                                                                                    },
-                                                                                    {
-                                                                                        "id":  "color",
-                                                                                        "value":  {
-                                                                                                      "fixedColor":  "yellow",
-                                                                                                      "mode":  "fixed"
-                                                                                                  }
-                                                                                    }
-                                                                                ]
-                                                             },
-                                                             {
-                                                                 "matcher":  {
-                                                                                 "id":  "byName",
-                                                                                 "options":  "Alarm (4.5 mm/s)"
-                                                                             },
-                                                                 "properties":  [
-                                                                                    {
-                                                                                        "id":  "custom.lineStyle",
-                                                                                        "value":  {
-                                                                                                      "dash":  [
-                                                                                                                   8,
-                                                                                                                   8
-                                                                                                               ],
-                                                                                                      "fill":  "dash"
-                                                                                                  }
-                                                                                    },
-                                                                                    {
-                                                                                        "id":  "color",
-                                                                                        "value":  {
-                                                                                                      "fixedColor":  "red",
-                                                                                                      "mode":  "fixed"
-                                                                                                  }
-                                                                                    }
-                                                                                ]
-                                                             }
-                                                         ]
-                                       },
-                       "gridPos":  {
-                                       "h":  8,
-                                       "w":  12,
-                                       "x":  12,
-                                       "y":  47
-                                   },
-                       "id":  17,
-                       "options":  {
-                                       "legend":  {
-                                                      "displayMode":  "table",
-                                                      "placement":  "bottom",
-                                                      "showLegend":  true
-                                                  },
-                                       "tooltip":  {
-                                                       "mode":  "multi"
-                                                   }
-                                   },
-                       "targets":  [
-                                       {
-                                           "datasource":  {
-                                                              "type":  "grafana-postgresql-datasource",
-                                                              "uid":  "atx-postgres"
-                                                          },
-                                           "format":  "time_series",
-                                           "rawQuery":  true,
-                                           "rawSql":  "SELECT time, numeric_value AS \"Vibration (mm/s)\", warning_threshold AS \"Warning (2.8 mm/s)\", alarm_threshold AS \"Alarm (4.5 mm/s)\" FROM v_condition_measurements WHERE asset_code = \u0027AIR-COMP-001\u0027 AND measurement_type = \u0027VIBRATION\u0027 ORDER BY time",
-                                           "refId":  "A"
-                                       }
-                                   ],
-                       "title":  "Air-Comp-001 Utility Vibration Trend (Shared Plant Risk — No OEE)",
-                       "type":  "timeseries",
-                       "description":  "Trends all seeded Air-Comp-001 vibration observations with 2.8 mm/s warning and 4.5 mm/s alarm references. Rising or threshold-crossing vibration indicates condition degradation. The compressor simultaneously supports both lines, so predictive intervention is plant-critical; as a shared utility it does not receive piece-rate OEE. Drill to Operational Risk condition panels. Data source: v_condition_measurements."
-                   },
-                   {
-                       "collapsed":  false,
-                       "gridPos":  {
-                                       "h":  1,
-                                       "w":  24,
-                                       "x":  0,
-                                       "y":  55
-                                   },
-                       "id":  106,
-                       "title":  "Executive AI Production \u0026 OEE Assistant",
-                       "type":  "row",
-                       "description":  "Section grouping for **Executive AI Production \u0026 OEE Assistant**. Read the panels below it together before drilling to the next numbered section or linked dashboard."
-                   },
-                   {
-                       "gridPos":  {
-                                       "h":  6,
-                                       "w":  24,
-                                       "x":  0,
-                                       "y":  56
-                                   },
-                       "id":  18,
-                       "options":  {
-                                       "content":  "### AI Production \u0026 OEE Executive Briefing\n\nAI Production \u0026 OEE Analysis interprets curated PostgreSQL views, including the fixed-anchor current-state views. The current scenario is hypothetical interview data at Aug 28, 2026 10:00 AM, not actual ATX production. AI does not calculate or invent KPI values.\n\n#### Key Production Inquiries Handled:\n- **Current Execution**: *\"What is running on Line 1 at the demo anchor?\"* → `ATX-20260828-L1-001` (Spicy Sauce) at 52.6% completion and 98.81% yield on Shift A.\n- **Next Scheduled Lots**: *\"What lot runs next on Line 2?\"* → `ATX-20260828-L2-002` (Sweet Heat) scheduled for 14:00.\n- **OEE Performance**: *\"Why is Line 2 OEE lower than Line 1?\"* → Compare Availability, Performance, and Quality in the curated monthly and detailed operating views.\n- **RCA ROI**: *\"Did Filler-201 improve after RCA?\"* → Use the curated before/after view and Equipment OEE Detail trace.\n- **Staffing Coverage**: *\"Is staffing coverage adequate at the anchor?\"* → Confirmed Shift A coverage includes 1 Lead, 1 L1 Operator, 1 L2 Operator, and 1 Maintenance Technician.\n\n*Run `.\\scripts\\test-ai-summary.ps1` to validate grounded responses.*",
-                                       "mode":  "markdown"
-                                   },
-                       "title":  "AI Production \u0026 OEE Decision Support",
-                       "type":  "text",
-                       "description":  "AI production narrative interprets curated PostgreSQL lot, schedule, OEE, loss, staffing, and risk views. It may explain relationships but does not calculate, overwrite, or invent KPI values. Validate cited numbers in the live panels and use Equipment OEE Detail for machine evidence. Data source: curated views supplied by scripts/test-ai-summary.ps1."
-                   },
-                   {
-                       "collapsed":  false,
-                       "gridPos":  {
-                                       "h":  1,
-                                       "w":  24,
-                                       "x":  0,
-                                       "y":  62
-                                   },
-                       "id":  107,
-                       "title":  "Line 2 OEE → Equipment OEE Contributors → Raw Inputs \u0026 Loss Analysis",
-                       "type":  "row",
-                       "description":  "Section grouping for **Line 2 OEE → Equipment OEE Contributors → Raw Inputs \u0026 Loss Analysis**. Read the panels below it together before drilling to the next numbered section or linked dashboard."
-                   },
-                   {
-                       "datasource":  {
-                                          "type":  "grafana-postgresql-datasource",
-                                          "uid":  "atx-postgres"
-                                      },
-                       "fieldConfig":  {
-                                           "defaults":  {
-                                                            "decimals":  2,
-                                                            "unit":  "percent"
-                                                        },
-                                           "overrides":  [
-
-                                                         ]
-                                       },
-                       "gridPos":  {
-                                       "h":  5,
-                                       "w":  6,
-                                       "x":  0,
-                                       "y":  63
-                                   },
-                       "id":  19,
-                       "options":  {
-                                       "colorMode":  "background",
-                                       "graphMode":  "area",
-                                       "reduceOptions":  {
-                                                             "calcs":  [
-                                                                           "lastNotNull"
-                                                                       ],
-                                                             "fields":  "",
-                                                             "values":  false
-                                                         },
-                                       "textMode":  "value_and_name"
-                                   },
-                       "targets":  [
-                                       {
-                                           "datasource":  {
-                                                              "type":  "grafana-postgresql-datasource",
-                                                              "uid":  "atx-postgres"
-                                                          },
-                                           "format":  "table",
-                                           "rawQuery":  true,
-                                           "rawSql":  "SELECT oee_percent AS \"LINE 2 OEE\",utilization_percent AS \"Line 2 Utilization\",availability_percent AS \"Line 2 Availability\",performance_percent AS \"Line 2 Performance\",quality_percent AS \"Line 2 Quality\" FROM v_line2_oee_summary",
-                                           "refId":  "A"
-                                       }
-                                   ],
-                       "title":  "LINE 2 OEE (independent line calculation, not machine average)",
-                       "type":  "stat",
-                       "description":  "Shows detailed Line 2 Scheduled Utilization, Availability, Performance, Quality, and OEE from independent line-level inputs. Utilization = scheduled production/calendar time and is not OEE. OEE = runtime/scheduled time x actual/theoretical output x good/total output; it is not average machine OEE. Low components direct the next investigation to time, speed, or quality. Data source: v_line2_oee_summary."
-                   },
-                   {
-                       "datasource":  {
-                                          "type":  "grafana-postgresql-datasource",
-                                          "uid":  "atx-postgres"
-                                      },
-                       "fieldConfig":  {
-                                           "defaults":  {
-
-                                                        },
-                                           "overrides":  [
-                                                             {
-                                                                 "matcher":  {
-                                                                                 "id":  "byName",
-                                                                                 "options":  "Asset"
-                                                                             },
-                                                                 "properties":  [
-                                                                                    {
-                                                                                        "id":  "links",
-                                                                                        "value":  [
-                                                                                                      {
-                                                                                                          "title":  "Open ${__value.text} Equipment OEE Detail",
-                                                                                                          "url":  "/d/atx-equipment-oee-detail/equipment-oee-detail?var-asset=${__value.text}",
-                                                                                                          "targetBlank":  false
-                                                                                                      }
-                                                                                                  ]
-                                                                                    }
-                                                                                ]
-                                                             }
-                                                         ]
-                                       },
-                       "gridPos":  {
-                                       "h":  5,
-                                       "w":  18,
-                                       "x":  6,
-                                       "y":  63
-                                   },
-                       "id":  20,
-                       "options":  {
-                                       "footer":  {
-                                                      "show":  false
-                                                  },
-                                       "showHeader":  true
-                                   },
-                       "targets":  [
-                                       {
-                                           "datasource":  {
-                                                              "type":  "grafana-postgresql-datasource",
-                                                              "uid":  "atx-postgres"
-                                                          },
-                                           "format":  "table",
-                                           "rawQuery":  true,
-                                           "rawSql":  "SELECT asset_code AS \"Asset\",utilization_percent AS \"Scheduled Utilization %\",availability_percent AS \"Availability %\",performance_percent AS \"Performance %\",quality_percent AS \"Quality %\",oee_percent AS \"Equipment OEE %\",stop_loss_minutes AS \"Stop Loss Minutes\" FROM v_equipment_oee_summary ORDER BY CASE asset_code WHEN \u0027MIXER-201\u0027 THEN 1 WHEN \u0027CONVEYOR-201\u0027 THEN 2 WHEN \u0027FILLER-201\u0027 THEN 3 WHEN \u0027LABELER-201\u0027 THEN 4 END",
-                                           "refId":  "A"
-                                       }
-                                   ],
-                       "title":  "Line 2 Equipment OEE Contributors — click Asset to drill into inputs and losses",
-                       "type":  "table",
-                       "description":  "Each row is one of the four instrumented Line 2 machines, in process order, with Scheduled Utilization, Availability, Performance, Quality, Equipment OEE, and unscheduled Stop Loss minutes. Values diagnose contributors; they are not averaged into Line OEE. Click Asset to inspect time accounting, Stop Reasons, sensors, and RCA trace. Data source: v_equipment_oee_summary."
-                   }
-               ],
-    "refresh":  "",
-    "schemaVersion":  42,
-    "tags":  [
-                 "production",
-                 "oee",
-                 "operations",
-                 "scheduling"
-             ],
-    "templating":  {
-                       "list":  [
+                    "thresholds": {
+                        "mode": "absolute",
+                        "steps": [
+                            {
+                                "color": "blue",
+                                "value": null
+                            }
+                        ]
+                    }
+                },
+                "overrides": []
+            },
+            "gridPos": {
+                "h": 4,
+                "w": 6,
+                "x": 0,
+                "y": 6
+            },
+            "id": 1,
+            "options": {
+                "colorMode": "background",
+                "graphMode": "none",
+                "justifyMode": "auto",
+                "orientation": "auto",
+                "reduceOptions": {
+                    "calcs": [
+                        "lastNotNull"
+                    ],
+                    "fields": "/.*/",
+                    "values": false
+                },
+                "textMode": "value_and_name"
+            },
+            "targets": [
+                {
+                    "datasource": {
+                        "type": "grafana-postgresql-datasource",
+                        "uid": "bfwp0qtw81z40a"
+                    },
+                    "format": "table",
+                    "rawQuery": true,
+                    "rawSql": "SELECT lot_number AS \"Active Lot\", product_name AS \"Product\", shift_code AS \"Shift\", progress_percent || '%' AS \"Progress\", yield_percent || '%' AS \"Yield\", round(current_rate,1) || ' units/min' AS \"Current Rate\" FROM v_current_line1_production_status",
+                    "refId": "A"
+                }
+            ],
+            "title": "Line 1 \u2014 Active Lot Status (Running)",
+            "type": "stat",
+            "description": "Shows the one Line 1 RUNNING lot at the fixed Aug 28, 2026 10:00 AM demonstration anchor: lot, product, Shift A, progress, yield, and current rate. The values are relational PostgreSQL demo data, not workstation-clock or actual ATX production data. Low progress versus elapsed schedule or weak yield should be checked against schedule adherence and line OEE. Data source: v_current_line1_production_status."
+        },
+        {
+            "datasource": {
+                "type": "grafana-postgresql-datasource",
+                "uid": "bfwp0qtw81z40a"
+            },
+            "fieldConfig": {
+                "defaults": {
+                    "color": {
+                        "mode": "thresholds"
+                    },
+                    "thresholds": {
+                        "mode": "absolute",
+                        "steps": [
+                            {
+                                "color": "purple",
+                                "value": null
+                            }
+                        ]
+                    }
+                },
+                "overrides": []
+            },
+            "gridPos": {
+                "h": 4,
+                "w": 6,
+                "x": 6,
+                "y": 6
+            },
+            "id": 2,
+            "options": {
+                "colorMode": "background",
+                "graphMode": "none",
+                "justifyMode": "auto",
+                "orientation": "auto",
+                "reduceOptions": {
+                    "calcs": [
+                        "lastNotNull"
+                    ],
+                    "fields": "/.*/",
+                    "values": false
+                },
+                "textMode": "value_and_name"
+            },
+            "targets": [
+                {
+                    "datasource": {
+                        "type": "grafana-postgresql-datasource",
+                        "uid": "bfwp0qtw81z40a"
+                    },
+                    "format": "table",
+                    "rawQuery": true,
+                    "rawSql": "SELECT lot_number AS \"Active Lot\", product_name AS \"Product\", shift_code AS \"Shift\", progress_percent || '%' AS \"Progress\", yield_percent || '%' AS \"Yield\", round(current_rate,1) || ' units/min' AS \"Current Rate\" FROM v_current_line2_production_status",
+                    "refId": "A"
+                }
+            ],
+            "title": "Line 2 \u2014 Active Lot Status (Running)",
+            "type": "stat",
+            "description": "Shows the one Line 2 RUNNING lot at the fixed Aug 28, 2026 10:00 AM demonstration anchor: lot, product, Shift A, progress, yield, and current rate. The lot is linked to Mixer-201, Conveyor-201, Filler-201, and Labeler-201. Low progress or yield should be followed into Detailed Line 2 OEE and Equipment OEE Detail. Data source: v_current_line2_production_status."
+        },
+        {
+            "datasource": {
+                "type": "grafana-postgresql-datasource",
+                "uid": "bfwp0qtw81z40a"
+            },
+            "fieldConfig": {
+                "defaults": {
+                    "custom": {
+                        "align": "auto",
+                        "displayMode": "auto"
+                    }
+                },
+                "overrides": []
+            },
+            "gridPos": {
+                "h": 4,
+                "w": 7,
+                "x": 12,
+                "y": 6
+            },
+            "id": 3,
+            "options": {
+                "footer": {
+                    "show": false
+                },
+                "showHeader": true
+            },
+            "targets": [
+                {
+                    "datasource": {
+                        "type": "grafana-postgresql-datasource",
+                        "uid": "bfwp0qtw81z40a"
+                    },
+                    "format": "table",
+                    "rawQuery": true,
+                    "rawSql": "SELECT assigned_role AS \"Role\", employee_name AS \"Employee\", line_assignment AS \"Line\", shift_code AS \"Shift\", status AS \"Status\" FROM v_current_shift_staffing ORDER BY assigned_role",
+                    "refId": "A"
+                }
+            ],
+            "title": "Current Staffing Roster (Shift A \u2014 1/1/0 Model)",
+            "type": "table",
+            "description": "Each row is one confirmed employee whose scheduled interval contains the fixed demo anchor. The roster shows the Shift A production lead, Line 1 operator, Line 2 operator, and plant-wide maintenance technician; sanitation personnel are excluded because sanitation is not active at 10:00 AM. The 1/1/0 model means one maintenance technician per production shift and none normally assigned to sanitation. Data source: v_current_shift_staffing."
+        },
+        {
+            "datasource": {
+                "type": "grafana-postgresql-datasource",
+                "uid": "bfwp0qtw81z40a"
+            },
+            "fieldConfig": {
+                "defaults": {
+                    "color": {
+                        "mode": "thresholds"
+                    },
+                    "decimals": 1,
+                    "thresholds": {
+                        "mode": "absolute",
+                        "steps": [
+                            {
+                                "color": "red",
+                                "value": null
+                            },
+                            {
+                                "color": "yellow",
+                                "value": 90
+                            },
+                            {
+                                "color": "green",
+                                "value": 95
+                            }
+                        ]
+                    },
+                    "unit": "percent"
+                },
+                "overrides": []
+            },
+            "gridPos": {
+                "h": 4,
+                "w": 5,
+                "x": 19,
+                "y": 6
+            },
+            "id": 4,
+            "options": {
+                "colorMode": "background",
+                "graphMode": "area",
+                "reduceOptions": {
+                    "calcs": [
+                        "lastNotNull"
+                    ],
+                    "fields": "",
+                    "values": false
+                }
+            },
+            "targets": [
+                {
+                    "datasource": {
+                        "type": "grafana-postgresql-datasource",
+                        "uid": "bfwp0qtw81z40a"
+                    },
+                    "format": "table",
+                    "rawQuery": true,
+                    "rawSql": "SELECT round(avg(on_time_start_percent), 1) AS \"On-Time Start %\" FROM v_current_month_schedule_adherence",
+                    "refId": "A"
+                }
+            ],
+            "title": "Schedule Adherence (Current Month)",
+            "type": "stat",
+            "description": "Shows average on-time-start percentage for August 2026, with the reporting month derived from the active demo anchor rather than workstation time. Higher means completed scheduled lots began within the 10-minute tolerance more consistently; low values indicate execution, staffing, material, shared-asset, or changeover constraints. Current running lots do not enter the completed-lot denominator. Data source: v_current_month_schedule_adherence."
+        },
+        {
+            "collapsed": false,
+            "gridPos": {
+                "h": 1,
+                "w": 24,
+                "x": 0,
+                "y": 10
+            },
+            "id": 101,
+            "title": "Line OEE Scorecard & Components",
+            "type": "row",
+            "description": "Section grouping for **Line OEE Scorecard & Components**. Read the panels below it together before drilling to the next numbered section or linked dashboard."
+        },
+        {
+            "datasource": {
+                "type": "grafana-postgresql-datasource",
+                "uid": "bfwp0qtw81z40a"
+            },
+            "fieldConfig": {
+                "defaults": {
+                    "color": {
+                        "mode": "thresholds"
+                    },
+                    "decimals": 2,
+                    "thresholds": {
+                        "mode": "absolute",
+                        "steps": [
+                            {
+                                "color": "red",
+                                "value": null
+                            },
+                            {
+                                "color": "yellow",
+                                "value": 75
+                            },
+                            {
+                                "color": "green",
+                                "value": 85
+                            }
+                        ]
+                    },
+                    "unit": "percent"
+                },
+                "overrides": []
+            },
+            "gridPos": {
+                "h": 4,
+                "w": 4,
+                "x": 0,
+                "y": 11
+            },
+            "id": 5,
+            "options": {
+                "colorMode": "background",
+                "graphMode": "area",
+                "reduceOptions": {
+                    "calcs": [
+                        "lastNotNull"
+                    ],
+                    "fields": "",
+                    "values": false
+                }
+            },
+            "targets": [
+                {
+                    "datasource": {
+                        "type": "grafana-postgresql-datasource",
+                        "uid": "bfwp0qtw81z40a"
+                    },
+                    "format": "table",
+                    "rawQuery": true,
+                    "rawSql": "SELECT oee_percent FROM v_line_oee_monthly WHERE line_code = 'LINE-1' ORDER BY period DESC LIMIT 1",
+                    "refId": "A"
+                }
+            ],
+            "title": "Line 1 Monthly OEE \u2014 Target \u226585%",
+            "type": "stat",
+            "description": "Shows monthly Line 1 OEE for the selected historical period using the dashboard's monthly rollup model. Runtime is derived from planned-versus-actual production and the historical production-calendar denominator; OEE is Availability x Performance x Quality. Use this panel for directional performance trending. For detailed loss attribution, review Detailed Line 2 OEE and Equipment OEE Detail.\n\n**Data source:** PostgreSQL v_line_oee_monthly."
+        },
+        {
+            "datasource": {
+                "type": "grafana-postgresql-datasource",
+                "uid": "bfwp0qtw81z40a"
+            },
+            "fieldConfig": {
+                "defaults": {
+                    "color": {
+                        "mode": "thresholds"
+                    },
+                    "decimals": 2,
+                    "thresholds": {
+                        "mode": "absolute",
+                        "steps": [
+                            {
+                                "color": "red",
+                                "value": null
+                            },
+                            {
+                                "color": "yellow",
+                                "value": 90
+                            },
+                            {
+                                "color": "green",
+                                "value": 95
+                            }
+                        ]
+                    },
+                    "unit": "percent"
+                },
+                "overrides": []
+            },
+            "gridPos": {
+                "h": 4,
+                "w": 4,
+                "x": 4,
+                "y": 11
+            },
+            "id": 6,
+            "options": {
+                "colorMode": "value",
+                "graphMode": "none",
+                "orientation": "vertical",
+                "reduceOptions": {
+                    "calcs": [
+                        "lastNotNull"
+                    ],
+                    "fields": "",
+                    "values": false
+                },
+                "textMode": "value_and_name"
+            },
+            "targets": [
+                {
+                    "datasource": {
+                        "type": "grafana-postgresql-datasource",
+                        "uid": "bfwp0qtw81z40a"
+                    },
+                    "format": "table",
+                    "rawQuery": true,
+                    "rawSql": "SELECT availability_percent AS \"Availability (%)\", performance_percent AS \"Performance (%)\", quality_percent AS \"Quality (%)\" FROM v_line_oee_monthly WHERE line_code = 'LINE-1' ORDER BY period DESC LIMIT 1",
+                    "refId": "A"
+                }
+            ],
+            "title": "Line 1 A / P / Q Components",
+            "type": "stat",
+            "description": "Shows Availability, Performance, and Quality for the latest month under the historical monthly rollup model. Availability uses inferred runtime and the historical planned-production denominator; Performance compares output with ideal-rate output during that runtime; Quality is good/total output. Use the lowest component diagnostically, then review Detailed Line 2 OEE for sensor-aware time and loss accounting.\n\n**Data source:** PostgreSQL v_line_oee_monthly."
+        },
+        {
+            "datasource": {
+                "type": "grafana-postgresql-datasource",
+                "uid": "bfwp0qtw81z40a"
+            },
+            "fieldConfig": {
+                "defaults": {
+                    "color": {
+                        "mode": "thresholds"
+                    },
+                    "decimals": 2,
+                    "thresholds": {
+                        "mode": "absolute",
+                        "steps": [
+                            {
+                                "color": "red",
+                                "value": null
+                            },
+                            {
+                                "color": "yellow",
+                                "value": 75
+                            },
+                            {
+                                "color": "green",
+                                "value": 85
+                            }
+                        ]
+                    },
+                    "unit": "percent"
+                },
+                "overrides": []
+            },
+            "gridPos": {
+                "h": 4,
+                "w": 4,
+                "x": 8,
+                "y": 11
+            },
+            "id": 7,
+            "options": {
+                "colorMode": "background",
+                "graphMode": "area",
+                "reduceOptions": {
+                    "calcs": [
+                        "lastNotNull"
+                    ],
+                    "fields": "",
+                    "values": false
+                }
+            },
+            "targets": [
+                {
+                    "datasource": {
+                        "type": "grafana-postgresql-datasource",
+                        "uid": "bfwp0qtw81z40a"
+                    },
+                    "format": "table",
+                    "rawQuery": true,
+                    "rawSql": "SELECT oee_percent FROM v_line_oee_monthly WHERE line_code = 'LINE-2' ORDER BY period DESC LIMIT 1",
+                    "refId": "A"
+                }
+            ],
+            "title": "Line 2 Monthly OEE \u2014 Target \u226585%",
+            "type": "stat",
+            "description": "Shows monthly Line 2 OEE for the selected historical period using the dashboard's monthly rollup model. Runtime is derived from planned-versus-actual production and the historical production-calendar denominator; OEE is Availability x Performance x Quality. Use this panel for directional performance trending. For detailed loss attribution, review Detailed Line 2 OEE and Equipment OEE Detail.\n\n**Data source:** PostgreSQL v_line_oee_monthly."
+        },
+        {
+            "datasource": {
+                "type": "grafana-postgresql-datasource",
+                "uid": "bfwp0qtw81z40a"
+            },
+            "fieldConfig": {
+                "defaults": {
+                    "color": {
+                        "mode": "thresholds"
+                    },
+                    "decimals": 2,
+                    "thresholds": {
+                        "mode": "absolute",
+                        "steps": [
+                            {
+                                "color": "red",
+                                "value": null
+                            },
+                            {
+                                "color": "yellow",
+                                "value": 90
+                            },
+                            {
+                                "color": "green",
+                                "value": 95
+                            }
+                        ]
+                    },
+                    "unit": "percent"
+                },
+                "overrides": []
+            },
+            "gridPos": {
+                "h": 4,
+                "w": 4,
+                "x": 12,
+                "y": 11
+            },
+            "id": 8,
+            "options": {
+                "colorMode": "value",
+                "graphMode": "none",
+                "orientation": "vertical",
+                "reduceOptions": {
+                    "calcs": [
+                        "lastNotNull"
+                    ],
+                    "fields": "",
+                    "values": false
+                },
+                "textMode": "value_and_name"
+            },
+            "targets": [
+                {
+                    "datasource": {
+                        "type": "grafana-postgresql-datasource",
+                        "uid": "bfwp0qtw81z40a"
+                    },
+                    "format": "table",
+                    "rawQuery": true,
+                    "rawSql": "SELECT availability_percent AS \"Availability (%)\", performance_percent AS \"Performance (%)\", quality_percent AS \"Quality (%)\" FROM v_line_oee_monthly WHERE line_code = 'LINE-2' ORDER BY period DESC LIMIT 1",
+                    "refId": "A"
+                }
+            ],
+            "title": "Line 2 A / P / Q Components",
+            "type": "stat",
+            "description": "Shows Availability, Performance, and Quality for the latest month under the historical monthly rollup model. Availability uses inferred runtime and the historical planned-production denominator; Performance compares output with ideal-rate output during that runtime; Quality is good/total output. Use the lowest component diagnostically, then review Detailed Line 2 OEE for sensor-aware time and loss accounting.\n\n**Data source:** PostgreSQL v_line_oee_monthly."
+        },
+        {
+            "datasource": {
+                "type": "grafana-postgresql-datasource",
+                "uid": "bfwp0qtw81z40a"
+            },
+            "fieldConfig": {
+                "defaults": {
+                    "custom": {
+                        "drawStyle": "line",
+                        "fillOpacity": 12,
+                        "lineWidth": 2
+                    },
+                    "unit": "percent"
+                },
+                "overrides": [
+                    {
+                        "matcher": {
+                            "id": "byName",
+                            "options": "Line 1"
+                        },
+                        "properties": [
+                            {
+                                "id": "color",
+                                "value": {
+                                    "fixedColor": "green",
+                                    "mode": "fixed"
+                                }
+                            }
+                        ]
+                    },
+                    {
+                        "matcher": {
+                            "id": "byName",
+                            "options": "Line 2"
+                        },
+                        "properties": [
+                            {
+                                "id": "color",
+                                "value": {
+                                    "fixedColor": "semi-dark-red",
+                                    "mode": "fixed"
+                                }
+                            }
+                        ]
+                    }
+                ]
+            },
+            "gridPos": {
+                "h": 8,
+                "w": 8,
+                "x": 16,
+                "y": 11
+            },
+            "id": 9,
+            "options": {
+                "legend": {
+                    "displayMode": "table",
+                    "placement": "bottom",
+                    "showLegend": true
+                },
+                "tooltip": {
+                    "mode": "multi"
+                }
+            },
+            "targets": [
+                {
+                    "datasource": {
+                        "type": "grafana-postgresql-datasource",
+                        "uid": "bfwp0qtw81z40a"
+                    },
+                    "format": "time_series",
+                    "rawQuery": true,
+                    "rawSql": "SELECT period AS time, line_name AS metric, oee_percent AS value FROM v_line_oee_monthly WHERE ('$line' = '%' OR line_code = '$line') ORDER BY period, line_name",
+                    "refId": "A"
+                }
+            ],
+            "title": "Monthly Line OEE Trend",
+            "type": "timeseries",
+            "description": "Trends monthly Line OEE for Line 1 and Line 2 over the dashboard period, filtered by $line. Each point is Availability x Performance x Quality using the historical monthly rollup model. Use the slope and cross-line gap for directional comparison; use Detailed Line 2 OEE for stop-loss and sensor-aware analysis.\n\n**Data source:** PostgreSQL v_line_oee_monthly."
+        },
+        {
+            "collapsed": false,
+            "gridPos": {
+                "h": 1,
+                "w": 24,
+                "x": 0,
+                "y": 19
+            },
+            "id": 102,
+            "title": "Equipment OEE Ranking & Loss Breakdown",
+            "type": "row",
+            "description": "Section grouping for **Equipment OEE Ranking & Loss Breakdown**. Read the panels below it together before drilling to the next numbered section or linked dashboard."
+        },
+        {
+            "datasource": {
+                "type": "grafana-postgresql-datasource",
+                "uid": "bfwp0qtw81z40a"
+            },
+            "fieldConfig": {
+                "defaults": {
+                    "color": {
+                        "mode": "thresholds"
+                    },
+                    "thresholds": {
+                        "mode": "absolute",
+                        "steps": [
+                            {
+                                "color": "red",
+                                "value": null
+                            },
+                            {
+                                "color": "yellow",
+                                "value": 75
+                            },
+                            {
+                                "color": "green",
+                                "value": 85
+                            }
+                        ]
+                    }
+                },
+                "overrides": [
+                    {
+                        "matcher": {
+                            "id": "byName",
+                            "options": "OEE (%)"
+                        },
+                        "properties": [
+                            {
+                                "id": "custom.displayMode",
+                                "value": "color-background"
+                            }
+                        ]
+                    }
+                ]
+            },
+            "gridPos": {
+                "h": 8,
+                "w": 14,
+                "x": 0,
+                "y": 20
+            },
+            "id": 10,
+            "options": {
+                "footer": {
+                    "show": false
+                },
+                "showHeader": true
+            },
+            "targets": [
+                {
+                    "datasource": {
+                        "type": "grafana-postgresql-datasource",
+                        "uid": "bfwp0qtw81z40a"
+                    },
+                    "format": "table",
+                    "rawQuery": true,
+                    "rawSql": "SELECT asset_code AS \"Asset\", asset_name AS \"Asset Name\", equipment_type AS \"Type\", line_code AS \"Line\", overall_availability_percent AS \"Availability (%)\", overall_performance_percent AS \"Performance (%)\", overall_quality_percent AS \"Quality (%)\", overall_oee_percent AS \"OEE (%)\" FROM v_asset_oee_components WHERE ('$line' = '%' OR line_code = '$line') AND ('$asset' = '%' OR asset_code = '$asset') ORDER BY overall_oee_percent ASC",
+                    "refId": "A"
+                }
+            ],
+            "title": "Equipment OEE Ranking (Worst-to-Best \u2014 Excludes Utility Air-Comp)",
+            "type": "table",
+            "description": "Each row is one completed production asset from the historical Equipment OEE summary, excluding shared utilities such as Air-Comp-001 and filtered by line/asset variables. Rows sort lowest OEE first and show Availability, Performance, Quality, and Equipment OEE. Low rows identify diagnostic contributors only: Line OEE is not calculated by averaging Equipment OEE. Drill to Equipment OEE Detail for the four instrumented Line 2 machines. Data source: v_asset_oee_components."
+        },
+        {
+            "datasource": {
+                "type": "grafana-postgresql-datasource",
+                "uid": "bfwp0qtw81z40a"
+            },
+            "fieldConfig": {
+                "defaults": {
+                    "color": {
+                        "mode": "palette-classic"
+                    },
+                    "unit": "m"
+                },
+                "overrides": []
+            },
+            "gridPos": {
+                "h": 8,
+                "w": 10,
+                "x": 14,
+                "y": 20
+            },
+            "id": 11,
+            "options": {
+                "barWidth": 0.8,
+                "groupWidth": 0.7,
+                "legend": {
+                    "displayMode": "list",
+                    "placement": "bottom",
+                    "showLegend": false
+                },
+                "orientation": "horizontal",
+                "showValue": "always",
+                "stacking": "none",
+                "tooltip": {
+                    "mode": "single"
+                },
+                "xTickLabelRotation": 0
+            },
+            "targets": [
+                {
+                    "datasource": {
+                        "type": "grafana-postgresql-datasource",
+                        "uid": "bfwp0qtw81z40a"
+                    },
+                    "format": "table",
+                    "rawQuery": true,
+                    "rawSql": "SELECT loss_category AS \"Loss Category\", sum(loss_minutes) AS \"Loss (Minutes)\" FROM v_oee_loss_by_category WHERE period = '2026-08-01' AND ('$line' = '%' OR line_code = '$line') GROUP BY loss_category ORDER BY 2 DESC",
+                    "refId": "A"
+                }
+            ],
+            "title": "Production Time Loss Categories \u2014 August 2026",
+            "type": "barchart",
+            "description": "Ranks August 2026 production-time loss minutes by category for the selected line(s), largest first. Categories combine recorded downtime, planned changeover, and planned breaks under the historical rollup convention; they explain lost time and are not multiplied into OEE again. Distinguish planned loss from maintenance, production, material, and quality causes before assigning action. Data source: v_oee_loss_by_category."
+        },
+        {
+            "collapsed": false,
+            "gridPos": {
+                "h": 1,
+                "w": 24,
+                "x": 0,
+                "y": 28
+            },
+            "id": 103,
+            "title": "Filler-201 Case Study: RCA Impact on OEE",
+            "type": "row",
+            "description": "Section grouping for **Filler-201 Case Study: RCA Impact on OEE**. Read the panels below it together before drilling to the next numbered section or linked dashboard."
+        },
+        {
+            "datasource": {
+                "type": "grafana-postgresql-datasource",
+                "uid": "bfwp0qtw81z40a"
+            },
+            "fieldConfig": {
+                "defaults": {
+                    "custom": {
+                        "align": "auto",
+                        "displayMode": "auto"
+                    }
+                },
+                "overrides": [
+                    {
+                        "matcher": {
+                            "id": "byName",
+                            "options": "OEE (%)"
+                        },
+                        "properties": [
+                            {
+                                "id": "thresholds",
+                                "value": {
+                                    "mode": "absolute",
+                                    "steps": [
+                                        {
+                                            "color": "red",
+                                            "value": null
+                                        },
+                                        {
+                                            "color": "yellow",
+                                            "value": 75
+                                        },
+                                        {
+                                            "color": "green",
+                                            "value": 85
+                                        }
+                                    ]
+                                }
+                            },
+                            {
+                                "id": "custom.displayMode",
+                                "value": "color-background"
+                            }
+                        ]
+                    }
+                ]
+            },
+            "gridPos": {
+                "h": 8,
+                "w": 12,
+                "x": 0,
+                "y": 29
+            },
+            "id": 12,
+            "options": {
+                "footer": {
+                    "show": false
+                },
+                "showHeader": true
+            },
+            "targets": [
+                {
+                    "datasource": {
+                        "type": "grafana-postgresql-datasource",
+                        "uid": "bfwp0qtw81z40a"
+                    },
+                    "format": "table",
+                    "rawQuery": true,
+                    "rawSql": "SELECT rca_period AS \"Period\", availability_percent AS \"Availability (%)\", performance_percent AS \"Performance (%)\", quality_percent AS \"Quality (%)\", oee_percent AS \"OEE (%)\", total_downtime_minutes AS \"Downtime (Min)\", total_failures AS \"Failures\", repeat_failures AS \"Repeat Failures\" FROM v_filler201_oee_before_after_rca ORDER BY rca_period DESC",
+                    "refId": "A"
+                }
+            ],
+            "title": "Filler-201 Pre vs Post RCA OEE Transformation (Bracket Root Cause Fix)",
+            "type": "table",
+            "description": "Each row compares Filler-201 PRE_RCA (Jan-May 2026) with POST_RCA (Jun-Aug 2026), showing Availability, Performance, Quality, OEE, downtime, failures, and repeat failures. The post period follows bracket replacement, locking hardware, and weekly PM revision. Higher Availability/OEE with lower downtime and recurrence supports corrective-action effectiveness. Drill to Equipment Detail or Maintenance Reliability for stop and RCA evidence. Data source: v_filler201_oee_before_after_rca."
+        },
+        {
+            "datasource": {
+                "type": "grafana-postgresql-datasource",
+                "uid": "bfwp0qtw81z40a"
+            },
+            "fieldConfig": {
+                "defaults": {
+                    "custom": {
+                        "drawStyle": "line",
+                        "fillOpacity": 15,
+                        "lineWidth": 2
+                    },
+                    "unit": "percent"
+                },
+                "overrides": [
+                    {
+                        "matcher": {
+                            "id": "byName",
+                            "options": "Filler-201 OEE (%)"
+                        },
+                        "properties": [
+                            {
+                                "id": "color",
+                                "value": {
+                                    "fixedColor": "green",
+                                    "mode": "fixed"
+                                }
+                            }
+                        ]
+                    },
+                    {
+                        "matcher": {
+                            "id": "byName",
+                            "options": "Availability (%)"
+                        },
+                        "properties": [
+                            {
+                                "id": "color",
+                                "value": {
+                                    "fixedColor": "blue",
+                                    "mode": "fixed"
+                                }
+                            }
+                        ]
+                    }
+                ]
+            },
+            "gridPos": {
+                "h": 8,
+                "w": 12,
+                "x": 12,
+                "y": 29
+            },
+            "id": 13,
+            "options": {
+                "legend": {
+                    "displayMode": "table",
+                    "placement": "bottom",
+                    "showLegend": true
+                },
+                "tooltip": {
+                    "mode": "multi"
+                }
+            },
+            "targets": [
+                {
+                    "datasource": {
+                        "type": "grafana-postgresql-datasource",
+                        "uid": "bfwp0qtw81z40a"
+                    },
+                    "format": "time_series",
+                    "rawQuery": true,
+                    "rawSql": "SELECT period AS time, oee_percent AS \"Filler-201 OEE (%)\", availability_percent AS \"Availability (%)\" FROM v_asset_oee_monthly WHERE asset_code = 'FILLER-201' ORDER BY period",
+                    "refId": "A"
+                }
+            ],
+            "title": "Filler-201 Monthly OEE & Availability Recovery Trend",
+            "type": "timeseries",
+            "description": "Trends monthly Filler-201 OEE and Availability across the seeded January-August 2026 history. OEE is Availability x Performance x Quality under the historical monthly equipment rollup. The June 2026 RCA/PM revision is the intervention point; sustained improvement afterward supports effectiveness. Drill to Filler-201 Equipment Detail for Stop Loss and sensor evidence. Data source: v_asset_oee_monthly."
+        },
+        {
+            "collapsed": false,
+            "gridPos": {
+                "h": 1,
+                "w": 24,
+                "x": 0,
+                "y": 37
+            },
+            "id": 104,
+            "title": "Production Scheduling & Performance Standards",
+            "type": "row",
+            "description": "Section grouping for **Production Scheduling & Performance Standards**. Read the panels below it together before drilling to the next numbered section or linked dashboard."
+        },
+        {
+            "datasource": {
+                "type": "grafana-postgresql-datasource",
+                "uid": "bfwp0qtw81z40a"
+            },
+            "fieldConfig": {
+                "defaults": {},
+                "overrides": []
+            },
+            "gridPos": {
+                "h": 8,
+                "w": 12,
+                "x": 0,
+                "y": 38
+            },
+            "id": 14,
+            "options": {
+                "footer": {
+                    "show": false
+                },
+                "showHeader": true
+            },
+            "targets": [
+                {
+                    "datasource": {
+                        "type": "grafana-postgresql-datasource",
+                        "uid": "bfwp0qtw81z40a"
+                    },
+                    "format": "table",
+                    "rawQuery": true,
+                    "rawSql": "SELECT ps.sequence_number AS \"Seq\", l.line_code AS \"Line\", pl.lot_number AS \"Lot Number\", p.product_name AS \"Product\", ps.scheduled_start AS \"Scheduled Start\", ps.scheduled_end AS \"Scheduled End\", pl.planned_quantity AS \"Planned Qty\", pl.status AS \"Status\" FROM production_schedule ps JOIN production_lots pl USING(lot_id) JOIN production_lines l ON l.line_id=ps.line_id JOIN products p ON p.product_id=pl.product_id WHERE pl.status IN ('READY', 'PLANNED') ORDER BY ps.scheduled_start, l.line_code LIMIT 10",
+                    "refId": "A"
+                }
+            ],
+            "title": "Upcoming Production Lots Schedule",
+            "type": "table",
+            "description": "Each row is one upcoming READY or PLANNED production lot, ordered by scheduled start then line and limited to ten. Columns show sequence, line, lot, product, scheduled window, planned quantity, and status; running/completed/cancelled lots are excluded. Conflicts, delays, or large shared-resource demand should be checked against Blender scheduling and staffing. Data source: production_schedule, production_lots, production_lines, products."
+        },
+        {
+            "datasource": {
+                "type": "grafana-postgresql-datasource",
+                "uid": "bfwp0qtw81z40a"
+            },
+            "fieldConfig": {
+                "defaults": {},
+                "overrides": []
+            },
+            "gridPos": {
+                "h": 8,
+                "w": 12,
+                "x": 12,
+                "y": 38
+            },
+            "id": 15,
+            "options": {
+                "footer": {
+                    "show": false
+                },
+                "showHeader": true
+            },
+            "targets": [
+                {
+                    "datasource": {
+                        "type": "grafana-postgresql-datasource",
+                        "uid": "bfwp0qtw81z40a"
+                    },
+                    "format": "table",
+                    "rawQuery": true,
+                    "rawSql": "SELECT p.product_code AS \"SKU\", p.product_name AS \"Product Name\", l.line_code AS \"Line\", pls.ideal_units_per_minute AS \"Ideal Rate (Units/Min)\", pls.expected_yield_pct AS \"Expected Yield (%)\", pls.standard_changeover_minutes AS \"Std Changeover (Min)\" FROM product_line_standards pls JOIN products p USING(product_id) JOIN production_lines l USING(line_id) WHERE ('$line' = '%' OR l.line_code = '$line') AND ('$product' = '%' OR p.product_code = '$product') ORDER BY l.line_code, p.product_code",
+                    "refId": "A"
+                }
+            ],
+            "title": "Product-Line Speed & Changeover Standards (OEE Benchmark)",
+            "type": "table",
+            "description": "Each row is one product/line standard filtered by line and product: ideal units/minute, expected yield, and standard changeover minutes. Ideal rate sets the theoretical Performance denominator; expected yield supports quality planning; changeover standard supports planned-loss review. Stale or unrealistic standards distort interpretation and require Production/Engineering review. Data source: product_line_standards, products, production_lines."
+        },
+        {
+            "collapsed": false,
+            "gridPos": {
+                "h": 1,
+                "w": 24,
+                "x": 0,
+                "y": 46
+            },
+            "id": 105,
+            "title": "Shared Assets & Plant Utilities Risk",
+            "type": "row",
+            "description": "Section grouping for **Shared Assets & Plant Utilities Risk**. Read the panels below it together before drilling to the next numbered section or linked dashboard."
+        },
+        {
+            "datasource": {
+                "type": "grafana-postgresql-datasource",
+                "uid": "bfwp0qtw81z40a"
+            },
+            "fieldConfig": {
+                "defaults": {},
+                "overrides": []
+            },
+            "gridPos": {
+                "h": 8,
+                "w": 12,
+                "x": 0,
+                "y": 47
+            },
+            "id": 16,
+            "options": {
+                "footer": {
+                    "show": false
+                },
+                "showHeader": true
+            },
+            "targets": [
+                {
+                    "datasource": {
+                        "type": "grafana-postgresql-datasource",
+                        "uid": "bfwp0qtw81z40a"
+                    },
+                    "format": "table",
+                    "rawQuery": true,
+                    "rawSql": "SELECT line_code AS \"Line\", scheduled_start AS \"Start\", scheduled_end AS \"End\", production_order AS \"Production Order\", risk_timing AS \"Risk Status\", CASE WHEN asset_currently_down THEN 'DOWN' ELSE 'OPERATIONAL' END AS \"Equipment Status\" FROM v_shared_asset_risk WHERE asset_code = 'BLENDER-001' ORDER BY scheduled_start",
+                    "refId": "A"
+                }
+            ],
+            "title": "Blender-001 Shared Production Schedule & Conflict Risk",
+            "type": "table",
+            "description": "Each row is a scheduled Blender-001 slot with line, start/end, order, current/future risk status, and current equipment status, ordered chronologically. Blender-001 is allocated sequentially, so a current failure can delay the active line and the next reserved line. Coordinate Production and Maintenance when risk_timing indicates future exposure. Data source: v_shared_asset_risk."
+        },
+        {
+            "datasource": {
+                "type": "grafana-postgresql-datasource",
+                "uid": "bfwp0qtw81z40a"
+            },
+            "fieldConfig": {
+                "defaults": {
+                    "custom": {
+                        "drawStyle": "line",
+                        "fillOpacity": 10,
+                        "lineWidth": 2
+                    },
+                    "unit": "mm/s"
+                },
+                "overrides": [
+                    {
+                        "matcher": {
+                            "id": "byName",
+                            "options": "Vibration (mm/s)"
+                        },
+                        "properties": [
+                            {
+                                "id": "color",
+                                "value": {
+                                    "fixedColor": "orange",
+                                    "mode": "fixed"
+                                }
+                            }
+                        ]
+                    },
+                    {
+                        "matcher": {
+                            "id": "byName",
+                            "options": "Warning (2.8 mm/s)"
+                        },
+                        "properties": [
+                            {
+                                "id": "custom.lineStyle",
+                                "value": {
+                                    "dash": [
+                                        8,
+                                        8
+                                    ],
+                                    "fill": "dash"
+                                }
+                            },
+                            {
+                                "id": "color",
+                                "value": {
+                                    "fixedColor": "yellow",
+                                    "mode": "fixed"
+                                }
+                            }
+                        ]
+                    },
+                    {
+                        "matcher": {
+                            "id": "byName",
+                            "options": "Alarm (4.5 mm/s)"
+                        },
+                        "properties": [
+                            {
+                                "id": "custom.lineStyle",
+                                "value": {
+                                    "dash": [
+                                        8,
+                                        8
+                                    ],
+                                    "fill": "dash"
+                                }
+                            },
+                            {
+                                "id": "color",
+                                "value": {
+                                    "fixedColor": "red",
+                                    "mode": "fixed"
+                                }
+                            }
+                        ]
+                    }
+                ]
+            },
+            "gridPos": {
+                "h": 8,
+                "w": 12,
+                "x": 12,
+                "y": 47
+            },
+            "id": 17,
+            "options": {
+                "legend": {
+                    "displayMode": "table",
+                    "placement": "bottom",
+                    "showLegend": true
+                },
+                "tooltip": {
+                    "mode": "multi"
+                }
+            },
+            "targets": [
+                {
+                    "datasource": {
+                        "type": "grafana-postgresql-datasource",
+                        "uid": "bfwp0qtw81z40a"
+                    },
+                    "format": "time_series",
+                    "rawQuery": true,
+                    "rawSql": "SELECT time, numeric_value AS \"Vibration (mm/s)\", warning_threshold AS \"Warning (2.8 mm/s)\", alarm_threshold AS \"Alarm (4.5 mm/s)\" FROM v_condition_measurements WHERE asset_code = 'AIR-COMP-001' AND measurement_type = 'VIBRATION' ORDER BY time",
+                    "refId": "A"
+                }
+            ],
+            "title": "Air-Comp-001 Utility Vibration Trend (Shared Plant Risk \u2014 No OEE)",
+            "type": "timeseries",
+            "description": "Trends all seeded Air-Comp-001 vibration observations with 2.8 mm/s warning and 4.5 mm/s alarm references. Rising or threshold-crossing vibration indicates condition degradation. The compressor simultaneously supports both lines, so predictive intervention is plant-critical; as a shared utility it does not receive piece-rate OEE. Drill to Operational Risk condition panels. Data source: v_condition_measurements."
+        },
+        {
+            "collapsed": false,
+            "gridPos": {
+                "h": 1,
+                "w": 24,
+                "x": 0,
+                "y": 55
+            },
+            "id": 106,
+            "title": "Executive AI Production & OEE Assistant",
+            "type": "row",
+            "description": "Section grouping for **Executive AI Production & OEE Assistant**. Read the panels below it together before drilling to the next numbered section or linked dashboard."
+        },
+        {
+            "gridPos": {
+                "h": 6,
+                "w": 24,
+                "x": 0,
+                "y": 56
+            },
+            "id": 18,
+            "options": {
+                "content": "### AI Production & OEE Executive Briefing\n\nAI Production & OEE Analysis interprets curated PostgreSQL views, including the fixed-anchor current-state views. The current scenario is hypothetical interview data at Aug 28, 2026 10:00 AM, not actual ATX production. AI does not calculate or invent KPI values.\n\n#### Key Production Inquiries Handled:\n- **Current Execution**: *\"What is running on Line 1 at the demo anchor?\"* \u2192 `ATX-20260828-L1-001` (Spicy Sauce) at 52.6% completion and 98.81% yield on Shift A.\n- **Next Scheduled Lots**: *\"What lot runs next on Line 2?\"* \u2192 `ATX-20260828-L2-002` (Sweet Heat) scheduled for 14:00.\n- **OEE Performance**: *\"Why is Line 2 OEE lower than Line 1?\"* \u2192 Compare Availability, Performance, and Quality in the curated monthly and detailed operating views.\n- **RCA ROI**: *\"Did Filler-201 improve after RCA?\"* \u2192 Use the curated before/after view and Equipment OEE Detail trace.\n- **Staffing Coverage**: *\"Is staffing coverage adequate at the anchor?\"* \u2192 Confirmed Shift A coverage includes 1 Lead, 1 L1 Operator, 1 L2 Operator, and 1 Maintenance Technician.\n\n*Run `.\\scripts\\test-ai-summary.ps1` to validate grounded responses.*",
+                "mode": "markdown"
+            },
+            "title": "AI Production & OEE Decision Support",
+            "type": "text",
+            "description": "AI production narrative interprets curated PostgreSQL lot, schedule, OEE, loss, staffing, and risk views. It may explain relationships but does not calculate, overwrite, or invent KPI values. Validate cited numbers in the live panels and use Equipment OEE Detail for machine evidence. Data source: curated views supplied by scripts/test-ai-summary.ps1."
+        },
+        {
+            "collapsed": false,
+            "gridPos": {
+                "h": 1,
+                "w": 24,
+                "x": 0,
+                "y": 62
+            },
+            "id": 107,
+            "title": "Line 2 OEE \u2192 Equipment OEE Contributors \u2192 Raw Inputs & Loss Analysis",
+            "type": "row",
+            "description": "Section grouping for **Line 2 OEE \u2192 Equipment OEE Contributors \u2192 Raw Inputs & Loss Analysis**. Read the panels below it together before drilling to the next numbered section or linked dashboard."
+        },
+        {
+            "datasource": {
+                "type": "grafana-postgresql-datasource",
+                "uid": "bfwp0qtw81z40a"
+            },
+            "fieldConfig": {
+                "defaults": {
+                    "decimals": 2,
+                    "unit": "percent"
+                },
+                "overrides": []
+            },
+            "gridPos": {
+                "h": 5,
+                "w": 6,
+                "x": 0,
+                "y": 63
+            },
+            "id": 19,
+            "options": {
+                "colorMode": "background",
+                "graphMode": "area",
+                "reduceOptions": {
+                    "calcs": [
+                        "lastNotNull"
+                    ],
+                    "fields": "",
+                    "values": false
+                },
+                "textMode": "value_and_name"
+            },
+            "targets": [
+                {
+                    "datasource": {
+                        "type": "grafana-postgresql-datasource",
+                        "uid": "bfwp0qtw81z40a"
+                    },
+                    "format": "table",
+                    "rawQuery": true,
+                    "rawSql": "SELECT oee_percent AS \"LINE 2 OEE\",utilization_percent AS \"Line 2 Utilization\",availability_percent AS \"Line 2 Availability\",performance_percent AS \"Line 2 Performance\",quality_percent AS \"Line 2 Quality\" FROM v_line2_oee_summary",
+                    "refId": "A"
+                }
+            ],
+            "title": "LINE 2 OEE (independent line calculation, not machine average)",
+            "type": "stat",
+            "description": "Shows detailed Line 2 Scheduled Utilization, Availability, Performance, Quality, and OEE from independent line-level inputs. Utilization = scheduled production/calendar time and is not OEE. OEE = runtime/scheduled time x actual/theoretical output x good/total output; it is not average machine OEE. Low components direct the next investigation to time, speed, or quality. Data source: v_line2_oee_summary."
+        },
+        {
+            "datasource": {
+                "type": "grafana-postgresql-datasource",
+                "uid": "bfwp0qtw81z40a"
+            },
+            "fieldConfig": {
+                "defaults": {},
+                "overrides": [
+                    {
+                        "matcher": {
+                            "id": "byName",
+                            "options": "Asset"
+                        },
+                        "properties": [
+                            {
+                                "id": "links",
+                                "value": [
                                     {
-                                        "current":  {
-                                                        "selected":  true,
-                                                        "text":  "All",
-                                                        "value":  "%"
-                                                    },
-                                        "datasource":  {
-                                                           "type":  "grafana-postgresql-datasource",
-                                                           "uid":  "atx-postgres"
-                                                       },
-                                        "definition":  "SELECT \u0027All\u0027 AS __text, \u0027%\u0027 AS __value UNION ALL SELECT DISTINCT name, line_code FROM production_lines ORDER BY 1",
-                                        "hide":  0,
-                                        "includeAll":  false,
-                                        "label":  "Production Line",
-                                        "multi":  false,
-                                        "name":  "line",
-                                        "options":  [
-
-                                                    ],
-                                        "query":  "SELECT \u0027All\u0027 AS __text, \u0027%\u0027 AS __value UNION ALL SELECT DISTINCT name, line_code FROM production_lines ORDER BY 1",
-                                        "refresh":  1,
-                                        "regex":  "",
-                                        "skipUrlSync":  false,
-                                        "sort":  0,
-                                        "type":  "query"
-                                    },
-                                    {
-                                        "current":  {
-                                                        "selected":  true,
-                                                        "text":  "All",
-                                                        "value":  "%"
-                                                    },
-                                        "datasource":  {
-                                                           "type":  "grafana-postgresql-datasource",
-                                                           "uid":  "atx-postgres"
-                                                       },
-                                        "definition":  "SELECT \u0027All\u0027 AS __text, \u0027%\u0027 AS __value UNION ALL SELECT DISTINCT product_name, product_code FROM products ORDER BY 1",
-                                        "hide":  0,
-                                        "includeAll":  false,
-                                        "label":  "Product",
-                                        "multi":  false,
-                                        "name":  "product",
-                                        "options":  [
-
-                                                    ],
-                                        "query":  "SELECT \u0027All\u0027 AS __text, \u0027%\u0027 AS __value UNION ALL SELECT DISTINCT product_name, product_code FROM products ORDER BY 1",
-                                        "refresh":  1,
-                                        "regex":  "",
-                                        "skipUrlSync":  false,
-                                        "sort":  0,
-                                        "type":  "query"
-                                    },
-                                    {
-                                        "current":  {
-                                                        "selected":  true,
-                                                        "text":  "All",
-                                                        "value":  "%"
-                                                    },
-                                        "datasource":  {
-                                                           "type":  "grafana-postgresql-datasource",
-                                                           "uid":  "atx-postgres"
-                                                       },
-                                        "definition":  "SELECT \u0027All\u0027 AS __text, \u0027%\u0027 AS __value UNION ALL SELECT DISTINCT name, asset_code FROM assets WHERE scope \u003c\u003e \u0027SHARED_UTILITY\u0027 ORDER BY 1",
-                                        "hide":  0,
-                                        "includeAll":  false,
-                                        "label":  "Asset",
-                                        "multi":  false,
-                                        "name":  "asset",
-                                        "options":  [
-
-                                                    ],
-                                        "query":  "SELECT \u0027All\u0027 AS __text, \u0027%\u0027 AS __value UNION ALL SELECT DISTINCT name, asset_code FROM assets WHERE scope \u003c\u003e \u0027SHARED_UTILITY\u0027 ORDER BY 1",
-                                        "refresh":  1,
-                                        "regex":  "",
-                                        "skipUrlSync":  false,
-                                        "sort":  0,
-                                        "type":  "query"
+                                        "title": "Open ${__value.text} Equipment OEE Detail",
+                                        "url": "/d/atx-equipment-oee-detail/equipment-oee-detail?var-asset=${__value.text}",
+                                        "targetBlank": false
                                     }
                                 ]
-                   },
-    "time":  {
-                 "from":  "2026-01-01T00:00:00.000Z",
-                 "to":  "2026-09-01T00:00:00.000Z"
-             },
-    "timezone":  "browser",
-    "title":  "Production \u0026 OEE Performance",
-    "uid":  "atx-production-oee",
-    "version":  1
+                            }
+                        ]
+                    }
+                ]
+            },
+            "gridPos": {
+                "h": 5,
+                "w": 18,
+                "x": 6,
+                "y": 63
+            },
+            "id": 20,
+            "options": {
+                "footer": {
+                    "show": false
+                },
+                "showHeader": true
+            },
+            "targets": [
+                {
+                    "datasource": {
+                        "type": "grafana-postgresql-datasource",
+                        "uid": "bfwp0qtw81z40a"
+                    },
+                    "format": "table",
+                    "rawQuery": true,
+                    "rawSql": "SELECT asset_code AS \"Asset\",utilization_percent AS \"Scheduled Utilization %\",availability_percent AS \"Availability %\",performance_percent AS \"Performance %\",quality_percent AS \"Quality %\",oee_percent AS \"Equipment OEE %\",stop_loss_minutes AS \"Stop Loss Minutes\" FROM v_equipment_oee_summary ORDER BY CASE asset_code WHEN 'MIXER-201' THEN 1 WHEN 'CONVEYOR-201' THEN 2 WHEN 'FILLER-201' THEN 3 WHEN 'LABELER-201' THEN 4 END",
+                    "refId": "A"
+                }
+            ],
+            "title": "Line 2 Equipment OEE Contributors \u2014 click Asset to drill into inputs and losses",
+            "type": "table",
+            "description": "Each row is one of the four instrumented Line 2 machines, in process order, with Scheduled Utilization, Availability, Performance, Quality, Equipment OEE, and unscheduled Stop Loss minutes. Values diagnose contributors; they are not averaged into Line OEE. Click Asset to inspect time accounting, Stop Reasons, sensors, and RCA trace. Data source: v_equipment_oee_summary."
+        },
+        {
+            "collapsed": false,
+            "gridPos": {
+                "h": 1,
+                "w": 24,
+                "x": 0,
+                "y": 68
+            },
+            "id": 108,
+            "panels": [],
+            "title": "Production Lot Run History",
+            "type": "row"
+        },
+        {
+            "datasource": {
+                "type": "grafana-postgresql-datasource",
+                "uid": "bfwp0qtw81z40a"
+            },
+            "fieldConfig": {
+                "defaults": {},
+                "overrides": []
+            },
+            "gridPos": {
+                "h": 8,
+                "w": 24,
+                "x": 0,
+                "y": 69
+            },
+            "id": 21,
+            "options": {
+                "footer": {
+                    "show": false
+                },
+                "showHeader": true
+            },
+            "targets": [
+                {
+                    "datasource": {
+                        "type": "grafana-postgresql-datasource",
+                        "uid": "bfwp0qtw81z40a"
+                    },
+                    "format": "table",
+                    "rawQuery": true,
+                    "rawSql": "SELECT actual_end AS \"Completed At\", line_code AS \"Line\", lot_number AS \"Lot Number\", product_name AS \"Product\", actual_start AS \"Started At\", actual_duration_minutes AS \"Duration (min)\", planned_quantity AS \"Planned Qty\", total_quantity AS \"Total Qty\", good_quantity AS \"Good Qty\", reject_quantity AS \"Reject Qty\", yield_percent AS \"Yield %\" FROM v_completed_production_lots WHERE line_code LIKE '$line' AND product_code LIKE '$product' ORDER BY actual_end DESC LIMIT 100",
+                    "refId": "A"
+                }
+            ],
+            "title": "Completed Lot Runs \u2014 Most Recent First",
+            "type": "table",
+            "description": "Historical production-lot runs for both lines, newest first. Use the Production Line and Product filters to narrow the list. Each row shows the run window, quantities, and final yield. Active lots remain in the two current-state panels above and enter this history after completion. Data source: v_completed_production_lots."
+        }
+    ],
+    "refresh": "",
+    "schemaVersion": 42,
+    "tags": [
+        "production",
+        "oee",
+        "operations",
+        "scheduling"
+    ],
+    "templating": {
+        "list": [
+            {
+                "current": {
+                    "selected": true,
+                    "text": "All",
+                    "value": "%"
+                },
+                "datasource": {
+                    "type": "grafana-postgresql-datasource",
+                    "uid": "bfwp0qtw81z40a"
+                },
+                "definition": "SELECT 'All' AS __text, '%' AS __value UNION ALL SELECT DISTINCT name, line_code FROM production_lines ORDER BY 1",
+                "hide": 0,
+                "includeAll": false,
+                "label": "Production Line",
+                "multi": false,
+                "name": "line",
+                "options": [],
+                "query": "SELECT 'All' AS __text, '%' AS __value UNION ALL SELECT DISTINCT name, line_code FROM production_lines ORDER BY 1",
+                "refresh": 1,
+                "regex": "",
+                "skipUrlSync": false,
+                "sort": 0,
+                "type": "query"
+            },
+            {
+                "current": {
+                    "selected": true,
+                    "text": "All",
+                    "value": "%"
+                },
+                "datasource": {
+                    "type": "grafana-postgresql-datasource",
+                    "uid": "bfwp0qtw81z40a"
+                },
+                "definition": "SELECT 'All' AS __text, '%' AS __value UNION ALL SELECT DISTINCT product_name, product_code FROM products ORDER BY 1",
+                "hide": 0,
+                "includeAll": false,
+                "label": "Product",
+                "multi": false,
+                "name": "product",
+                "options": [],
+                "query": "SELECT 'All' AS __text, '%' AS __value UNION ALL SELECT DISTINCT product_name, product_code FROM products ORDER BY 1",
+                "refresh": 1,
+                "regex": "",
+                "skipUrlSync": false,
+                "sort": 0,
+                "type": "query"
+            },
+            {
+                "current": {
+                    "selected": true,
+                    "text": "All",
+                    "value": "%"
+                },
+                "datasource": {
+                    "type": "grafana-postgresql-datasource",
+                    "uid": "bfwp0qtw81z40a"
+                },
+                "definition": "SELECT 'All' AS __text, '%' AS __value UNION ALL SELECT DISTINCT name, asset_code FROM assets WHERE scope <> 'SHARED_UTILITY' ORDER BY 1",
+                "hide": 0,
+                "includeAll": false,
+                "label": "Asset",
+                "multi": false,
+                "name": "asset",
+                "options": [],
+                "query": "SELECT 'All' AS __text, '%' AS __value UNION ALL SELECT DISTINCT name, asset_code FROM assets WHERE scope <> 'SHARED_UTILITY' ORDER BY 1",
+                "refresh": 1,
+                "regex": "",
+                "skipUrlSync": false,
+                "sort": 0,
+                "type": "query"
+            }
+        ]
+    },
+    "time": {
+        "from": "2026-01-01T00:00:00.000Z",
+        "to": "2026-09-01T00:00:00.000Z"
+    },
+    "timezone": "browser",
+    "title": "Production & OEE Performance",
+    "uid": "atx-production-oee",
+    "version": 1
 }

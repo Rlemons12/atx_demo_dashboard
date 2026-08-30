@@ -6,7 +6,7 @@ deleteDatasources:
 
 datasources:
   - name: ATX Maintenance PostgreSQL
-    uid: atx-postgres
+    uid: bfwp0qtw81z40a
     type: postgres
     access: proxy
     url: ${POSTGRES_HOST}:${POSTGRES_PORT}
