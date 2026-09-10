@@ -1,4 +1,9 @@
 \pset pager off
+\if :{?expected_database}
+\else
+\set expected_database atx_demo_dashboard
+\endif
+SELECT set_config('atx.expected_database', :'expected_database', false);
 \echo '=== Connection and target ==='
 SELECT current_database() AS database_name, current_schema() AS schema_name,
        current_setting('server_version') AS server_version, 'SUCCESS' AS connection_status;
@@ -6,7 +11,7 @@ SELECT current_database() AS database_name, current_schema() AS schema_name,
 DO $$
 DECLARE missing_views text;
 BEGIN
-  IF current_database() <> 'atx_demo_dashboard' THEN RAISE EXCEPTION 'Wrong target database: %', current_database(); END IF;
+  IF current_database() <> current_setting('atx.expected_database') THEN RAISE EXCEPTION 'Wrong target database: %', current_database(); END IF;
   IF (SELECT count(*) FROM sites) <> 1 THEN RAISE EXCEPTION 'Expected 1 site'; END IF;
   IF (SELECT count(*) FROM production_lines) <> 2 THEN RAISE EXCEPTION 'Expected 2 production lines'; END IF;
   IF (SELECT count(*) FROM shifts) <> 3 THEN RAISE EXCEPTION 'Expected 3 shifts'; END IF;

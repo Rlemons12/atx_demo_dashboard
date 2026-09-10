@@ -2,7 +2,37 @@
 
 This project provides a PostgreSQL and Grafana interview demonstration for a fictional two-line food manufacturing maintenance operation. The design source of truth is [documentation/atx_demo_dashboard.md](documentation/atx_demo_dashboard.md).
 
-## Prerequisites
+## Guided setup using a supplied .env
+
+For a new named copy of the demo, place the supplied `.env` beside `setup.ps1` and double-click `setup.cmd`. Alternatively, run:
+
+```powershell
+powershell -NoProfile -ExecutionPolicy Bypass -File .\setup.ps1
+```
+
+The setup asks what to install, then what to call it:
+
+| Choice | Result | Required credentials/tools |
+| --- | --- | --- |
+| Both | New named database with demo tables/data, plus a Grafana folder, datasource, and five linked dashboards | PostgreSQL credentials with database-creation permission, `psql`, and Grafana URL/token with create permissions |
+| Grafana only | Datasource and five dashboards connected to the existing `POSTGRES_DB`; no database changes | PostgreSQL host/user/password/database and Grafana URL/token; no `psql` needed |
+| Database only | New named database with all demo tables, data, and views | PostgreSQL credentials with database-creation permission and `psql`; no Grafana credentials needed |
+
+For example, `Interview Demo` creates `demo_interview_demo` in Both or Database mode. Grafana mode uses `POSTGRES_DB` from `.env` instead, so you can connect dashboards to a database created earlier. The existing database must already contain the project's demo tables and views. Database-only completion prints the `POSTGRES_DB` value to use when setting up Grafana later.
+
+Grafana modes use the existing instance in `GRAFANA_URL`. Setup does not install Grafana or PostgreSQL. Grafana must be able to reach PostgreSQL. Database setup runs all 15 migrations/seeds and five validation suites; the ATX demonstration content stays the same. `DATABASE_URL_UNPOOLED`, when supplied, provides the direct migration connection and must point to the same PostgreSQL server/branch as the `POSTGRES_*` datasource settings. It is ignored in Grafana-only mode. Remote connections default to SSL `require`; set `POSTGRES_SSLMODE` if needed.
+
+Database creation refuses an existing target, and Grafana creation refuses matching resource UIDs. The supplied `.env` and source dashboards are preserved. Partial failures leave created resources for inspection; setup does not automatically delete or resume them.
+
+Preview locally without connecting or creating resources:
+
+```powershell
+powershell -NoProfile -ExecutionPolicy Bypass -File .\setup.ps1 -Name "Interview Demo" -Plan
+```
+
+For an unattended setup, use `-Name "Interview Demo" -Mode Both -Yes`. `-Mode Grafana` and `-Mode Database` select the individual components. Preview and unattended runs default to Both when `-Mode` is omitted. To validate the setup code without live services, run `powershell -NoProfile -ExecutionPolicy Bypass -File scripts/test-setup.ps1`.
+
+## Existing local setup prerequisites
 
 - PostgreSQL 17 or a compatible supported PostgreSQL release
 - PostgreSQL command-line tools (`psql`, `createdb`, and `dropdb`) on `PATH`
