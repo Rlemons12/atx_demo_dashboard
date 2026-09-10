@@ -53,6 +53,14 @@ The rebuild script refuses any database name other than `atx_demo_dashboard`.
 
 ## Grafana
 
+To refresh the project dashboard configurations from the Grafana instance configured in `.env`, set `GRAFANA_URL` and `GRAFANA_SERVICE_ACCOUNT_TOKEN`, then run:
+
+```powershell
+powershell -NoProfile -ExecutionPolicy Bypass -File scripts/export-grafana-dashboards.ps1
+```
+
+The exporter discovers dashboards using paginated, read-only API requests and downloads those with an `atx-` UID prefix. Grafana Cloud billing, usage, incident, and platform-monitoring dashboards are excluded because they are unrelated to this demo. It updates `grafana/dashboards` by UID, preserves existing filenames, and retains local dashboards absent from the remote listing. All downloads are validated before writing. Numeric dashboard IDs are cleared for provisioning; queries, UIDs, versions, and datasource references remain as exported. `grafana/dashboard-export.json` records the source, export time, and original folder metadata. The local provider places these dashboards in its configured ATX Maintenance Demo folder; remote folders are not recreated. Referenced datasources and plugins must be available on the destination instance. The token is never written into the export metadata.
+
 The project uses the installed Grafana binary but keeps its runtime database, logs, plugins, and provisioning isolated under the ignored `.grafana` directory. PostgreSQL credentials are supplied to Grafana only through the startup process environment.
 
 ```powershell

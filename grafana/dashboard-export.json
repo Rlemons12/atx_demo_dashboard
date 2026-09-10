@@ -1,0 +1,46 @@
+{
+    "source":  "https://emtac.grafana.net",
+    "exportedAt":  "2026-09-10T15:00:44.7383310Z",
+    "dashboards":  [
+                       {
+                           "uid":  "atx-equipment-oee-detail",
+                           "title":  "Equipment OEE Detail",
+                           "file":  "dashboards/equipment-oee-detail.json",
+                           "folderUid":  "fj87df",
+                           "folderTitle":  "ATX_DEMO",
+                           "version":  8
+                       },
+                       {
+                           "uid":  "atx-maintenance-reliability",
+                           "title":  "Maintenance Reliability",
+                           "file":  "dashboards/maintenance-reliability.json",
+                           "folderUid":  "fj87df",
+                           "folderTitle":  "ATX_DEMO",
+                           "version":  5
+                       },
+                       {
+                           "uid":  "atx-production-oee",
+                           "title":  "Production \u0026 OEE Performance",
+                           "file":  "dashboards/production-oee-performance.json",
+                           "folderUid":  "fj87df",
+                           "folderTitle":  "ATX_DEMO",
+                           "version":  9
+                       },
+                       {
+                           "uid":  "atx-operational-risk",
+                           "title":  "Staffing, Sanitation \u0026 Operational Risk",
+                           "file":  "dashboards/staffing-sanitation-operational-risk.json",
+                           "folderUid":  "fj87df",
+                           "folderTitle":  "ATX_DEMO",
+                           "version":  4
+                       },
+                       {
+                           "uid":  "atx-vp-operations",
+                           "title":  "VP Operations Overview",
+                           "file":  "dashboards/vp-operations-overview.json",
+                           "folderUid":  "fj87df",
+                           "folderTitle":  "ATX_DEMO",
+                           "version":  6
+                       }
+                   ]
+}
